@@ -1,7 +1,6 @@
 package com.templatodo.api.TemplateDefinitions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,21 +43,38 @@ public class TemplateDefinitionService {
         return defs.stream().map(x -> TemplateDefinitionDto.fromDomain(x)).collect(Collectors.toList());
     }
 
+    public TemplateDefinitionDto getById(String templateDefinitionId) {
+        TemplateDefinition def = this.templateDefRepository.findById(templateDefinitionId).get();
+        TemplateDefinitionDto dto = TemplateDefinitionDto.fromDomain(def);
+
+        List<TimeSlotDto> timeSlots = this.getTimeSlots(templateDefinitionId);
+
+        for (int i = 0; i < timeSlots.size(); i++) {
+            TimeSlotDto tsDto = timeSlots.get(i);
+            List<TodoItemDto> todoItems = this.getTodoItems(tsDto.getId());
+            tsDto.setTodoItems(todoItems);
+        }
+
+        dto.setTimeSlots(timeSlots);
+
+        return dto;
+    }
+
     public List<TimeSlotDto> getTimeSlots(String templateDefinitionId) {
         List<String> timeSlotIds = this.templateDefRepository.findById(templateDefinitionId).get().getTimeSlotIds();
-        
+
         return this.timeSlotRepository.findAllById(timeSlotIds)
-            .stream()
-            .map(x -> TimeSlotDto.fromDomain(x))
-            .collect(Collectors.toList());
+                .stream()
+                .map(x -> TimeSlotDto.fromDomain(x))
+                .collect(Collectors.toList());
     }
 
     public List<TodoItemDto> getTodoItems(String timeSlotId) {
         List<String> todoItemIds = this.timeSlotRepository.findById(timeSlotId).get().getTodoItemIds();
-        
+
         return this.todoRepository.findAllById(todoItemIds)
-            .stream()
-            .map(x -> TodoItemDto.fromDomain(x))
-            .collect(Collectors.toList());
+                .stream()
+                .map(x -> TodoItemDto.fromDomain(x))
+                .collect(Collectors.toList());
     }
 }

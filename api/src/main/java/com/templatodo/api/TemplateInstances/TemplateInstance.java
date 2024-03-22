@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.templatodo.api.TemplateDefinitions.TemplateDefinition;
+import com.templatodo.api.TemplateDefinitions.TemplateDefinitionDto;
 
 @Document(collection = "templateInstances")
 public class TemplateInstance {
     @Id
     private String id;
-    private TemplateDefinition templateSnapshot;
+    private TemplateDefinitionDto templateSnapshot;
     private LocalDate date;
     private List<ActionedItem> actionedItems;
 
@@ -22,10 +22,10 @@ public class TemplateInstance {
     public void setId(String id) {
         this.id = id;
     }
-    public TemplateDefinition getTemplateSnapshot() {
+    public TemplateDefinitionDto getTemplateSnapshot() {
         return templateSnapshot;
     }
-    public void setTemplateSnapshot(TemplateDefinition templateSnapshot) {
+    public void setTemplateSnapshot(TemplateDefinitionDto templateSnapshot) {
         this.templateSnapshot = templateSnapshot;
     }
     public LocalDate getDate() {

@@ -30,7 +30,6 @@ public class TemplateDefinitionController {
 	public List<TodoItemDto> getMethodName(@PathVariable String templateDefId, @PathVariable String timeSlotId) {
 		return this.service.getTodoItems(timeSlotId);
 	}
-		
 
 	@PostMapping("")
 	public void save(@RequestBody TemplateDefinitionDto templateDefinition) {
