@@ -57,4 +57,15 @@ public class TodoItemDto {
 
         return item;
     }
+
+    public static TodoItemDto fromDomain(TodoItem todo) {
+        TodoItemDto item = new TodoItemDto();
+        item.setId(todo.getId());
+        item.setName(todo.getName());
+        item.setDescription(todo.getDescription());
+        item.setTypicalDuration(todo.getTypicalDuration());
+        item.setTypicalDurationUnit(todo.getTypicalDurationUnit());
+
+        return item;
+    }
 }

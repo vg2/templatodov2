@@ -83,4 +83,15 @@ public class TimeSlotDto {
 
         return slot;
     }
+
+    public static TimeSlotDto fromDomain(TimeSlot slot) {
+        TimeSlotDto dto = new TimeSlotDto();
+        dto.setId(slot.getId());
+        dto.setName(slot.getName());
+        dto.setDescription(slot.getDescription());
+        dto.setDuration(slot.getDuration());
+        dto.setDurationUnit(slot.getDurationUnit());
+        dto.setTimeOfDay(slot.getTimeOfDay());
+        return dto;
+    }
 }
