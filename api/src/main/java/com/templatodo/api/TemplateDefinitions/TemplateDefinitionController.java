@@ -7,20 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("template-definitions")
 public class TemplateDefinitionController {
 	@Autowired
 	private TemplateDefinitionService service;
 
-	@GetMapping("/templates")
+	@GetMapping("")
 	public List<TemplateDefinition> templates() {
 		return this.service.GetAll();
 	}
 
-	@PostMapping("/templateDefinition")
-	public void postMethodName(@RequestBody TemplateDefinition templateDefinition) {
+	@PostMapping("")
+	public void save(@RequestBody TemplateDefinitionDto templateDefinition) {
 		this.service.Save(templateDefinition);
 	}
 }

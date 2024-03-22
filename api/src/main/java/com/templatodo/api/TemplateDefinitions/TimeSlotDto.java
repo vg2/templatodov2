@@ -4,10 +4,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "timeslots")
-public class TimeSlot {
+public class TimeSlotDto {
     @Id
     private String id;
 
@@ -16,14 +14,14 @@ public class TimeSlot {
     private int duration;
     private DurationUnit durationUnit;
     private LocalTime timeOfDay;
-    private List<String> todoItemIds;
+    private List<TodoItemDto> todoItems;
 
-    public List<String> getTodoItemIds() {
-        return todoItemIds;
+    public List<TodoItemDto> getTodoItems() {
+        return todoItems;
     }
 
-    public void setTodoItemIds(List<String> todoItemIds) {
-        this.todoItemIds = todoItemIds;
+    public void setTodoItems(List<TodoItemDto> todoItems) {
+        this.todoItems = todoItems;
     }
 
     public String getId() {
@@ -72,5 +70,17 @@ public class TimeSlot {
 
     public void setTimeOfDay(LocalTime timeOfDay) {
         this.timeOfDay = timeOfDay;
+    }
+
+    public TimeSlot toDomain() {
+        TimeSlot slot = new TimeSlot();
+        slot.setId(this.getId());
+        slot.setName(this.getName());
+        slot.setDescription(this.getDescription());
+        slot.setDuration(this.getDuration());
+        slot.setDurationUnit(this.getDurationUnit());
+        slot.setTimeOfDay(this.getTimeOfDay());
+
+        return slot;
     }
 }
