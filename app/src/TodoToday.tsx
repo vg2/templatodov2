@@ -1,19 +1,41 @@
-import { Grid, Select, Option, Typography } from "@mui/joy"
-import { useQuery } from "@tanstack/react-query";
-
+import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
+import { useFetchTemplates } from "./data/useFetchTemplates";
+import { TodoCard } from "./components/TodoCard";
 const TodoToday = () => {
-  const query = useQuery({ queryKey: ['templateDefintions'], queryFn: fetch('http://localhost:8080/template-definitions') });
+  const { data, isPending, error } = useFetchTemplates();
 
-console.log(query.data);
+  if (isPending) return <>Loading</>;
+
+  if (error) return <>{error.message}</>;
+
+  if (!data || data.length === 0) return <>no templates found</>;
+
+  console.log(data);
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
       <Grid xs={12}>
         <Typography level='h2'>To do today</Typography>
       </Grid>
       <Grid xs={12} sm={4}>
-        <Select defaultValue='baby-activities'>
-          <Option value='baby-activities'>Baby activites</Option>
-        </Select>
+        <AccordionGroup>
+          {data.map(template =>
+          (<Accordion key={template.id}>
+            <AccordionSummary>{template.name}</AccordionSummary>
+            <AccordionDetails>
+              {template.timeSlots.map(ts => ts.todoItems.map(todo => (
+                <TodoCard 
+                    name={todo.name} 
+                    description={todo.description} 
+                    timeSlot={ts.name}
+                    time={ts.timeOfDay}
+                    duration={ts.duration} 
+                    durationUnit={ts.durationUnit} 
+                  />
+              )))}
+            </AccordionDetails>
+          </Accordion>)
+          )}
+        </AccordionGroup>
       </Grid>
     </Grid>
   )
