@@ -1,24 +1,14 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
-import { useFetchTemplates } from "./data/useFetchTemplates";
 import { TodoCard } from "./components/TodoCard";
+import { Template } from "./data/Template.type";
 import { useState } from "react";
-import { format } from "date-fns/format";
-import { useFetchTemplateInstance } from "./data/useFetchTemplateInstance";
+import { TemplateInstance } from "./data/TemplateInstance.type";
+
 const TodoToday = () => {
-  const { data, isPending, error } = useFetchTemplates();
   const [index, setIndex] = useState<number | null>(null);
-
-  const today = format(new Date(), 'yyyy-MM-dd');
-
-  const { data: instanceData, isPending: instancePending  } = useFetchTemplateInstance(data && data[index ?? 0].id, today);
-
-
-  if (isPending) return <>Loading</>;
-
-  if (error) return <>{error.message}</>;
-
-  if (!data || data.length === 0) return <>no templates found</>;
-
+  const data: Template[] = [];
+  const instanceData: TemplateInstance = { id: '1', date: '2024-05-29', actionedItems: [], templateSnapshot: data[0] };
+  const instancePending = false;
 
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>

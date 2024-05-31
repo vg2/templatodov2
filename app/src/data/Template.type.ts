@@ -4,7 +4,7 @@ export type Template = {
   cycleLength: number;
   description: string;
   frequency: 'Daily' | 'Weekly' | 'Monthly';
-  id: string;
+  id?: number;
   name: string;
   startDate: string | Date;
   timeSlots: TimeSlot[];

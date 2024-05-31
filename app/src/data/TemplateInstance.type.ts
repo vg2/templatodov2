@@ -5,7 +5,7 @@ export type TemplateInstance = {
   id: string;
   templateSnapshot: Template;
   date: string;
-  actionedItems: ActionedItem;
+  actionedItems: ActionedItem[];
 }
 
 export type ActionedItem = {

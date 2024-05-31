@@ -1,19 +1,26 @@
 import { Sheet, Typography } from '@mui/joy'
 import './App.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import TodoToday from './TodoToday';
-
-const queryClient = new QueryClient();
+import { initDb } from './data/db';
+import { useEffect } from 'react';
+import seedData from './data/seed-data';
 
 function App() {
+  useEffect(() => {
+    const setupDb = async () => {
+      const db = await initDb();
+      await seedData(db);
+    }
+    setupDb();
+  }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Sheet variant='soft' color='primary' sx={{padding: 1}}>
+    <>
+      <Sheet variant='soft' color='primary' sx={{ padding: 1 }}>
         <Typography level='h1'>Templatodo</Typography>
       </Sheet>
-      <TodoToday/>
-    </QueryClientProvider>
+      <TodoToday />
+    </>
   )
 }
 
