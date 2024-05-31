@@ -4,7 +4,7 @@ import { timeSlotToDuration } from "../utils/timeslot-to-duration.function";
 import { TodoState } from "../data/TodoState";
 
 export type TodoCardInput = {
-  todoId: string;
+  todoId: number | undefined;
   name: string;
   description: string;
   timeSlot: string;
@@ -12,8 +12,8 @@ export type TodoCardInput = {
   duration: number;
   durationUnit: DurationUnit;
   state: TodoState;
-  markDone: (todoId: string) => void;
-  openDetails: (todoId: string) => void;
+  markDone: (todoId: number) => void;
+  openDetails: (todoId: number) => void;
 };
 export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, description, timeSlot, time, duration, durationUnit, state, markDone, openDetails }) => {
   return (

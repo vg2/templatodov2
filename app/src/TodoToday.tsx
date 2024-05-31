@@ -1,14 +1,24 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
 import { TodoCard } from "./components/TodoCard";
-import { Template } from "./data/Template.type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TemplateInstance } from "./data/TemplateInstance.type";
+import { openDb } from "./data/db";
+import { Template } from "./model/Template.type";
 
 const TodoToday = () => {
   const [index, setIndex] = useState<number | null>(null);
-  const data: Template[] = [];
+  const [data, setData] = useState<Template[]>([]);
   const instanceData: TemplateInstance = { id: '1', date: '2024-05-29', actionedItems: [], templateSnapshot: data[0] };
   const instancePending = false;
+
+  useEffect(() => {
+    const loadTemps = async () => {
+      const db = await openDb();
+      const templates = await db.getAll('templates');
+      setData(templates);
+    }
+    loadTemps();
+  }, []);
 
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>

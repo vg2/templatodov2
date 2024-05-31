@@ -1,7 +1,7 @@
-import { DurationUnit } from "./DurationUnit.type";
+import { DurationUnit } from "../common/DurationUnit.type";
 
 export type TodoItem = {
-  id?: string;
+  id?: number;
   name: string;
   description: string;
   typicalDuration: number;

@@ -1,15 +1,15 @@
 import { Template } from "./Template.type";
-import { TodoState } from "./TodoState";
+import { TodoState } from "../common/TodoState";
 
 export type TemplateInstance = {
-  id: string;
+  id: number;
   templateSnapshot: Template;
   date: string;
   actionedItems: ActionedItem[];
 }
 
 export type ActionedItem = {
-  todoItemId: string;
+  todoItemId: number;
   state: TodoState;
   comment: string;
   timestamp: string;

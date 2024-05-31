@@ -11,19 +11,25 @@ export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<
       frequency: "Daily",
       cycleLength: 14,
       startDate: "2024-03-15",
-      timeSlots: [{
-        name: "P1",
-        description: "Playtime 1",
-        duration: 60,
-        durationUnit: "Minutes",
-        timeOfDay: "07:30:00",
-        todoItems: [{
-          name: "Tactile creativity",
-          description: "Explore textures - texture books, around the house, etc",
-          typicalDuration: 60,
-          typicalDurationUnit: 'Minutes',
-        }]
-      }]
+      timeSlotIds: [1],
+    });
+
+    db.put('timeSlots', {
+      id: 1,
+      name: "P1",
+      description: "Playtime 1",
+      duration: 60,
+      durationUnit: "Minutes",
+      timeOfDay: "07:30:00",
+      todoItemIds: [1]
     })
+
+    db.put('todoItems', {
+      id: 1,
+      name: "Tactile creativity",
+      description: "Explore textures - texture books, around the house, etc",
+      typicalDuration: 60,
+      typicalDurationUnit: 'Minutes',
+    });
   }
 }

@@ -37,6 +37,11 @@ public class TemplateInstance {
     public List<ActionedItem> getActionedItems() {
         return actionedItems;
     }
+
+    public void addActionedItem(ActionedItem item) {
+        this.actionedItems.add(item);
+    }
+
     public void setActionedItems(List<ActionedItem> actionedItems) {
         this.actionedItems = actionedItems;
     }

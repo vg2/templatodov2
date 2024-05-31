@@ -1,23 +1,37 @@
 import { DBSchema, openDB } from "idb";
-import { Template } from "./Template.type";
-import { TemplateInstance } from "./TemplateInstance.type";
+import { DbTemplate } from "./DbTemplate.type";
+import { DbTemplateInstance } from "./DbTemplateInstance.type";
+import { DbTimeSlot } from "./DbTimeSlot.type";
+import { DbTodoItem } from "./DbTodoItem.type";
 
 export interface TemplaTodoDb extends DBSchema {
   'templates': {
     key: string;
-    value: Template;
+    value: DbTemplate;
+  },
+  'timeSlots': {
+    key: string;
+    value: DbTimeSlot;
+  },
+  'todoItems': {
+    key: string;
+    value: DbTodoItem;
   },
   'templateInstances': {
     key: string;
-    value: TemplateInstance;
-  }
+    value: DbTemplateInstance;
+  },
 }
 
-export async function initDb() {
-  const db = await openDB<TemplaTodoDb>('templatodo', 1, {
+export async function openDb() {
+  const db = await openDB<TemplaTodoDb>('templatodo', 2, {
     upgrade(db) {
       if (!db.objectStoreNames.contains('templates')) {
         db.createObjectStore('templates', { keyPath: 'id', autoIncrement: true });
+      }
+
+      if (!db.objectStoreNames.contains('timeSlots')) {
+        db.createObjectStore('timeSlots', { keyPath: 'id', autoIncrement: true });
       }
 
       if (!db.objectStoreNames.contains('templateInstances')) {

@@ -1,14 +1,14 @@
 import { Sheet, Typography } from '@mui/joy'
 import './App.css'
 import TodoToday from './TodoToday';
-import { initDb } from './data/db';
+import { openDb } from './data/db';
 import { useEffect } from 'react';
 import seedData from './data/seed-data';
 
 function App() {
   useEffect(() => {
     const setupDb = async () => {
-      const db = await initDb();
+      const db = await openDb();
       await seedData(db);
     }
     setupDb();
