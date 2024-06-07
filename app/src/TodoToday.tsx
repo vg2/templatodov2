@@ -1,24 +1,62 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
 import { TodoCard } from "./components/TodoCard";
 import { useEffect, useState } from "react";
-import { TemplateInstance } from "./data/TemplateInstance.type";
-import { openDb } from "./data/db";
 import { Template } from "./model/Template.type";
+import { ActionedItem, TemplateInstance } from "./model/TemplateInstance.type";
+import { loadTemplates } from "./service/load-templates";
+import { format, formatISO } from "date-fns";
+import { getInstance } from "./service/get-instance";
+import { TodoState } from "./common/TodoState";
+import { TodoItem } from "./model/TodoItem.type";
+import { updateInstance } from "./service/update-instance";
 
 const TodoToday = () => {
-  const [index, setIndex] = useState<number | null>(null);
+  const [expandedTemplate, setExpandedTemplate] = useState<Template | null>(null);
   const [data, setData] = useState<Template[]>([]);
-  const instanceData: TemplateInstance = { id: '1', date: '2024-05-29', actionedItems: [], templateSnapshot: data[0] };
-  const instancePending = false;
+  const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
+  const [instancePending, setInstancePending] = useState<boolean>(false);
 
   useEffect(() => {
     const loadTemps = async () => {
-      const db = await openDb();
-      const templates = await db.getAll('templates');
+      const templates = await loadTemplates();
       setData(templates);
     }
     loadTemps();
   }, []);
+
+  useEffect(() => {
+    if (expandedTemplate === null) {
+      setInstanceData(() => null);
+      setInstancePending(() => false);
+      return;
+    }
+
+    setInstancePending(true);
+    const loadInstance = async () => {
+      const templateInstance = await getInstance(expandedTemplate.id!, format(new Date(), 'yyyy-MM-dd'));
+      setInstancePending(false);
+      setInstanceData(templateInstance);
+    }
+    loadInstance();
+  }, [expandedTemplate, setInstanceData, setInstancePending])
+
+  const currentTodoItemState = (instance: TemplateInstance, todo: TodoItem): TodoState => {
+    const actionedItems = instance.actionedItems;
+    const actionedItem = actionedItems.find(ai => ai.todoItemId === todo.id);
+    return actionedItem?.state ?? "New";
+  }
+
+  const markDoneForInstance = async (instance: TemplateInstance, todo: TodoItem): Promise<void> => {
+    const actioned: ActionedItem = {
+      state: 'Complete',
+      todoItemId: todo.id,
+      comment: '',
+      timestamp: formatISO(new Date())
+    }
+    instance.actionedItems.push(actioned);
+    await updateInstance(instance);
+    setExpandedTemplate(null);
+  }
 
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -27,8 +65,8 @@ const TodoToday = () => {
       </Grid>
       <Grid xs={12} sm={4}>
         <AccordionGroup>
-          {data.map((template, i) =>
-          (<Accordion key={template.id} expanded={index === i} onChange={(_, expanded) => setIndex(expanded ? i : null)}>
+          {data.map((template) =>
+          (<Accordion key={template.id} expanded={expandedTemplate?.id === template.id} onChange={(_, expanded) => setExpandedTemplate(expanded ? template : null)}>
             <AccordionSummary>{template.name}</AccordionSummary>
             <AccordionDetails>
               {!instancePending && instanceData?.templateSnapshot.timeSlots.map(ts => ts.todoItems.map(todo => (
@@ -41,8 +79,8 @@ const TodoToday = () => {
                   duration={ts.duration}
                   durationUnit={ts.durationUnit}
                   todoId={todo.id}
-                  state="New"
-                  markDone={() => { }}
+                  state={currentTodoItemState(instanceData, todo)}
+                  markDone={() => markDoneForInstance(instanceData, todo)}
                   openDetails={() => { }}
                 />
               )))}

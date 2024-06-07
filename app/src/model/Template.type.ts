@@ -1,3 +1,4 @@
+import { DbTemplate } from "../data/DbTemplate.type";
 import { TimeSlot } from "./TimeSlot.type";
 
 export type Template = {
@@ -8,4 +9,11 @@ export type Template = {
   name: string;
   startDate: string | Date;
   timeSlots: TimeSlot[];
+}
+
+export function mapTemplateFromDb(dbTemplate: DbTemplate): Template {
+  return {
+    ...dbTemplate,
+    timeSlots: []
+  }
 }

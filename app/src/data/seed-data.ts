@@ -6,7 +6,7 @@ export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<
   if (count === 0) {
     db.put('templates', {
       id: 1,
-      name: "Viaan's schedule",
+      name: "Viaan's activity schedule",
       description: "Template of todo items for Viaan's schedule",
       frequency: "Daily",
       cycleLength: 14,

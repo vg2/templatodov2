@@ -1,10 +1,10 @@
 import { Button, Card, CardActions, CardContent, Chip, Typography } from "@mui/joy";
-import { DurationUnit } from "../data/DurationUnit.type";
 import { timeSlotToDuration } from "../utils/timeslot-to-duration.function";
-import { TodoState } from "../data/TodoState";
+import { DurationUnit } from "../common/DurationUnit.type";
+import { TodoState } from "../common/TodoState";
 
 export type TodoCardInput = {
-  todoId: number | undefined;
+  todoId: number;
   name: string;
   description: string;
   timeSlot: string;
@@ -12,7 +12,7 @@ export type TodoCardInput = {
   duration: number;
   durationUnit: DurationUnit;
   state: TodoState;
-  markDone: (todoId: number) => void;
+  markDone: (todoId: number) => Promise<void>;
   openDetails: (todoId: number) => void;
 };
 export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, description, timeSlot, time, duration, durationUnit, state, markDone, openDetails }) => {
@@ -24,7 +24,7 @@ export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, 
         <Chip>{timeSlot}: {timeSlotToDuration(time, duration, durationUnit)}</Chip>
       </CardContent>
       <CardActions>
-        <Button disabled={state !== 'New'} variant="solid" color="primary" onClick={() => markDone(todoId)}>
+        <Button disabled={state !== 'New'} variant="solid" color="primary" onClick={() => void markDone(todoId)}>
           Done?
         </Button>
         <Button variant="outlined" color="neutral" onClick={() => openDetails(todoId)}>

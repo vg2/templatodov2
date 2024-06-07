@@ -6,19 +6,19 @@ import { DbTodoItem } from "./DbTodoItem.type";
 
 export interface TemplaTodoDb extends DBSchema {
   'templates': {
-    key: string;
+    key: number;
     value: DbTemplate;
   },
   'timeSlots': {
-    key: string;
+    key: number;
     value: DbTimeSlot;
   },
   'todoItems': {
-    key: string;
+    key: number;
     value: DbTodoItem;
   },
   'templateInstances': {
-    key: string;
+    key: number;
     value: DbTemplateInstance;
   },
 }
@@ -34,6 +34,10 @@ export async function openDb() {
         db.createObjectStore('timeSlots', { keyPath: 'id', autoIncrement: true });
       }
 
+      if (!db.objectStoreNames.contains('todoItems')) {
+        db.createObjectStore('todoItems', { keyPath: 'id', autoIncrement: true });
+      }
+  
       if (!db.objectStoreNames.contains('templateInstances')) {
         db.createObjectStore('templateInstances', { keyPath: 'id', autoIncrement: true });
       }

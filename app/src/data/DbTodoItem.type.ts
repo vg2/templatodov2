@@ -1,7 +1,7 @@
 import { DurationUnit } from "../common/DurationUnit.type";
 
 export type DbTodoItem = {
-  id?: number;
+  id: number;
   name: string;
   description: string;
   typicalDuration: number;

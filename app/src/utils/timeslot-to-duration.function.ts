@@ -1,4 +1,4 @@
-import { DurationUnit } from "../data/DurationUnit.type";
+import { DurationUnit } from "../common/DurationUnit.type";
 
 export function timeSlotToDuration(time: string, duration: number, durationUnit: DurationUnit): string {
     const validDurations: DurationUnit[] = ['Seconds', 'Minutes', 'Hours'];
