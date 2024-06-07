@@ -15,6 +15,7 @@ const TodoToday = () => {
   const [data, setData] = useState<Template[]>([]);
   const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
   const [instancePending, setInstancePending] = useState<boolean>(false);
+  const [refreshInstance, setRefreshInstance] = useState<any>(null);
 
   useEffect(() => {
     const loadTemps = async () => {
@@ -38,7 +39,7 @@ const TodoToday = () => {
       setInstanceData(templateInstance);
     }
     loadInstance();
-  }, [expandedTemplate, setInstanceData, setInstancePending])
+  }, [expandedTemplate, setInstanceData, setInstancePending, refreshInstance])
 
   const currentTodoItemState = (instance: TemplateInstance, todo: TodoItem): TodoState => {
     const actionedItems = instance.actionedItems;
@@ -55,7 +56,7 @@ const TodoToday = () => {
     }
     instance.actionedItems.push(actioned);
     await updateInstance(instance);
-    setExpandedTemplate(null);
+    setRefreshInstance({});
   }
 
   return (
