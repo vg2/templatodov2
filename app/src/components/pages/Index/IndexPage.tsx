@@ -1,11 +1,11 @@
 import { Sheet, Typography } from '@mui/joy'
-import './App.css'
-import TodoToday from './TodoToday';
-import { openDb } from './data/db';
+import './IndexPage.css'
 import { useEffect } from 'react';
-import seedData from './data/seed-data';
+import { openDb } from '@app/data/db';
+import seedData from '@app/data/seed-data';
+import TodoToday from '@app/components/organisms/TodoToday';
 
-function App() {
+function IndexPage() {
   useEffect(() => {
     const setupDb = async () => {
       const db = await openDb();
@@ -24,4 +24,4 @@ function App() {
   )
 }
 
-export default App
+export default IndexPage

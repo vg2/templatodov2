@@ -1,7 +1,7 @@
+import { DurationUnit } from "@app/common/DurationUnit.type";
+import { TodoState } from "@app/common/TodoState";
+import { timeSlotToDuration } from "@app/utils/timeslot-to-duration.function";
 import { Button, Card, CardActions, CardContent, Chip, Typography } from "@mui/joy";
-import { timeSlotToDuration } from "../utils/timeslot-to-duration.function";
-import { DurationUnit } from "../common/DurationUnit.type";
-import { TodoState } from "../common/TodoState";
 
 export type TodoCardInput = {
   todoId: number;

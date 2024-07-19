@@ -1,5 +1,7 @@
 import { IDBPDatabase } from "idb";
 import { TemplaTodoDb } from "./db";
+import { parse } from "date-fns";
+import { DateFormat } from "@app/common/DateFormat";
 
 export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<void> {
   const count = await db.count('templates');
@@ -10,7 +12,7 @@ export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<
       description: "Template of todo items for Viaan's schedule",
       frequency: "Daily",
       cycleLength: 14,
-      startDate: "2024-03-15",
+      startDate: parse("2024-03-15", DateFormat, new Date()),
       timeSlotIds: [1],
     });
 

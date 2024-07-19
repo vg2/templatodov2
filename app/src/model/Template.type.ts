@@ -7,7 +7,7 @@ export type Template = {
   frequency: 'Daily' | 'Weekly' | 'Monthly';
   id?: number;
   name: string;
-  startDate: string | Date;
+  startDate: Date;
   timeSlots: TimeSlot[];
 }
 
@@ -17,3 +17,5 @@ export function mapTemplateFromDb(dbTemplate: DbTemplate): Template {
     timeSlots: []
   }
 }
+
+export type TemplateFormType = Omit<Template, 'timeSlots'>;

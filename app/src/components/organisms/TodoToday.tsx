@@ -1,20 +1,22 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
-import { TodoCard } from "./components/TodoCard";
 import { useEffect, useState } from "react";
-import { Template } from "./model/Template.type";
-import { ActionedItem, TemplateInstance } from "./model/TemplateInstance.type";
-import { loadTemplates } from "./service/load-templates";
 import { format, formatISO } from "date-fns";
-import { getInstance } from "./service/get-instance";
-import { TodoState } from "./common/TodoState";
-import { TodoItem } from "./model/TodoItem.type";
-import { updateInstance } from "./service/update-instance";
+import { Template } from "@app/model/Template.type";
+import { ActionedItem, TemplateInstance } from "@app/model/TemplateInstance.type";
+import { loadTemplates } from "@app/service/load-templates";
+import { getInstance } from "@app/service/get-instance";
+import { TodoItem } from "@app/model/TodoItem.type";
+import { TodoState } from "../../common/TodoState";
+import { updateInstance } from "@app/service/update-instance";
+import { TodoCard } from "../molecules/TodoCard";
+import { Link } from "@tanstack/react-router";
 
 const TodoToday = () => {
   const [expandedTemplate, setExpandedTemplate] = useState<Template | null>(null);
   const [data, setData] = useState<Template[]>([]);
   const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
   const [instancePending, setInstancePending] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [refreshInstance, setRefreshInstance] = useState<any>(null);
 
   useEffect(() => {
@@ -70,22 +72,23 @@ const TodoToday = () => {
           (<Accordion key={template.id} expanded={expandedTemplate?.id === template.id} onChange={(_, expanded) => setExpandedTemplate(expanded ? template : null)}>
             <AccordionSummary>{template.name}</AccordionSummary>
             <AccordionDetails>
-              {!instancePending && instanceData?.templateSnapshot.timeSlots.map(ts => ts.todoItems.map(todo => (
-                <TodoCard
-                  key={ts.id}
-                  name={todo.name}
-                  description={todo.description}
-                  timeSlot={ts.name}
-                  time={ts.timeOfDay}
-                  duration={ts.duration}
-                  durationUnit={ts.durationUnit}
-                  todoId={todo.id}
-                  state={currentTodoItemState(instanceData, todo)}
-                  markDone={() => markDoneForInstance(instanceData, todo)}
-                  openDetails={() => { }}
-                />
-              )))}
-              {instancePending && (<div>loading</div>)}
+              <Link to="/edit-template/$templateId" params={{ templateId: `${template.id}` }}>Edit</Link>
+                {!instancePending && instanceData?.templateSnapshot.timeSlots.map(ts => ts.todoItems.map(todo => (
+                  <TodoCard
+                    key={ts.id}
+                    name={todo.name}
+                    description={todo.description}
+                    timeSlot={ts.name}
+                    time={ts.timeOfDay}
+                    duration={ts.duration}
+                    durationUnit={ts.durationUnit}
+                    todoId={todo.id}
+                    state={currentTodoItemState(instanceData, todo)}
+                    markDone={() => markDoneForInstance(instanceData, todo)}
+                    openDetails={() => { }}
+                  />
+                )))}
+                {instancePending && (<div>loading</div>)}
             </AccordionDetails>
           </Accordion>)
           )}

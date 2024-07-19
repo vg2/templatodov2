@@ -4,6 +4,6 @@ export type DbTemplate = {
   frequency: 'Daily' | 'Weekly' | 'Monthly';
   id?: number;
   name: string;
-  startDate: string | Date;
+  startDate: Date;
   timeSlotIds: number[];
 }
