@@ -3,7 +3,7 @@ import { DbTimeSlot } from "../data/DbTimeSlot.type";
 import { TodoItem } from "./TodoItem.type";
 
 export type TimeSlot = {
-  id: number;
+  id?: number;
   name: string;
   description: string;
   duration: number;
@@ -18,3 +18,5 @@ export function mapTimeSlotFromDb(dbTimeSlot: DbTimeSlot): TimeSlot {
     todoItems: [],
   }
 }
+
+export type TimeSlotFormType = Omit<TimeSlot, 'todoItems'>;

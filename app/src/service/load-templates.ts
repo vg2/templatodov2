@@ -19,7 +19,7 @@ export async function loadTemplates(): Promise<Template[]> {
 
     templates.forEach(t => {
         const dbTemplate = dbTemplates.find(dbt => dbt.id === t.id);
-        const templateTimeSlots = timeSlots.filter(ts => dbTemplate?.timeSlotIds.includes(ts.id));
+        const templateTimeSlots = timeSlots.filter(ts => dbTemplate?.timeSlotIds.includes(ts.id!));
         t.timeSlots = templateTimeSlots;
     });
 
