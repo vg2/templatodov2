@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as EditTemplateTemplateIdImport } from './routes/edit-template.$templateId'
+import { Route as EditTemplateTemplateIdNewTimeslotImport } from './routes/edit-template_.$templateId/new-timeslot'
 
 // Create Virtual Routes
 
@@ -36,6 +37,12 @@ const EditTemplateTemplateIdRoute = EditTemplateTemplateIdImport.update({
   path: '/edit-template/$templateId',
   getParentRoute: () => rootRoute,
 } as any)
+
+const EditTemplateTemplateIdNewTimeslotRoute =
+  EditTemplateTemplateIdNewTimeslotImport.update({
+    path: '/edit-template/$templateId/new-timeslot',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -62,6 +69,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditTemplateTemplateIdImport
       parentRoute: typeof rootRoute
     }
+    '/edit-template/$templateId/new-timeslot': {
+      id: '/edit-template/$templateId/new-timeslot'
+      path: '/edit-template/$templateId/new-timeslot'
+      fullPath: '/edit-template/$templateId/new-timeslot'
+      preLoaderRoute: typeof EditTemplateTemplateIdNewTimeslotImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -71,6 +85,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   NewTemplateLazyRoute,
   EditTemplateTemplateIdRoute,
+  EditTemplateTemplateIdNewTimeslotRoute,
 })
 
 /* prettier-ignore-end */
@@ -83,7 +98,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/new-template",
-        "/edit-template/$templateId"
+        "/edit-template/$templateId",
+        "/edit-template/$templateId/new-timeslot"
       ]
     },
     "/": {
@@ -94,6 +110,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/edit-template/$templateId": {
       "filePath": "edit-template.$templateId.tsx"
+    },
+    "/edit-template/$templateId/new-timeslot": {
+      "filePath": "edit-template_.$templateId/new-timeslot.tsx"
     }
   }
 }

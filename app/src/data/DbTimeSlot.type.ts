@@ -1,7 +1,7 @@
 import { DurationUnit } from "../common/DurationUnit.type";
 
 export type DbTimeSlot = {
-  id: number;
+  id?: number;
   name: string;
   description: string;
   duration: number;

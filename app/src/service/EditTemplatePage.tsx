@@ -9,9 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 export const EditTemplatePage = () => {
   const { templateId } = useParams({ strict: false });
   const { data: template } = useSuspenseQuery(getTemplateQueryOptions(parseInt(templateId!)));
-  const navigate = useNavigate({ from: '/edit-template/$templateId' });
-
-  const addTimeSlot = () => navigate({ to: './new-timeslot' });
+  const navigate = useNavigate({ from: '/new-template' });
 
   const postSubmit = () => navigate({ to: '/' });
 
@@ -20,7 +18,7 @@ export const EditTemplatePage = () => {
       <Typography level='h3'>Edit {template.name}</Typography>
       <EditTemplateForm template={template} onSuccessfulSubmit={postSubmit} />
       <Divider />
-      <Stack direction="row" alignItems="center"><Typography level='h4'>Time Slots</Typography> <IconButton onClick={() => addTimeSlot()} variant="plain"><AddIcon /></IconButton></Stack>
+      <Stack direction="row" alignItems="center"><Typography level='h4'>Time Slots</Typography> <IconButton variant="plain"><AddIcon /></IconButton></Stack>
       <AccordionGroup>
         {
           template.timeSlots.map((timeSlot => (

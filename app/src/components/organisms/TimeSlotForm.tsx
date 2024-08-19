@@ -6,10 +6,11 @@ import { useForm, Validator } from "@tanstack/react-form";
 import { FormControl, FormLabel, Input, Select, Option, Button, Stack } from "@mui/joy";
 import { AllDurations, DurationUnit } from "@app/common/DurationUnit.type";
 import styles from './TimeSlotForm.module.css';
+import { saveTimeSlot } from "@app/service/update-timeslot";
 
 type TimeSlotFormInputs = {
   timeSlot: TimeSlot;
-  onSuccessfulSubmit: () => Promise<void>;
+  onSuccessfulSubmit: (timeSlotId: number) => Promise<void>;
 }
 
 export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSubmit }) => {
@@ -17,8 +18,8 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
     validatorAdapter: zodValidator(),
     validators: { onChange: timeSlotSchema, onSubmit: timeSlotSchema },
     onSubmit: async ({ value }) => {
-      console.log(value);
-      onSuccessfulSubmit();
+      const timeSlotId = await saveTimeSlot(value);
+      onSuccessfulSubmit(timeSlotId);
     },
     defaultValues: timeSlot,
   });
