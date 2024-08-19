@@ -7,6 +7,5 @@ export const editTemplateSchema = z.object({
     description: z.string().min(2, 'Description must be at least 2 characters').max(100, 'Description must be at most 100 characters'),
     cycleLength: z.number(),
     frequency: z.enum(['Daily', 'Weekly', 'Monthly']),
-    startDate: z.date(),
-
+    startDate: z.coerce.date()
 }) satisfies ZodType<TemplateFormType>;
