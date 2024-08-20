@@ -13,7 +13,7 @@ export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<
       frequency: "Daily",
       cycleLength: 14,
       startDate: parse("2024-03-15", DateFormat, new Date()),
-      timeSlotIds: [1],
+      todos: [{ timeSlotId: 1, todoItemId: 1, pointInCycle: 1 }],
     });
 
     db.put('timeSlots', {
@@ -23,7 +23,6 @@ export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<
       duration: 60,
       durationUnit: "Minutes",
       timeOfDay: "07:30:00",
-      todoItemIds: [1]
     })
 
     db.put('todoItems', {

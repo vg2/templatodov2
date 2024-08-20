@@ -6,7 +6,8 @@ import { useForm, Validator } from "@tanstack/react-form";
 import { FormControl, FormLabel, Input, Select, Option, Button, Stack } from "@mui/joy";
 import { AllDurations, DurationUnit } from "@app/common/DurationUnit.type";
 import styles from './TimeSlotForm.module.css';
-import { saveTimeSlot } from "@app/service/update-timeslot";
+// import { saveTimeSlot } from "@app/service/update-timeslot";
+import { Link } from "@tanstack/react-router";
 
 type TimeSlotFormInputs = {
   timeSlot: TimeSlot;
@@ -18,8 +19,9 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
     validatorAdapter: zodValidator(),
     validators: { onChange: timeSlotSchema, onSubmit: timeSlotSchema },
     onSubmit: async ({ value }) => {
-      const timeSlotId = await saveTimeSlot(value);
-      onSuccessfulSubmit(timeSlotId);
+      console.log(value);
+      // const timeSlotId = await saveTimeSlot(value);
+      onSuccessfulSubmit(timeSlot.id ?? 0 /* wtf */);
     },
     defaultValues: timeSlot,
   });
@@ -129,7 +131,16 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
             </FormControl>
           )}
         />
-        <Button type="submit">Save {timeSlot.name}</Button>
+        <Stack direction="row" spacing={1} justifyContent="space-evenly" sx={{
+          width: '100%',
+          '& > *': {
+            width: '50%',
+            flex: 1
+          }
+        }}>
+          <Button type="submit">Save {timeSlot.name}</Button>
+          <Button component={Link} to="/time-slot/$timeSlotId/todos" params={{ timeSlotId: `${timeSlot.id}` }}>Add todos</Button>
+        </Stack>
       </Stack>
     </form>
   );

@@ -7,5 +7,4 @@ export type DbTimeSlot = {
   duration: number;
   durationUnit: DurationUnit;
   timeOfDay: string;
-  todoItemIds: number[];
 }

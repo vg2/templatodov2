@@ -73,21 +73,21 @@ const TodoToday = () => {
             <AccordionSummary>{template.name}</AccordionSummary>
             <AccordionDetails>
               <Link to="/edit-template/$templateId" params={{ templateId: `${template.id}` }}>Edit</Link>
-                {!instancePending && instanceData?.templateSnapshot.timeSlots.map(ts => ts.todoItems.map(todo => (
+                {!instancePending && instanceData?.templateSnapshot.todos.map(todo => (
                   <TodoCard
-                    key={ts.id}
-                    name={todo.name}
-                    description={todo.description}
-                    timeSlot={ts.name}
-                    time={ts.timeOfDay}
-                    duration={ts.duration}
-                    durationUnit={ts.durationUnit}
-                    todoId={todo.id}
-                    state={currentTodoItemState(instanceData, todo)}
-                    markDone={() => markDoneForInstance(instanceData, todo)}
+                    key={`${todo.timeSlot.id}-${todo.todoItem.id}`}
+                    name={todo.todoItem.name}
+                    description={todo.todoItem.description}
+                    timeSlot={todo.timeSlot.name}
+                    time={todo.timeSlot.timeOfDay}
+                    duration={todo.timeSlot.duration}
+                    durationUnit={todo.timeSlot.durationUnit}
+                    todoId={todo.todoItem.id}
+                    state={currentTodoItemState(instanceData, todo.todoItem)}
+                    markDone={() => markDoneForInstance(instanceData, todo.todoItem)}
                     openDetails={() => { }}
                   />
-                )))}
+                ))}
                 {instancePending && (<div>loading</div>)}
             </AccordionDetails>
           </Accordion>)

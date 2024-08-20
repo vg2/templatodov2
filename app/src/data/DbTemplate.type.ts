@@ -1,3 +1,5 @@
+import { DbTodoItemInTemplate } from "./DbTodoItemInTemplate.type";
+
 export type DbTemplate = {
   cycleLength: number;
   description: string;
@@ -5,5 +7,5 @@ export type DbTemplate = {
   id?: number;
   name: string;
   startDate: Date;
-  timeSlotIds: number[];
+  todos: DbTodoItemInTemplate[];
 }

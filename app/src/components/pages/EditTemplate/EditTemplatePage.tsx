@@ -23,11 +23,11 @@ export const EditTemplatePage = () => {
       <Stack direction="row" alignItems="center"><Typography level='h4'>Time Slots</Typography> <IconButton onClick={() => addTimeSlot()} variant="plain"><AddIcon /></IconButton></Stack>
       <AccordionGroup>
         {
-          template.timeSlots.map((timeSlot => (
-            <Accordion key={timeSlot.id}>
-              <AccordionSummary>{timeSlot.name} | {timeSlot.description}</AccordionSummary>
+          template.todos.map((todo => (
+            <Accordion key={todo.timeSlot.id}>
+              <AccordionSummary>{todo.timeSlot.name} | {todo.timeSlot.description}</AccordionSummary>
               <AccordionDetails>
-                <TimeSlotForm timeSlot={timeSlot} onSuccessfulSubmit={async () => { }} />
+                <TimeSlotForm timeSlot={todo.timeSlot} onSuccessfulSubmit={async () => { }} />
               </AccordionDetails>
             </Accordion>
           )))

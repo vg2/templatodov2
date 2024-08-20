@@ -6,7 +6,7 @@ export async function insertTemplate(template: TemplateFormType): Promise<void> 
     const db = await openDb();
     const dbTemplate: DbTemplate = {
         ...template,
-        timeSlotIds: []
+        todos: []
     }
     await db.put('templates', dbTemplate);
 }

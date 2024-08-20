@@ -1,5 +1,5 @@
 import { DbTemplate } from "../data/DbTemplate.type";
-import { TimeSlot } from "./TimeSlot.type";
+import { TodoItemInTemplate } from "./TodoItemInTemplate.type";
 
 export type Template = {
   cycleLength: number;
@@ -8,14 +8,14 @@ export type Template = {
   id?: number;
   name: string;
   startDate: Date;
-  timeSlots: TimeSlot[];
+  todos: TodoItemInTemplate[];
 }
 
 export function mapTemplateFromDb(dbTemplate: DbTemplate): Template {
   return {
     ...dbTemplate,
-    timeSlots: []
+    todos: []
   }
 }
 
-export type TemplateFormType = Omit<Template, 'timeSlots'>;
+export type TemplateFormType = Omit<Template, 'todos'>;

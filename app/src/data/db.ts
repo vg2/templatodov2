@@ -37,7 +37,7 @@ export async function openDb() {
       if (!db.objectStoreNames.contains('todoItems')) {
         db.createObjectStore('todoItems', { keyPath: 'id', autoIncrement: true });
       }
-  
+
       if (!db.objectStoreNames.contains('templateInstances')) {
         db.createObjectStore('templateInstances', { keyPath: 'id', autoIncrement: true });
       }
