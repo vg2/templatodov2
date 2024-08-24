@@ -25,7 +25,7 @@ export const TodoList = ({ todos }: TodoListInputType) => {
                   endAction={<IconButton aria-label='Remove' size='sm' variant='plain'><RemoveCircleOutline /></IconButton>}>
                   <ListItemButton>
                     <ListItemContent>
-                      <Typography level="title-sm">{todo.todoItem.name}</Typography>
+                      <Typography level="title-sm">{todo.todoItem.name} | {todo.pointInCycle}</Typography>
                       <Typography level="body-sm" noWrap>
                         {todo.todoItem.description}
                       </Typography>
