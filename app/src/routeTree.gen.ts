@@ -14,7 +14,6 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as EditTemplateTemplateIdImport } from './routes/edit-template.$templateId'
-import { Route as TimeSlotTimeSlotIdTodosImport } from './routes/time-slot.$timeSlotId.todos'
 import { Route as EditTemplateTemplateIdNewTimeslotImport } from './routes/edit-template_.$templateId/new-timeslot'
 
 // Create Virtual Routes
@@ -36,11 +35,6 @@ const IndexLazyRoute = IndexLazyImport.update({
 
 const EditTemplateTemplateIdRoute = EditTemplateTemplateIdImport.update({
   path: '/edit-template/$templateId',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const TimeSlotTimeSlotIdTodosRoute = TimeSlotTimeSlotIdTodosImport.update({
-  path: '/time-slot/$timeSlotId/todos',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -82,13 +76,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditTemplateTemplateIdNewTimeslotImport
       parentRoute: typeof rootRoute
     }
-    '/time-slot/$timeSlotId/todos': {
-      id: '/time-slot/$timeSlotId/todos'
-      path: '/time-slot/$timeSlotId/todos'
-      fullPath: '/time-slot/$timeSlotId/todos'
-      preLoaderRoute: typeof TimeSlotTimeSlotIdTodosImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -99,7 +86,6 @@ export const routeTree = rootRoute.addChildren({
   NewTemplateLazyRoute,
   EditTemplateTemplateIdRoute,
   EditTemplateTemplateIdNewTimeslotRoute,
-  TimeSlotTimeSlotIdTodosRoute,
 })
 
 /* prettier-ignore-end */
@@ -113,8 +99,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/new-template",
         "/edit-template/$templateId",
-        "/edit-template/$templateId/new-timeslot",
-        "/time-slot/$timeSlotId/todos"
+        "/edit-template/$templateId/new-timeslot"
       ]
     },
     "/": {
@@ -128,9 +113,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/edit-template/$templateId/new-timeslot": {
       "filePath": "edit-template_.$templateId/new-timeslot.tsx"
-    },
-    "/time-slot/$timeSlotId/todos": {
-      "filePath": "time-slot.$timeSlotId.todos.tsx"
     }
   }
 }

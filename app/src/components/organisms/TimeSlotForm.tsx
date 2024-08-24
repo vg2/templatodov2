@@ -7,7 +7,6 @@ import { FormControl, FormLabel, Input, Select, Option, Button, Stack } from "@m
 import { AllDurations, DurationUnit } from "@app/common/DurationUnit.type";
 import styles from './TimeSlotForm.module.css';
 // import { saveTimeSlot } from "@app/service/update-timeslot";
-import { Link } from "@tanstack/react-router";
 
 type TimeSlotFormInputs = {
   timeSlot: TimeSlot;
@@ -139,7 +138,6 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
           }
         }}>
           <Button type="submit">Save {timeSlot.name}</Button>
-          <Button component={Link} to="/time-slot/$timeSlotId/todos" params={{ timeSlotId: `${timeSlot.id}` }}>Add todos</Button>
         </Stack>
       </Stack>
     </form>

@@ -19,6 +19,7 @@ export default defineConfig({
       "@app/model": resolve(root, "model"),
       "@app/service": resolve(root, "service"),
       "@app/utils": resolve(root, "utils"),
+      "@mui/material": "@mui/joy"
     }
   }
 })
