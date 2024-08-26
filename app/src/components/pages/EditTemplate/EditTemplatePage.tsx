@@ -11,7 +11,7 @@ export const EditTemplatePage = () => {
   const { data: template } = useSuspenseQuery(getTemplateQueryOptions(parseInt(templateId!)));
   const navigate = useNavigate({ from: '/edit-template/$templateId' });
 
-  const addTimeSlot = () => navigate({ to: './new-timeslot' });
+  const addTodos = () => navigate({ to: './add-todos' });
 
   const postSubmit = () => navigate({ to: '/' });
 
@@ -20,7 +20,7 @@ export const EditTemplatePage = () => {
       <Typography level='h3'>Edit {template.name}</Typography>
       <EditTemplateForm template={template} onSuccessfulSubmit={postSubmit} />
       <Divider />
-      <Stack direction="row" alignItems="center"><Typography level='h4'>Todos</Typography> <IconButton onClick={() => addTimeSlot()} variant="plain"><AddCircleOutline /></IconButton></Stack>
+      <Stack direction="row" alignItems="center"><Typography level='h4'>Todos</Typography> <IconButton onClick={() => addTodos()} variant="plain"><AddCircleOutline /></IconButton></Stack>
       <TodoList todos={template.todos} />
     </Stack>
   )

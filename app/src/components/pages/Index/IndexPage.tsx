@@ -1,4 +1,3 @@
-import { Sheet, Typography } from '@mui/joy'
 import './IndexPage.css'
 import { useEffect } from 'react';
 import { openDb } from '@app/data/db';
@@ -15,12 +14,7 @@ function IndexPage() {
   }, []);
 
   return (
-    <>
-      <Sheet variant='soft' color='primary' sx={{ padding: 1 }}>
-        <Typography level='h1'>Templatodo</Typography>
-      </Sheet>
-      <TodoToday />
-    </>
+    <TodoToday />
   )
 }
 

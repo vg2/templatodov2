@@ -1,20 +1,23 @@
 import { Add, Home } from '@mui/icons-material'
-import { Button, Stack } from '@mui/joy'
+import { Box, Button, Divider, Stack, Typography } from '@mui/joy'
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
 export const Route = createRootRoute({
   component: () => (
-    <>
-      <Stack direction='row' gap={2} alignItems='center'>
-        <Link to="/" className="[&.active]:font-bold">
-          <Home />
-        </Link>
-        <Button component={Link} to="/new-template" startDecorator={<Add/>}>New template</Button> 
-      </Stack>
-      <hr />
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '98vh' }}>
+      <Box component='main' sx={{ flexGrow: 1, p: 2 }}>
+        <Outlet />
+      </Box>
+      <Divider />
+      <Box component='footer' sx={{ p: 2 }}>
+        <Stack direction='row' gap={2} alignItems='center' justifyContent='space-between'>
+          <Link to="/">
+            <Home />
+          </Link>
+          <Button component={Link} to="/new-template" startDecorator={<Add />}>New template</Button>
+          <Typography level='title-lg'>Templatodo</Typography>
+        </Stack>
+      </Box>
+    </Box>
   ),
 })
