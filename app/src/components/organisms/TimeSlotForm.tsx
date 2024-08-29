@@ -1,4 +1,4 @@
-import { TimeSlot, TimeSlotFormType } from "@app/model/TimeSlot.type";
+import { TimeSlot } from "@app/model/TimeSlot.type";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { timeSlotSchema } from "./timeslot.schema";
 import { FC } from "react";
@@ -14,7 +14,7 @@ type TimeSlotFormInputs = {
 }
 
 export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSubmit }) => {
-  const form = useForm<TimeSlotFormType, Validator<TimeSlotFormType | unknown>>({
+  const form = useForm<TimeSlot, Validator<TimeSlot | unknown>>({
     validatorAdapter: zodValidator(),
     validators: { onChange: timeSlotSchema, onSubmit: timeSlotSchema },
     onSubmit: async ({ value }) => {

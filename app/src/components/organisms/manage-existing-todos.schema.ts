@@ -1,10 +1,10 @@
 import { TodoItem } from "@app/model/TodoItem.type";
-import { TodoItemInTemplate, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
+import { TodoItemInTemplateForm, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
 import { AllDurations } from "@app/common/DurationUnit.type";
 import { z, ZodType } from "zod";
 import { timeSlotSchema } from "./timeslot.schema";
 
-const todo = z.object({
+const todoSchema = z.object({
     id: z.number().optional(),
     name: z.string(),
     description: z.string(),
@@ -13,12 +13,11 @@ const todo = z.object({
 }) satisfies ZodType<TodoItem>;
 
 
-const todoInTemplate = z.object({
-  todoItem: todo,
-  timeSlot: timeSlotSchema,
-  pointInCycle: z.number()
-}) satisfies ZodType<TodoItemInTemplate>;
+const todoInTemplateSchema = z.discriminatedUnion("selected", [
+    z.object({ selected: z.literal(true), todoItem: todoSchema, timeSlot: timeSlotSchema, pointInCycle: z.number() }),
+    z.object({ selected: z.literal(false), todoItem: todoSchema })
+]) satisfies ZodType<TodoItemInTemplateForm>;
 
-export const managingExistingTodos = z.object({
-    todoItemsInTemplate: z.array(todoInTemplate)
+export const managingExistingTodosSchema = z.object({
+    todoItemsInTemplate: z.array(todoInTemplateSchema)
 }) satisfies ZodType<TodoItemsInTemplateForm>;

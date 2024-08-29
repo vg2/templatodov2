@@ -7,6 +7,10 @@ export type TodoItemInTemplate = {
   pointInCycle: number;
 }
 
+type SelectedItemInTemplateForm = TodoItemInTemplate & { selected: true }
+type UnselectedItemInTemplateForm = Pick<TodoItemInTemplate, 'todoItem'> & { selected: false };
+export type TodoItemInTemplateForm = SelectedItemInTemplateForm | UnselectedItemInTemplateForm;
+
 export type TodoItemsInTemplateForm = {
-  todoItemsInTemplate: TodoItemInTemplate[];
+  todoItemsInTemplate: TodoItemInTemplateForm[];
 }

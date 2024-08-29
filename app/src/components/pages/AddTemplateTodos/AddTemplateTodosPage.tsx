@@ -3,8 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { getTemplateQueryOptions, invalidateTemplateQuery } from "../../../queries/template-query";
 import { getAllTodosQueryOptions } from "../../../queries/all-todos-query";
-import { TodoItem } from "@app/model/TodoItem.type";
 import { ManageExistingTodos } from "@app/components/organisms/ManageExistingTodos";
+import { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
 
 export const AddTemplateTodosPage = () => {
     const { templateId } = useParams({ strict: false });
@@ -13,8 +13,8 @@ export const AddTemplateTodosPage = () => {
     const { data: allTodos } = useSuspenseQuery(getAllTodosQueryOptions())
     const navigate = useNavigate({ from: '/new-template' });
 
-    const toggleTodoInTemplate = async (todo: TodoItem) => {
-        console.log(todo);
+    const save = async (values: TodoItemInTemplate[]) => {
+        console.log(values);
 
 
 
@@ -24,7 +24,7 @@ export const AddTemplateTodosPage = () => {
     return (
         <Stack spacing={1}>
             <Typography level='title-lg'>Add todo to {template.name}</Typography>
-            <ManageExistingTodos todosInTemplate={template.todos} allTodos={allTodos} toggleTodoInTemplate={toggleTodoInTemplate} />
+            <ManageExistingTodos todosInTemplate={template.todos} allTodos={allTodos} save={save}/>
         </Stack>
     )
 }
