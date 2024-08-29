@@ -1,5 +1,5 @@
 import { AllDurations } from "@app/common/DurationUnit.type";
-import { TimeSlotFormType } from "@app/model/TimeSlot.type";
+import { TimeSlot } from "@app/model/TimeSlot.type";
 import { z, ZodType } from "zod";
 
 export const timeSlotSchema = z.object({
@@ -10,4 +10,4 @@ export const timeSlotSchema = z.object({
     durationUnit: z.enum(AllDurations),
     timeOfDay: z.string()
 
-}) satisfies ZodType<TimeSlotFormType>;
+}) satisfies ZodType<TimeSlot>;

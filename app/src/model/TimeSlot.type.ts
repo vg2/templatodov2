@@ -15,5 +15,3 @@ export function mapTimeSlotFromDb(dbTimeSlot: DbTimeSlot): TimeSlot {
     ...dbTimeSlot,
   }
 }
-
-export type TimeSlotFormType = Omit<TimeSlot, 'todoItems'>;

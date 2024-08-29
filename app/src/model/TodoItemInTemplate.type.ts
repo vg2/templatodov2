@@ -6,3 +6,7 @@ export type TodoItemInTemplate = {
   timeSlot: TimeSlot;
   pointInCycle: number;
 }
+
+export type TodoItemsInTemplateForm = {
+  todoItemsInTemplate: TodoItemInTemplate[];
+}

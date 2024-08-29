@@ -1,17 +1,30 @@
 import { TodoItem } from "@app/model/TodoItem.type"
-import { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
+import { TodoItemInTemplate, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
 import { Checkbox, List, ListItem, ListItemButton, ListItemDecorator, Stack, Typography } from "@mui/joy";
+import { Validator } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
 
 type ManagingExistingTodosInput = {
   allTodos: TodoItem[];
   todosInTemplate: TodoItemInTemplate[];
-  toggleTodoInTemplate: (todo: TodoItem) => Promise<void>;
+  save: (todosInTemplate: TodoItemInTemplate[]) => Promise<void>;
 }
 
-export const ManageExistingTodos = ({ allTodos: todos, todosInTemplate, toggleTodoInTemplate }: ManagingExistingTodosInput) => {
+export const ManageExistingTodos = ({ allTodos: todos, todosInTemplate, save }: ManagingExistingTodosInput) => {
   const todoInTemplate = (todoId: number): boolean => {
     return todosInTemplate.some(t => t.todoItem.id === todoId);
   }
+
+  const form = useForm<TodoItemsInTemplateForm, Validator<TodoItemsInTemplateForm | unknown>>({
+    validatorAdapter: zodValidator(),
+    validators: { onChange: , onSubmit: },
+    onSubmit: async ({ value }) => {
+      console.log(value);
+      // const timeSlotId = await saveTimeSlot(value);
+      save(value);
+    },
+    defaultValues: { todosInTemplate: todosInTemplate },
+  });
 
   return (
     <>
@@ -20,7 +33,7 @@ export const ManageExistingTodos = ({ allTodos: todos, todosInTemplate, toggleTo
         <List>
           {todos.map(todo => (
             <ListItem key={todo.id}>
-              <ListItemButton onClick={() => toggleTodoInTemplate(todo)}>
+              <ListItemButton>
                 <ListItemDecorator>
                   <Checkbox checked={todoInTemplate(todo.id)} />
                 </ListItemDecorator>
