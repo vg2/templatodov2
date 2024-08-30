@@ -4,7 +4,7 @@ import { AllDurations } from "@app/common/DurationUnit.type";
 import { z, ZodType } from "zod";
 import { timeSlotSchema } from "./timeslot.schema";
 
-const todoSchema = z.object({
+export const todoSchema = z.object({
     id: z.number().optional(),
     name: z.string(),
     description: z.string(),
@@ -14,7 +14,7 @@ const todoSchema = z.object({
 
 
 const todoInTemplateSchema = z.discriminatedUnion("selected", [
-    z.object({ selected: z.literal(true), todoItem: todoSchema, timeSlot: timeSlotSchema, pointInCycle: z.number() }),
+    z.object({ selected: z.literal(true), todoItem: todoSchema, timeSlot: timeSlotSchema, pointsInCycle: z.array(z.number()) }),
     z.object({ selected: z.literal(false), todoItem: todoSchema })
 ]) satisfies ZodType<TodoItemInTemplateForm>;
 
