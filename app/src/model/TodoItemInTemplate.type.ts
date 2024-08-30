@@ -4,7 +4,7 @@ import { TodoItem } from "./TodoItem.type"
 export type TodoItemInTemplate = {
   todoItem: TodoItem;
   timeSlot: TimeSlot;
-  pointInCycle: number;
+  pointsInCycle: number[];
 }
 
 type SelectedItemInTemplateForm = TodoItemInTemplate & { selected: true }

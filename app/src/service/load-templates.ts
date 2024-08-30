@@ -14,10 +14,10 @@ export async function loadTemplates(): Promise<Template[]> {
 
     templates.forEach(t => {
         const dbTemplate = dbTemplates.find(dbt => dbt.id === t.id)!;
-        dbTemplate.todos.forEach(({ timeSlotId, todoItemId, pointInCycle }) => {
+        dbTemplate.todos.forEach(({ timeSlotId, todoItemId, pointsInCycle }) => {
             const todoItem = todoItems.find(dbtodo => dbtodo.id === todoItemId)!;
             const timeSlot = timeSlots.find(dbts => dbts.id === timeSlotId)!;
-            t.todos.push({ todoItem, timeSlot, pointInCycle })
+            t.todos.push({ todoItem, timeSlot, pointsInCycle })
         });
     });
 
@@ -33,10 +33,10 @@ export async function loadTemplate(templateId: number): Promise<Template> {
     const dbTodoItems = await db.getAll('todoItems');
     const todoItems = dbTodoItems.map(mapTodoItemFromDb);
 
-    dbTemplate!.todos.forEach(({ timeSlotId, todoItemId, pointInCycle }) => {
+    dbTemplate!.todos.forEach(({ timeSlotId, todoItemId, pointsInCycle }) => {
         const todoItem = todoItems.find(dbtodo => dbtodo.id === todoItemId)!;
         const timeSlot = timeSlots.find(dbts => dbts.id === timeSlotId)!;
-        template.todos.push({ todoItem, timeSlot, pointInCycle })
+        template.todos.push({ todoItem, timeSlot, pointsInCycle })
     });
 
     return template;

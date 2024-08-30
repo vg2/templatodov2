@@ -24,7 +24,7 @@ export const AddTemplateTodosPage = () => {
     return (
         <Stack spacing={1}>
             <Typography level='title-lg'>Add todo to {template.name}</Typography>
-            <ManageExistingTodos todosInTemplate={template.todos} allTodos={allTodos} save={save}/>
+            <ManageExistingTodos template={template} allTodos={allTodos} save={save}/>
         </Stack>
     )
 }
