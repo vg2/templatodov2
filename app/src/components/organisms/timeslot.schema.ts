@@ -8,6 +8,6 @@ export const timeSlotSchema = z.object({
     description: z.string().min(2, 'Description must be at least 2 characters').max(100, 'Description must be at most 100 characters'),
     duration: z.number(),
     durationUnit: z.enum(AllDurations),
-    timeOfDay: z.string()
-
+    timeOfDay: z.string(),
+    templateId: z.number(),
 }) satisfies ZodType<TimeSlot>;

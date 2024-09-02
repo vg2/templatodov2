@@ -1,4 +1,4 @@
-import { TimeSlot } from "@app/model/TimeSlot.type";
+import { NewTimeSlotForm, TimeSlot } from "@app/model/TimeSlot.type";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { timeSlotSchema } from "./timeslot.schema";
 import { FC } from "react";
@@ -6,21 +6,22 @@ import { useForm, Validator } from "@tanstack/react-form";
 import { FormControl, FormLabel, Input, Select, Option, Button, Stack } from "@mui/joy";
 import { AllDurations, DurationUnit } from "@app/common/DurationUnit.type";
 import styles from './TimeSlotForm.module.css';
-// import { saveTimeSlot } from "@app/service/update-timeslot";
+import { saveTimeSlot } from "@app/service/save-timeslot";
+import { invalidateAllTimeslotsQuery } from "../../queries/all-timeslots-query";
 
 type TimeSlotFormInputs = {
-  timeSlot: TimeSlot;
-  onSuccessfulSubmit: (timeSlotId: number) => Promise<void>;
+  timeSlot: NewTimeSlotForm;
+  onSuccessfulSubmit: () => void;
 }
 
 export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSubmit }) => {
-  const form = useForm<TimeSlot, Validator<TimeSlot | unknown>>({
+  const form = useForm<NewTimeSlotForm, Validator<TimeSlot | unknown>>({
     validatorAdapter: zodValidator(),
     validators: { onChange: timeSlotSchema, onSubmit: timeSlotSchema },
     onSubmit: async ({ value }) => {
-      console.log(value);
-      // const timeSlotId = await saveTimeSlot(value);
-      onSuccessfulSubmit(timeSlot.id ?? 0 /* wtf */);
+      await saveTimeSlot(value as TimeSlot);
+      await invalidateAllTimeslotsQuery();
+      onSuccessfulSubmit();
     },
     defaultValues: timeSlot,
   });
@@ -50,7 +51,7 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
             >
               <FormLabel>Name</FormLabel>
               <Input
-                value={field.state.value}
+                value={field.state.value || ""}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 placeholder="Name"
@@ -66,7 +67,7 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
             >
               <FormLabel>Description</FormLabel>
               <Input
-                value={field.state.value}
+                value={field.state.value || ""}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 placeholder="Description"
@@ -89,7 +90,7 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
               >
                 <FormLabel>Duration</FormLabel>
                 <Input
-                  value={field.state.value}
+                  value={field.state.value || 0}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(parseInt(e.target.value))}
                   placeholder="Duration"
@@ -103,7 +104,6 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
               <FormControl>
                 <FormLabel>Duration unit</FormLabel>
                 <Select
-                  defaultValue="Minutes"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(_, val) => val && field.handleChange(val as DurationUnit)}
@@ -122,7 +122,7 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({ timeSlot, onSuccessfulSub
               <FormLabel>Time of day</FormLabel>
               <Input
                 type="time"
-                value={field.state.value}
+                value={field.state.value || ""}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 placeholder="Time of day"

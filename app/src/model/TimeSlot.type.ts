@@ -8,7 +8,10 @@ export type TimeSlot = {
   duration: number;
   durationUnit: DurationUnit;
   timeOfDay: string;
+  templateId: number;
 }
+
+export type NewTimeSlotForm = Partial<TimeSlot>;
 
 export function mapTimeSlotFromDb(dbTimeSlot: DbTimeSlot): TimeSlot {
   return {

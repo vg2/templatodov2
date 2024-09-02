@@ -5,6 +5,7 @@ import { getTemplateQueryOptions, invalidateTemplateQuery } from "../../../queri
 import { getAllTodosQueryOptions } from "../../../queries/all-todos-query";
 import { ManageExistingTodos } from "@app/components/organisms/ManageExistingTodos";
 import { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
+import { saveTodosInTemplate } from "@app/service/save-todos-in-template";
 
 export const AddTemplateTodosPage = () => {
     const { templateId } = useParams({ strict: false });
@@ -14,10 +15,7 @@ export const AddTemplateTodosPage = () => {
     const navigate = useNavigate({ from: '/new-template' });
 
     const save = async (values: TodoItemInTemplate[]) => {
-        console.log(values);
-
-
-
+        await saveTodosInTemplate(templateIdParsed, values);
         await invalidateTemplateQuery(templateIdParsed);
         navigate({ to: '/edit-template/$templateId', params: { templateId: templateId! } });
     }

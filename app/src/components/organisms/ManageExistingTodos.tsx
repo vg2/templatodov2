@@ -34,9 +34,14 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getAllTimeslotsQueryOptions } from "../../queries/all-timeslots-query";
 import { TimeSlot } from "@app/model/TimeSlot.type";
-import FloatingActionButton from "../atoms/FloatingActionButton";
+import FloatingActionButton from "../atoms/RoundedButton";
 import { useState } from "react";
 import { AllDurations, DurationUnit } from "@app/common/DurationUnit.type";
+import { AddTodoForm } from "./AddTodoForm";
+import { TimeSlotForm } from "./TimeSlotForm";
+import { Add, SaveAs, SaveAsRounded } from "@mui/icons-material";
+import { FloatingActionBar } from "../atoms/FloatingActionBar";
+import RoundedButton from "../atoms/RoundedButton";
 
 type ManagingExistingTodosInput = {
   allTodos: TodoItem[];
@@ -68,7 +73,8 @@ export const ManageExistingTodos = ({
   const { data: timeSlots } = useSuspenseQuery(getAllTimeslotsQueryOptions());
 
   const defaultValues = getDefaultFormValues(todos, template.todos);
-  const [addModalIsOpen, setAddModalIsOpen] = useState<boolean>(false);
+  const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState<boolean>(false);
+  const [addTimeslotModalIsOpen, setAddTimeslotModalIsOpen] = useState<boolean>(false);
 
   const form = useForm<
     TodoItemsInTemplateForm,
@@ -80,25 +86,20 @@ export const ManageExistingTodos = ({
       onSubmit: managingExistingTodosSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
       await save(value.todoItemsInTemplate as TodoItemInTemplate[]);
-      // const timeSlotId = await saveTimeSlot(value);
     },
     defaultValues: defaultValues,
   });
 
-  const todoForm = useForm<TodoItem, Validator<TodoItem | unknown>>({
-    validatorAdapter: zodValidator(),
-    validators: { onChange: todoSchema, onSubmit: todoSchema },
-    onSubmit: async ({ value }) => {
-      console.log(value);
-    },
-  });
 
   const handleTimeslotChange = (
     formChangeHandler: (updater: unknown) => void,
     timeSlotId: number | null
   ) => {
+    if (timeSlotId === -1) {
+      setAddTimeslotModalIsOpen(true);
+      return;
+    }
     const timeSlot = timeSlots.find((t) => t.id === timeSlotId);
     formChangeHandler(timeSlot);
   };
@@ -119,8 +120,11 @@ export const ManageExistingTodos = ({
   // const isSelected = (todoItemId: number) => formValues.some(f => f.selected && f.todoItem.id === todoItemId);
   const isSelected = () => true;
 
-  const openAddModal = () => setAddModalIsOpen(true);
-  const closeAddModal = () => setAddModalIsOpen(false);
+  const openAddTodoModal = () => setAddTodoModalIsOpen(true);
+  const closeAddTodoModal = () => setAddTodoModalIsOpen(false);
+
+  const openAddTimeslotModal = () => setAddTimeslotModalIsOpen(true);
+  const closeAddTimeslotTodoModal = () => setAddTimeslotModalIsOpen(false);
 
   return (
     <>
@@ -194,6 +198,7 @@ export const ManageExistingTodos = ({
                                       {ts.name} | {ts.description}
                                     </Option>
                                   ))}
+                                  <Option key='add-new' value={-1} label='Add new timeslot...'>Add new timeslot...</Option>
                                 </Select>
                               )}
                             </form.Field>
@@ -230,103 +235,24 @@ export const ManageExistingTodos = ({
           </List>
         </form>
       </div>
-      <Modal open={addModalIsOpen} onClose={closeAddModal}>
+      <Modal open={addTodoModalIsOpen} onClose={closeAddTodoModal}>
         <ModalDialog>
           <DialogTitle>Add todo</DialogTitle>
           <DialogContent>Add a new todo</DialogContent>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              todoForm.handleSubmit();
-            }}
-          >
-            <Stack direction="column" gap={1}>
-              <todoForm.Field
-                name="name"
-                children={(field) => (
-                  <FormControl error={field.state.meta.errors.length > 0}>
-                    <FormLabel>Todo name</FormLabel>
-                    <Input
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Todo name"
-                    />
-                  </FormControl>
-                )}
-              />
-
-              <todoForm.Field
-                name="description"
-                children={(field) => (
-                  <FormControl>
-                    <FormLabel>Description</FormLabel>
-                    <Textarea
-                      minRows={2}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Description"
-                    />
-                  </FormControl>
-                )}
-              />
-              <Stack
-                direction="row"
-                gap={1}
-                sx={{
-                  width: "100%",
-                  "& > *": {
-                    width: "50%",
-                    flex: 1,
-                  },
-                }}
-              >
-                <todoForm.Field
-                  name="typicalDuration"
-                  children={(field) => (
-                    <FormControl>
-                      <FormLabel>Typical duration</FormLabel>
-                      <Input
-                        type="number"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(parseInt(e.target.value))
-                        }
-                        placeholder="Typical Duration"
-                      />
-                    </FormControl>
-                  )}
-                />
-                <todoForm.Field
-                  name="typicalDurationUnit"
-                  children={(field) => (
-                    <FormControl>
-                      <FormLabel>Unit</FormLabel>
-                      <Select
-                        defaultValue="Minutes"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(_, val) =>
-                          val &&
-                          field.handleChange(val as DurationUnit)
-                        }
-                        placeholder="Unit"
-                      >
-                        {AllDurations.map(duration => (<Option key={duration} value={duration}>{duration}</Option>))}
-                      </Select>
-                    </FormControl>
-                  )}
-                />
-              </Stack>
-              <Button>Save</Button>
-            </Stack>
-          </form>
+          <AddTodoForm onSubmit={closeAddTodoModal}/>
         </ModalDialog>
       </Modal>
-      <FloatingActionButton onClick={openAddModal} />
+      <Modal open={addTimeslotModalIsOpen} onClose={closeAddTimeslotTodoModal}>
+        <ModalDialog>
+          <DialogTitle>Add timeslot</DialogTitle>
+          <DialogContent>Add a new timeslot</DialogContent>
+          <TimeSlotForm timeSlot={{ templateId: template.id }} onSuccessfulSubmit={closeAddTimeslotTodoModal}/>
+        </ModalDialog>
+      </Modal>
+      <FloatingActionBar>
+        <RoundedButton onClick={openAddTodoModal}><Add /></RoundedButton>
+        <RoundedButton onClick={form.handleSubmit}><SaveAs /></RoundedButton>
+      </FloatingActionBar>
     </>
   );
 };

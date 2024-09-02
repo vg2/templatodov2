@@ -7,4 +7,5 @@ export type DbTimeSlot = {
   duration: number;
   durationUnit: DurationUnit;
   timeOfDay: string;
+  templateId: number;
 }

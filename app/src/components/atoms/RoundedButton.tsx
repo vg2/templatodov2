@@ -1,19 +1,16 @@
 import Button from '@mui/joy/Button'
-import AddIcon from '@mui/icons-material/Add';
+import { PropsWithChildren } from 'react';
 
-type FloatingActionButtonProps = {
+type RoundedButtonProps = {
     onClick: () => void;
 }
 
-function FloatingActionButton({ onClick }: FloatingActionButtonProps) {
+function RoundedButton({ onClick, children }: PropsWithChildren<RoundedButtonProps>) {
     return (
         <Button
             variant="solid"
             color="primary"
-            sx={{
-                position: 'fixed',
-                bottom: '96px',
-                right: '16px',
+            sx={{ 
                 borderRadius: '50%',
                 width: '56px',
                 height: '56px',
@@ -21,9 +18,9 @@ function FloatingActionButton({ onClick }: FloatingActionButtonProps) {
             }}
             onClick={onClick}
         >
-            <AddIcon />
+            {children}
         </Button>
     );
 }
 
-export default FloatingActionButton;
+export default RoundedButton;

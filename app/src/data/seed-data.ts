@@ -23,6 +23,7 @@ export default async function seedData(db: IDBPDatabase<TemplaTodoDb>): Promise<
       duration: 60,
       durationUnit: "Minutes",
       timeOfDay: "07:30:00",
+      templateId: 1,
     })
 
     db.put('todoItems', {
