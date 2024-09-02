@@ -1,7 +1,7 @@
-import { TodoItem } from "@app/model/TodoItem.type";
-import { TodoItemInTemplateForm, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
+import type { TodoItem } from "@app/model/TodoItem.type";
+import type { TodoItemInTemplateForm, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
 import { AllDurations } from "@app/common/DurationUnit.type";
-import { z, ZodType } from "zod";
+import { z, type ZodType } from "zod";
 import { timeSlotSchema } from "./timeslot.schema";
 
 export const todoSchema = z.object({

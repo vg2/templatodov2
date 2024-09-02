@@ -1,6 +1,6 @@
 import { AllDurations } from "@app/common/DurationUnit.type";
-import { TimeSlot } from "@app/model/TimeSlot.type";
-import { z, ZodType } from "zod";
+import type { TimeSlot } from "@app/model/TimeSlot.type";
+import { z, type ZodType } from "zod";
 
 export const timeSlotSchema = z.object({
     id: z.number().optional(),

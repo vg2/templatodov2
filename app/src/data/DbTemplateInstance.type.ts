@@ -1,5 +1,5 @@
-import { DbTemplate } from "./DbTemplate.type";
-import { TodoState } from "../common/TodoState";
+import type { DbTemplate } from "./DbTemplate.type";
+import type { TodoState } from "../common/TodoState";
 
 export type DbTemplateInstance = {
   id?: number;

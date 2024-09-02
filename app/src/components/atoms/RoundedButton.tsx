@@ -1,5 +1,5 @@
 import Button from '@mui/joy/Button'
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 type RoundedButtonProps = {
     onClick: () => void;

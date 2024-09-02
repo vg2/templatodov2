@@ -1,8 +1,8 @@
-import { DBSchema, openDB } from "idb";
-import { DbTemplate } from "./DbTemplate.type";
-import { DbTemplateInstance } from "./DbTemplateInstance.type";
-import { DbTimeSlot } from "./DbTimeSlot.type";
-import { DbTodoItem } from "./DbTodoItem.type";
+import { type DBSchema, openDB } from "idb";
+import type { DbTemplate } from "./DbTemplate.type";
+import type { DbTemplateInstance } from "./DbTemplateInstance.type";
+import type { DbTimeSlot } from "./DbTimeSlot.type";
+import type { DbTodoItem } from "./DbTodoItem.type";
 
 export interface TemplaTodoDb extends DBSchema {
   'templates': {

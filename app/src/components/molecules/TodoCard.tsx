@@ -1,5 +1,5 @@
-import { DurationUnit } from "@app/common/DurationUnit.type";
-import { TodoState } from "@app/common/TodoState";
+import type { DurationUnit } from "@app/common/DurationUnit.type";
+import type { TodoState } from "@app/common/TodoState";
 import { timeSlotToDuration } from "@app/utils/timeslot-to-duration.function";
 import { Button, Card, CardActions, CardContent, Chip, Typography } from "@mui/joy";
 

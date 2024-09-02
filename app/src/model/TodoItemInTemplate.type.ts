@@ -1,5 +1,5 @@
-import { TimeSlot } from "./TimeSlot.type";
-import { TodoItem } from "./TodoItem.type"
+import type { TimeSlot } from "./TimeSlot.type";
+import type { TodoItem } from "./TodoItem.type"
 
 export type TodoItemInTemplate = {
   todoItem: TodoItem;

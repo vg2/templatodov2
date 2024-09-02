@@ -8,7 +8,7 @@ import { AddCircleOutline } from "@mui/icons-material";
 
 export const EditTemplatePage = () => {
   const { templateId } = useParams({ strict: false });
-  const { data: template } = useSuspenseQuery(getTemplateQueryOptions(parseInt(templateId!)));
+  const { data: template } = useSuspenseQuery(getTemplateQueryOptions(Number.parseInt(templateId ?? '')));
   const navigate = useNavigate({ from: '/edit-template/$templateId' });
 
   const addTodos = () => navigate({ to: './add-todos' });

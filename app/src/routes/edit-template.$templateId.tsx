@@ -6,6 +6,6 @@ import { EditTemplatePage } from '@app/components/pages/EditTemplate/EditTemplat
 export const Route = createFileRoute('/edit-template/$templateId')({
   component: EditTemplatePage,
   loader: ({ params }) => {
-    return  queryClient.ensureQueryData(getTemplateQueryOptions(parseInt(params.templateId)));
+    return  queryClient.ensureQueryData(getTemplateQueryOptions(Number.parseInt(params.templateId, 10)));
   }
 })

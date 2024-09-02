@@ -1,6 +1,6 @@
 
 import { openDb } from "../data/db";
-import { mapTimeSlotFromDb, TimeSlot } from "@app/model/TimeSlot.type";
+import { mapTimeSlotFromDb, type TimeSlot } from "@app/model/TimeSlot.type";
 
 export async function getAllTimeslots(): Promise<TimeSlot[]> {
     const db = await openDb();

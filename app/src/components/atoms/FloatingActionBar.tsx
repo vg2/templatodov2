@@ -1,5 +1,5 @@
 import { Sheet, Stack } from "@mui/joy";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 export const FloatingActionBar = ({ children }: PropsWithChildren) => {
 	return (

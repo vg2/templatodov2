@@ -1,4 +1,4 @@
-import { DurationUnit } from "../common/DurationUnit.type";
+import type { DurationUnit } from "../common/DurationUnit.type";
 
 export type DbTimeSlot = {
   id?: number;

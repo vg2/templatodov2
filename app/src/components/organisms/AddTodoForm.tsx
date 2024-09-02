@@ -1,24 +1,33 @@
-import { AllDurations, DurationUnit } from "@app/common/DurationUnit.type";
-import { TodoItem } from "@app/model/TodoItem.type";
-import { Stack, FormControl, FormLabel, Input, Textarea, Select, Option, Button } from "@mui/joy";
-import { useForm, Validator } from "@tanstack/react-form";
+import { AllDurations, type DurationUnit } from "@app/common/DurationUnit.type";
+import type { TodoItem } from "@app/model/TodoItem.type";
+import {
+	Stack,
+	FormControl,
+	FormLabel,
+	Input,
+	Textarea,
+	Select,
+	Option,
+	Button,
+} from "@mui/joy";
+import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { todoSchema } from "./manage-existing-todos.schema";
 import { insertTodo } from "@app/service/insert-todo";
 import { invalidateAllTodosQuery } from "../../queries/all-todos-query";
 
 type AddTodoFormProps = {
-    onSubmit: () => void;
-}
+	onSubmit: () => void;
+};
 
 export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
 	const todoForm = useForm<TodoItem, Validator<TodoItem | unknown>>({
 		validatorAdapter: zodValidator(),
 		validators: { onChange: todoSchema, onSubmit: todoSchema },
 		onSubmit: async ({ value }) => {
-            await insertTodo(value);
-            await invalidateAllTodosQuery();
-            onSubmit();
+			await insertTodo(value);
+			await invalidateAllTodosQuery();
+			onSubmit();
 		},
 	});
 	return (
@@ -30,9 +39,8 @@ export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
 			}}
 		>
 			<Stack direction="column" gap={1}>
-				<todoForm.Field
-					name="name"
-					children={(field) => (
+				<todoForm.Field name="name">
+					{(field) => (
 						<FormControl error={field.state.meta.errors.length > 0}>
 							<FormLabel>Todo name</FormLabel>
 							<Input
@@ -43,11 +51,10 @@ export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
 							/>
 						</FormControl>
 					)}
-				/>
+				</todoForm.Field>
 
-				<todoForm.Field
-					name="description"
-					children={(field) => (
+				<todoForm.Field name="description">
+					{(field) => (
 						<FormControl>
 							<FormLabel>Description</FormLabel>
 							<Textarea
@@ -59,7 +66,7 @@ export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
 							/>
 						</FormControl>
 					)}
-				/>
+				</todoForm.Field>
 				<Stack
 					direction="row"
 					gap={1}
@@ -71,24 +78,22 @@ export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
 						},
 					}}
 				>
-					<todoForm.Field
-						name="typicalDuration"
-						children={(field) => (
+					<todoForm.Field name="typicalDuration">
+						{(field) => (
 							<FormControl>
 								<FormLabel>Typical duration</FormLabel>
 								<Input
 									type="number"
 									value={field.state.value || 0}
 									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(parseInt(e.target.value))}
+									onChange={(e) => field.handleChange(Number.parseInt(e.target.value, 10))}
 									placeholder="Typical Duration"
 								/>
 							</FormControl>
 						)}
-					/>
-					<todoForm.Field
-						name="typicalDurationUnit"
-						children={(field) => (
+					</todoForm.Field>
+					<todoForm.Field name="typicalDurationUnit">
+						{(field) => (
 							<FormControl>
 								<FormLabel>Unit</FormLabel>
 								<Select
@@ -108,7 +113,7 @@ export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
 								</Select>
 							</FormControl>
 						)}
-					/>
+					</todoForm.Field>
 				</Stack>
 				<Button type="submit">Save</Button>
 			</Stack>

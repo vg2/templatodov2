@@ -1,5 +1,5 @@
-import { IDBPDatabase } from "idb";
-import { TemplaTodoDb } from "./db";
+import type { IDBPDatabase } from "idb";
+import type { TemplaTodoDb } from "./db";
 import { parse } from "date-fns";
 import { DateFormat } from "@app/common/DateFormat";
 

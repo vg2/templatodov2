@@ -1,6 +1,6 @@
-import { Template } from "./Template.type";
-import { TodoState } from "../common/TodoState";
-import { DbTemplateInstance } from "../data/DbTemplateInstance.type";
+import type { Template } from "./Template.type";
+import type { TodoState } from "../common/TodoState";
+import type { DbTemplateInstance } from "../data/DbTemplateInstance.type";
 
 export type TemplateInstance = {
   id: number;
@@ -18,7 +18,7 @@ export type ActionedItem = {
 
 export function mapTemplateInstanceFromDb(dbInstance: DbTemplateInstance, mappedTemplate: Template): TemplateInstance {
   return {
-    id: dbInstance.id!,
+    id: dbInstance.id ?? 0,
     date: dbInstance.date,
     templateSnapshot: mappedTemplate,
     actionedItems: dbInstance.actionedItems

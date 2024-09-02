@@ -1,6 +1,6 @@
-import { DbTemplateInstance } from "../data/DbTemplateInstance.type";
+import type { DbTemplateInstance } from "../data/DbTemplateInstance.type";
 import { openDb } from "../data/db";
-import { TemplateInstance, mapTemplateInstanceFromDb } from "../model/TemplateInstance.type";
+import { type TemplateInstance, mapTemplateInstanceFromDb } from "../model/TemplateInstance.type";
 import { loadTemplate } from "./load-templates";
 
 export async function getInstance(templateId: number, date: string): Promise<TemplateInstance> {
@@ -14,9 +14,11 @@ export async function getInstance(templateId: number, date: string): Promise<Tem
     }
 
     const dbTemplate = await db.get('templates', templateId);
+    if (!dbTemplate) throw new Error("could not find template");
+
     const newTemplateInstance: DbTemplateInstance = {
         date: date,
-        templateSnapshot: dbTemplate!,
+        templateSnapshot: dbTemplate,
         actionedItems: [],
     }; 
     const key = await db.put('templateInstances', newTemplateInstance);

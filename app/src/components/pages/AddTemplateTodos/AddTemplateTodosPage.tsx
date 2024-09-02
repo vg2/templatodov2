@@ -4,12 +4,12 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { getTemplateQueryOptions, invalidateTemplateQuery } from "../../../queries/template-query";
 import { getAllTodosQueryOptions } from "../../../queries/all-todos-query";
 import { ManageExistingTodos } from "@app/components/organisms/ManageExistingTodos";
-import { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
+import type { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
 import { saveTodosInTemplate } from "@app/service/save-todos-in-template";
 
 export const AddTemplateTodosPage = () => {
     const { templateId } = useParams({ strict: false });
-    const templateIdParsed = parseInt(templateId!);
+    const templateIdParsed = Number.parseInt(templateId ?? '', 10);
     const { data: template } = useSuspenseQuery(getTemplateQueryOptions(templateIdParsed));
     const { data: allTodos } = useSuspenseQuery(getAllTodosQueryOptions())
     const navigate = useNavigate({ from: '/new-template' });
@@ -17,7 +17,7 @@ export const AddTemplateTodosPage = () => {
     const save = async (values: TodoItemInTemplate[]) => {
         await saveTodosInTemplate(templateIdParsed, values);
         await invalidateTemplateQuery(templateIdParsed);
-        navigate({ to: '/edit-template/$templateId', params: { templateId: templateId! } });
+        navigate({ to: '/edit-template/$templateId', params: { templateId: templateId  ?? '' } });
     }
     return (
         <Stack spacing={1}>

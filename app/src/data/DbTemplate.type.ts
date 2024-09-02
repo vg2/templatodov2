@@ -1,4 +1,4 @@
-import { DbTodoItemInTemplate } from "./DbTodoItemInTemplate.type";
+import type { DbTodoItemInTemplate } from "./DbTodoItemInTemplate.type";
 
 export type DbTemplate = {
   cycleLength: number;

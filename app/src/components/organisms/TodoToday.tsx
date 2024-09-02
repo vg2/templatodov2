@@ -1,12 +1,12 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
 import { useEffect, useState } from "react";
 import { format, formatISO } from "date-fns";
-import { Template } from "@app/model/Template.type";
-import { ActionedItem, TemplateInstance } from "@app/model/TemplateInstance.type";
+import type { Template } from "@app/model/Template.type";
+import type { ActionedItem, TemplateInstance } from "@app/model/TemplateInstance.type";
 import { loadTemplates } from "@app/service/load-templates";
 import { getInstance } from "@app/service/get-instance";
-import { TodoItem } from "@app/model/TodoItem.type";
-import { TodoState } from "../../common/TodoState";
+import type { TodoItem } from "@app/model/TodoItem.type";
+import type { TodoState } from "../../common/TodoState";
 import { updateInstance } from "@app/service/update-instance";
 import { TodoCard } from "../molecules/TodoCard";
 import { Link } from "@tanstack/react-router";
@@ -16,8 +16,7 @@ const TodoToday = () => {
   const [data, setData] = useState<Template[]>([]);
   const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
   const [instancePending, setInstancePending] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [refreshInstance, setRefreshInstance] = useState<any>(null);
+  const [refreshInstance, setRefreshInstance] = useState<unknown>(null);
 
   useEffect(() => {
     const loadTemps = async () => {
@@ -27,6 +26,7 @@ const TodoToday = () => {
     loadTemps();
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (expandedTemplate === null) {
       setInstanceData(() => null);
@@ -36,7 +36,7 @@ const TodoToday = () => {
 
     setInstancePending(true);
     const loadInstance = async () => {
-      const templateInstance = await getInstance(expandedTemplate.id!, format(new Date(), 'yyyy-MM-dd'));
+      const templateInstance = await getInstance(expandedTemplate.id ?? 0, format(new Date(), 'yyyy-MM-dd'));
       setInstancePending(false);
       setInstanceData(templateInstance);
     }
@@ -52,7 +52,7 @@ const TodoToday = () => {
   const markDoneForInstance = async (instance: TemplateInstance, todo: TodoItem): Promise<void> => {
     const actioned: ActionedItem = {
       state: 'Complete',
-      todoItemId: todo.id,
+      todoItemId: todo.id ?? 0,
       comment: '',
       timestamp: formatISO(new Date())
     }
@@ -82,7 +82,7 @@ const TodoToday = () => {
                     time={todo.timeSlot.timeOfDay}
                     duration={todo.timeSlot.duration}
                     durationUnit={todo.timeSlot.durationUnit}
-                    todoId={todo.todoItem.id}
+                    todoId={todo.todoItem.id ?? 0}
                     state={currentTodoItemState(instanceData, todo.todoItem)}
                     markDone={() => markDoneForInstance(instanceData, todo.todoItem)}
                     openDetails={() => { }}

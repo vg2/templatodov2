@@ -1,6 +1,6 @@
-import { TodoItem } from "@app/model/TodoItem.type";
-import { Template } from "@app/model/Template.type";
-import {
+import type { TodoItem } from "@app/model/TodoItem.type";
+import type { Template } from "@app/model/Template.type";
+import type {
 	TodoItemInTemplate,
 	TodoItemInTemplateForm,
 	TodoItemsInTemplateForm,
@@ -20,12 +20,12 @@ import {
 	Stack,
 	Typography,
 } from "@mui/joy";
-import { useForm, Validator } from "@tanstack/react-form";
+import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { managingExistingTodosSchema } from "./manage-existing-todos.schema";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getAllTimeslotsQueryOptions } from "../../queries/all-timeslots-query";
-import { TimeSlot } from "@app/model/TimeSlot.type";
+import type { TimeSlot } from "@app/model/TimeSlot.type";
 import { useState } from "react";
 import { AddTodoForm } from "./AddTodoForm";
 import { TimeSlotForm } from "./TimeSlotForm";
@@ -87,7 +87,7 @@ export const ManageExistingTodos = ({
 		timeSlotId: number | null,
 	) => {
 		if (timeSlotId === -1) {
-			setAddTimeslotModalIsOpen(true);
+			openAddTimeslotModal();
 			return;
 		}
 		const timeSlot = timeSlots.find((t) => t.id === timeSlotId);
@@ -131,7 +131,7 @@ export const ManageExistingTodos = ({
 						<form.Field name="todoItemsInTemplate" mode="array">
 							{(field) =>
 								field.state.value.map((_, i) => (
-									<ListItem key={i}>
+									<ListItem key={field.state.value[i].todoItem.id}>
 										<ListItemButton>
 											<ListItemDecorator>
 												<form.Field name={`todoItemsInTemplate[${i}].selected`}>
@@ -149,10 +149,10 @@ export const ManageExistingTodos = ({
 											</ListItemDecorator>
 											<Stack direction="column" gap={1}>
 												<Typography level="title-sm">
-													{field.state.value[i].todoItem!.name}
+													{field.state.value[i].todoItem?.name ?? ""}
 												</Typography>
 												<Typography level="body-sm">
-													{field.state.value[i].todoItem!.description}
+													{field.state.value[i].todoItem?.description ?? ""}
 												</Typography>
 												{isSelected() && (
 													<Stack
@@ -181,7 +181,7 @@ export const ManageExistingTodos = ({
 																>
 																	{timeSlots.map((ts) => (
 																		<Option
-																			key={ts.id!}
+																			key={ts.id}
 																			value={ts.id}
 																			label={ts.name}
 																		>
@@ -208,7 +208,7 @@ export const ManageExistingTodos = ({
 																	onChange={(_, val) =>
 																		handlePointsInCycleChange(
 																			subField.handleChange,
-																			val! as number[],
+																			val as number[],
 																		)
 																	}
 																>

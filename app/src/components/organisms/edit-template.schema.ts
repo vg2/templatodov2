@@ -1,5 +1,5 @@
-import { TemplateFormType } from "@app/model/Template.type";
-import { z, ZodType } from "zod";
+import type { TemplateFormType } from "@app/model/Template.type";
+import { z, type ZodType } from "zod";
 
 export const editTemplateSchema = z.object({
     id: z.number(),

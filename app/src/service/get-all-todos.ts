@@ -1,5 +1,5 @@
 
-import { mapTodoItemFromDb, TodoItem } from "@app/model/TodoItem.type";
+import { mapTodoItemFromDb, type TodoItem } from "@app/model/TodoItem.type";
 import { openDb } from "../data/db";
 
 export async function getAllTodos(): Promise<TodoItem[]> {
