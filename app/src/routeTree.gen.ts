@@ -14,7 +14,6 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as EditTemplateTemplateIdImport } from './routes/edit-template.$templateId'
-import { Route as EditTemplateTemplateIdNewTimeslotImport } from './routes/edit-template_.$templateId/new-timeslot'
 import { Route as EditTemplateTemplateIdAddTodosImport } from './routes/edit-template_.$templateId/add-todos'
 
 // Create Virtual Routes
@@ -38,12 +37,6 @@ const EditTemplateTemplateIdRoute = EditTemplateTemplateIdImport.update({
   path: '/edit-template/$templateId',
   getParentRoute: () => rootRoute,
 } as any)
-
-const EditTemplateTemplateIdNewTimeslotRoute =
-  EditTemplateTemplateIdNewTimeslotImport.update({
-    path: '/edit-template/$templateId/new-timeslot',
-    getParentRoute: () => rootRoute,
-  } as any)
 
 const EditTemplateTemplateIdAddTodosRoute =
   EditTemplateTemplateIdAddTodosImport.update({
@@ -83,13 +76,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditTemplateTemplateIdAddTodosImport
       parentRoute: typeof rootRoute
     }
-    '/edit-template/$templateId/new-timeslot': {
-      id: '/edit-template/$templateId/new-timeslot'
-      path: '/edit-template/$templateId/new-timeslot'
-      fullPath: '/edit-template/$templateId/new-timeslot'
-      preLoaderRoute: typeof EditTemplateTemplateIdNewTimeslotImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -100,7 +86,6 @@ export const routeTree = rootRoute.addChildren({
   NewTemplateLazyRoute,
   EditTemplateTemplateIdRoute,
   EditTemplateTemplateIdAddTodosRoute,
-  EditTemplateTemplateIdNewTimeslotRoute,
 })
 
 /* prettier-ignore-end */
@@ -114,8 +99,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/new-template",
         "/edit-template/$templateId",
-        "/edit-template/$templateId/add-todos",
-        "/edit-template/$templateId/new-timeslot"
+        "/edit-template/$templateId/add-todos"
       ]
     },
     "/": {
@@ -129,9 +113,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/edit-template/$templateId/add-todos": {
       "filePath": "edit-template_.$templateId/add-todos.tsx"
-    },
-    "/edit-template/$templateId/new-timeslot": {
-      "filePath": "edit-template_.$templateId/new-timeslot.tsx"
     }
   }
 }

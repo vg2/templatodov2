@@ -77,7 +77,7 @@ export const ManageExistingTodos = ({
 			onSubmit: managingExistingTodosSchema,
 		},
 		onSubmit: async ({ value }) => {
-			await save(value.todoItemsInTemplate as TodoItemInTemplate[]);
+			await save(value.todoItemsInTemplate.filter(t => t.selected) as TodoItemInTemplate[]);
 		},
 		defaultValues: defaultValues,
 	});
@@ -106,8 +106,6 @@ export const ManageExistingTodos = ({
 		(_, i) => i + 1,
 	);
 
-	// const formValues = form.useStore(x => x.values.todoItemsInTemplate);
-	// const isSelected = (todoItemId: number) => formValues.some(f => f.selected && f.todoItem.id === todoItemId);
 	const isSelected = () => true;
 
 	const openAddTodoModal = () => setAddTodoModalIsOpen(true);
