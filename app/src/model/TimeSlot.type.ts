@@ -1,8 +1,8 @@
 import type { DurationUnit } from "../common/DurationUnit.type";
 import type { DbTimeSlot } from "../data/DbTimeSlot.type";
 
-export type TimeSlot = {
-  id?: number;
+export type ExistingTimeSlot = {
+  id: number;
   name: string;
   description: string;
   duration: number;
@@ -11,10 +11,15 @@ export type TimeSlot = {
   templateId: number;
 }
 
-export type NewTimeSlotForm = Partial<TimeSlot>;
+export type NewTimeSlot = Omit<ExistingTimeSlot, 'id'>;
 
-export function mapTimeSlotFromDb(dbTimeSlot: DbTimeSlot): TimeSlot {
+export type TimeSlot = ExistingTimeSlot | NewTimeSlot;
+
+export type NewTimeSlotForm = Partial<NewTimeSlot>;
+
+export function mapTimeSlotFromDb(dbTimeSlot: DbTimeSlot): ExistingTimeSlot {
   return {
+    id: 0,
     ...dbTimeSlot,
   }
 }

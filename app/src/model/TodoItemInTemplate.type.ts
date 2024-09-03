@@ -1,9 +1,9 @@
-import type { TimeSlot } from "./TimeSlot.type";
-import type { TodoItem } from "./TodoItem.type"
+import type { ExistingTimeSlot } from "./TimeSlot.type";
+import type { ExistingTodoItem } from "./TodoItem.type";
 
 export type TodoItemInTemplate = {
-  todoItem: TodoItem;
-  timeSlot: TimeSlot;
+  todoItem: ExistingTodoItem;
+  timeSlot: ExistingTimeSlot;
   pointsInCycle: number[];
 }
 

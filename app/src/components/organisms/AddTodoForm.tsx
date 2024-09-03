@@ -1,5 +1,5 @@
 import { AllDurations, type DurationUnit } from "@app/common/DurationUnit.type";
-import type { TodoItem } from "@app/model/TodoItem.type";
+import type { NewTodoItem, TodoItem } from "@app/model/TodoItem.type";
 import {
 	Stack,
 	FormControl,
@@ -12,7 +12,7 @@ import {
 } from "@mui/joy";
 import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { todoSchema } from "./manage-existing-todos.schema";
+import { newTodoSchema } from "./manage-existing-todos.schema";
 import { insertTodo } from "@app/service/insert-todo";
 import { invalidateAllTodosQuery } from "../../queries/all-todos-query";
 
@@ -21,9 +21,9 @@ type AddTodoFormProps = {
 };
 
 export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
-	const todoForm = useForm<TodoItem, Validator<TodoItem | unknown>>({
+	const todoForm = useForm<NewTodoItem, Validator<TodoItem | unknown>>({
 		validatorAdapter: zodValidator(),
-		validators: { onChange: todoSchema, onSubmit: todoSchema },
+		validators: { onChange: newTodoSchema, onSubmit: newTodoSchema },
 		onSubmit: async ({ value }) => {
 			await insertTodo(value);
 			await invalidateAllTodosQuery();

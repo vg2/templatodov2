@@ -1,6 +1,6 @@
 import type { NewTimeSlotForm, TimeSlot } from "@app/model/TimeSlot.type";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { timeSlotSchema } from "./timeslot.schema";
+import { newTimeSlotSchema } from "./timeslot.schema";
 import type { FC } from "react";
 import { useForm, type Validator } from "@tanstack/react-form";
 import {
@@ -13,7 +13,6 @@ import {
 	Stack,
 } from "@mui/joy";
 import { AllDurations, type DurationUnit } from "@app/common/DurationUnit.type";
-import styles from "./TimeSlotForm.module.css";
 import { saveTimeSlot } from "@app/service/save-timeslot";
 import { invalidateAllTimeslotsQuery } from "../../queries/all-timeslots-query";
 
@@ -28,7 +27,7 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({
 }) => {
 	const form = useForm<NewTimeSlotForm, Validator<TimeSlot | unknown>>({
 		validatorAdapter: zodValidator(),
-		validators: { onChange: timeSlotSchema, onSubmit: timeSlotSchema },
+		validators: { onChange: newTimeSlotSchema, onSubmit: newTimeSlotSchema },
 		onSubmit: async ({ value }) => {
 			await saveTimeSlot(value as TimeSlot);
 			await invalidateAllTimeslotsQuery();
@@ -46,17 +45,6 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({
 			}}
 		>
 			<Stack spacing={1}>
-				<form.Field name="id">
-					{(field) => (
-						<FormControl error={field.state.meta.errors.length > 0}>
-							<input
-								className={styles.hidden}
-								type="hidden"
-								value={field.state.value}
-							/>
-						</FormControl>
-					)}
-				</form.Field>
 				<form.Field name="name">
 					{(field) => (
 						<FormControl error={field.state.meta.errors.length > 0}>

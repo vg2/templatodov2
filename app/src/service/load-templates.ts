@@ -1,9 +1,9 @@
 import { openDb } from "../data/db";
-import { type Template, mapTemplateFromDb } from "../model/Template.type";
+import { type ExistingTemplate, mapTemplateFromDb } from "../model/Template.type";
 import { mapTimeSlotFromDb } from "../model/TimeSlot.type";
 import { mapTodoItemFromDb } from "../model/TodoItem.type";
 
-export async function loadTemplates(): Promise<Template[]> {
+export async function loadTemplates(): Promise<ExistingTemplate[]> {
     const db = await openDb();
     const dbTemplates = await db.getAll('templates');
     const templates = dbTemplates.map(mapTemplateFromDb);
@@ -29,7 +29,7 @@ export async function loadTemplates(): Promise<Template[]> {
     return templates;
 }
 
-export async function loadTemplate(templateId: number): Promise<Template> {
+export async function loadTemplate(templateId: number): Promise<ExistingTemplate> {
     const db = await openDb();
     const dbTemplate = await db.get('templates', templateId);
     if (!dbTemplate) throw new Error("could not find template");

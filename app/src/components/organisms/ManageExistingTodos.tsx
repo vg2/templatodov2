@@ -1,10 +1,12 @@
-import type { TodoItem } from "@app/model/TodoItem.type";
-import type { Template } from "@app/model/Template.type";
+import type { ExistingTemplate } from "@app/model/Template.type";
+import type { ExistingTimeSlot } from "@app/model/TimeSlot.type";
+import type { ExistingTodoItem } from "@app/model/TodoItem.type";
 import type {
 	TodoItemInTemplate,
 	TodoItemInTemplateForm,
 	TodoItemsInTemplateForm,
 } from "@app/model/TodoItemInTemplate.type";
+import { Add, SaveAs } from "@mui/icons-material";
 import {
 	Checkbox,
 	DialogContent,
@@ -20,27 +22,25 @@ import {
 	Stack,
 	Typography,
 } from "@mui/joy";
-import { useForm, type Validator } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
-import { managingExistingTodosSchema } from "./manage-existing-todos.schema";
+import { type Validator, useForm } from "@tanstack/react-form";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getAllTimeslotsQueryOptions } from "../../queries/all-timeslots-query";
-import type { TimeSlot } from "@app/model/TimeSlot.type";
+import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useState } from "react";
-import { AddTodoForm } from "./AddTodoForm";
-import { TimeSlotForm } from "./TimeSlotForm";
-import { Add, SaveAs } from "@mui/icons-material";
+import { getAllTimeslotsQueryOptions } from "../../queries/all-timeslots-query";
 import { FloatingActionBar } from "../atoms/FloatingActionBar";
 import RoundedButton from "../atoms/RoundedButton";
+import { AddTodoForm } from "./AddTodoForm";
+import { TimeSlotForm } from "./TimeSlotForm";
+import { managingExistingTodosSchema } from "./manage-existing-todos.schema";
 
 type ManagingExistingTodosInput = {
-	allTodos: TodoItem[];
-	template: Template;
+	allTodos: ExistingTodoItem[];
+	template: ExistingTemplate;
 	save: (todosInTemplate: TodoItemInTemplate[]) => Promise<void>;
 };
 
 const getDefaultFormValues = (
-	allTodos: TodoItem[],
+	allTodos: ExistingTodoItem[],
 	todosInTemplate: TodoItemInTemplate[],
 ): TodoItemsInTemplateForm => {
 	const formTodos: TodoItemInTemplateForm[] = allTodos.map((todo) => {
@@ -169,7 +169,7 @@ export const ManageExistingTodos = ({
 														>
 															{(subField) => (
 																<Select
-																	value={(subField.state.value as TimeSlot)?.id}
+																	value={(subField.state.value as ExistingTimeSlot)?.id}
 																	onChange={(_, val) =>
 																		handleTimeslotChange(
 																			subField.handleChange,

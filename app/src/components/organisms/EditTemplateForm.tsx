@@ -8,7 +8,7 @@ import {
 	Stack,
 	Textarea,
 } from "@mui/joy";
-import type { Template, TemplateFormType } from "@app/model/Template.type";
+import type { ExistingTemplate, TemplateFormType } from "@app/model/Template.type";
 import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { updateTemplate } from "@app/service/update-template";
@@ -18,7 +18,7 @@ import type { FC } from "react";
 import { editTemplateSchema } from "./edit-template.schema";
 
 type EditTemplateFormProps = {
-	template: Template;
+	template: ExistingTemplate;
 	onSuccessfulSubmit: () => Promise<void>;
 };
 

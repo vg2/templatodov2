@@ -15,11 +15,12 @@ export type NewTemplate = Omit<Omit<ExistingTemplate, 'id'>, 'todos'>;
 
 export type Template = NewTemplate | ExistingTemplate;
 
-export function mapTemplateFromDb(dbTemplate: DbTemplate): Template {
+export function mapTemplateFromDb(dbTemplate: DbTemplate): ExistingTemplate {
   return {
+    id: 0,
     ...dbTemplate,
     todos: []
   }
 }
 
-export type TemplateFormType = Omit<Template, 'todos'>;
+export type TemplateFormType = Omit<NewTemplate, 'todos'> | Omit<ExistingTemplate, 'todos'>;

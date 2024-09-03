@@ -1,10 +1,10 @@
-import type { Template } from "./Template.type";
+import type { ExistingTemplate } from "./Template.type";
 import type { TodoState } from "../common/TodoState";
 import type { DbTemplateInstance } from "../data/DbTemplateInstance.type";
 
 export type TemplateInstance = {
   id: number;
-  templateSnapshot: Template;
+  templateSnapshot: ExistingTemplate;
   date: string;
   actionedItems: ActionedItem[];
 }
@@ -16,7 +16,7 @@ export type ActionedItem = {
   timestamp: string;
 }
 
-export function mapTemplateInstanceFromDb(dbInstance: DbTemplateInstance, mappedTemplate: Template): TemplateInstance {
+export function mapTemplateInstanceFromDb(dbInstance: DbTemplateInstance, mappedTemplate: ExistingTemplate): TemplateInstance {
   return {
     id: dbInstance.id ?? 0,
     date: dbInstance.date,

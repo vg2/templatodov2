@@ -1,11 +1,11 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
 import { useEffect, useState } from "react";
 import { format, formatISO } from "date-fns";
-import type { Template } from "@app/model/Template.type";
+import type { ExistingTemplate } from "@app/model/Template.type";
 import type { ActionedItem, TemplateInstance } from "@app/model/TemplateInstance.type";
 import { loadTemplates } from "@app/service/load-templates";
 import { getInstance } from "@app/service/get-instance";
-import type { TodoItem } from "@app/model/TodoItem.type";
+import type { ExistingTodoItem } from "@app/model/TodoItem.type";
 import type { TodoState } from "../../common/TodoState";
 import { updateInstance } from "@app/service/update-instance";
 import { TodoCard } from "../molecules/TodoCard";
@@ -13,8 +13,8 @@ import { Link } from "@tanstack/react-router";
 // import { dumpData } from "@app/data/dump-data";
 
 const TodoToday = () => {
-  const [expandedTemplate, setExpandedTemplate] = useState<Template | null>(null);
-  const [data, setData] = useState<Template[]>([]);
+  const [expandedTemplate, setExpandedTemplate] = useState<ExistingTemplate| null>(null);
+  const [data, setData] = useState<ExistingTemplate[]>([]);
   const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
   const [instancePending, setInstancePending] = useState<boolean>(false);
   const [refreshInstance, setRefreshInstance] = useState<unknown>(null);
@@ -52,13 +52,13 @@ const TodoToday = () => {
     loadInstance();
   }, [expandedTemplate, setInstanceData, setInstancePending, refreshInstance])
 
-  const currentTodoItemState = (instance: TemplateInstance, todo: TodoItem): TodoState => {
+  const currentTodoItemState = (instance: TemplateInstance, todo: ExistingTodoItem): TodoState => {
     const actionedItems = instance.actionedItems;
     const actionedItem = actionedItems.find(ai => ai.todoItemId === todo.id);
     return actionedItem?.state ?? "New";
   }
 
-  const markDoneForInstance = async (instance: TemplateInstance, todo: TodoItem): Promise<void> => {
+  const markDoneForInstance = async (instance: TemplateInstance, todo: ExistingTodoItem): Promise<void> => {
     const actioned: ActionedItem = {
       state: 'Complete',
       todoItemId: todo.id ?? 0,
