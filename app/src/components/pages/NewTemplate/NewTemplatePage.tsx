@@ -1,6 +1,13 @@
-import { TemplateFormType } from "@app/model/Template.type";
-import { FormControl, FormLabel, Input, Select, Option, Button } from "@mui/joy";
-import { useForm, Validator } from "@tanstack/react-form";
+import type { TemplateFormType } from "@app/model/Template.type";
+import {
+    FormControl,
+    FormLabel,
+    Input,
+    Select,
+    Option,
+    Button,
+} from "@mui/joy";
+import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { newTemplateSchema } from "./new-template.schema";
 import { format, parse } from "date-fns";
@@ -9,34 +16,37 @@ import { DateFormat } from "@app/common/DateFormat";
 import { useNavigate } from "@tanstack/react-router";
 
 export const NewTemplatePage = () => {
-    const navigate = useNavigate({ from: '/new-template' });
+    const navigate = useNavigate({ from: "/new-template" });
 
-    const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>({
-        validatorAdapter: zodValidator(),
-        validators: { onChange: newTemplateSchema, onSubmit: newTemplateSchema },
-        onSubmit: async ({ value }) => {
-            await insertTemplate(value);
-            navigate({ to: '/'});
+    const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>(
+        {
+            validatorAdapter: zodValidator(),
+            validators: { onChange: newTemplateSchema, onSubmit: newTemplateSchema },
+            onSubmit: async ({ value }) => {
+                await insertTemplate(value);
+                navigate({ to: "/" });
+            },
+            defaultValues: {
+                cycleLength: 1,
+                description: "",
+                frequency: "Daily",
+                name: "",
+                startDate: new Date(),
+            },
         },
-        defaultValues: {
-            cycleLength: 1,
-            description: '',
-            frequency: 'Daily',
-            name: '',
-            startDate: new Date(),
-        },
-    });
-
-
+    );
 
     return (
-        <form onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); form.handleSubmit(); }}>
-            <form.Field
-                name="name"
-                children={(field) => (
-                    <FormControl
-                        error={field.state.meta.errors.length > 0}
-                    >
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
+            }}
+        >
+            <form.Field name="name">
+                {(field) => (
+                    <FormControl error={field.state.meta.errors.length > 0}>
                         <FormLabel>Template name</FormLabel>
                         <Input
                             value={field.state.value}
@@ -47,11 +57,10 @@ export const NewTemplatePage = () => {
                         Errors: {field.state.meta.errors}
                     </FormControl>
                 )}
-            />
+            </form.Field>
 
-            <form.Field
-                name="description"
-                children={(field) => (
+            <form.Field name="description">
+                {(field) => (
                     <FormControl>
                         <FormLabel>Description</FormLabel>
                         <Input
@@ -62,34 +71,36 @@ export const NewTemplatePage = () => {
                         />
                     </FormControl>
                 )}
-            />
+            </form.Field>
 
-            <form.Field
-                name="cycleLength"
-                children={(field) => (
+            <form.Field name="cycleLength">
+                {(field) => (
                     <FormControl>
                         <FormLabel>Cycle Length</FormLabel>
                         <Input
                             type="number"
                             value={field.state.value}
                             onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(parseInt(e.target.value))}
+                            onChange={(e) =>
+                                field.handleChange(Number.parseInt(e.target.value, 10))
+                            }
                             placeholder="Cycle Length"
                         />
                     </FormControl>
                 )}
-            />
+            </form.Field>
 
-            <form.Field
-                name="frequency"
-                children={(field) => (
+            <form.Field name="frequency">
+                {(field) => (
                     <FormControl>
                         <FormLabel>Frequency</FormLabel>
                         <Select
                             defaultValue="Daily"
                             value={field.state.value}
                             onBlur={field.handleBlur}
-                            onChange={(_, val) => val && field.handleChange(val as "Daily" | "Weekly" | "Monthly")}
+                            onChange={(_, val) =>
+                                val && field.handleChange(val as "Daily" | "Weekly" | "Monthly")
+                            }
                             placeholder="Frequency"
                         >
                             <Option value="Daily">Daily</Option>
@@ -98,24 +109,27 @@ export const NewTemplatePage = () => {
                         </Select>
                     </FormControl>
                 )}
-            />
+            </form.Field>
 
-            <form.Field
-                name="startDate"
-                children={(field) => (
+            <form.Field name="startDate">
+                {(field) => (
                     <FormControl>
                         <FormLabel>Start date</FormLabel>
                         <Input
                             type="date"
                             value={format(field.state.value, DateFormat)}
                             onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(parse(e.target.value, DateFormat, new Date()))}
+                            onChange={(e) =>
+                                field.handleChange(
+                                    parse(e.target.value, DateFormat, new Date()),
+                                )
+                            }
                             placeholder="Description"
                         />
                     </FormControl>
                 )}
-            />
+            </form.Field>
             <Button type="submit">Submit</Button>
         </form>
     );
-}
+};

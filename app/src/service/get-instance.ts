@@ -8,6 +8,8 @@ export async function getInstance(templateId: number, date: string): Promise<Tem
     const dbTemplateInstances = await db.getAll('templateInstances');
     const template = await loadTemplate(templateId);
     const templateInstances = dbTemplateInstances.map(dbti => mapTemplateInstanceFromDb(dbti, template));
+    // todo: use better logic to determine if existing instance is applicable
+    // when it can span days
     const templateInstance = templateInstances.find(ti => ti.templateSnapshot.id === templateId && ti.date === date); 
     if (templateInstance) {
         return templateInstance;

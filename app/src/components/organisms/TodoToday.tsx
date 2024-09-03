@@ -10,6 +10,7 @@ import type { TodoState } from "../../common/TodoState";
 import { updateInstance } from "@app/service/update-instance";
 import { TodoCard } from "../molecules/TodoCard";
 import { Link } from "@tanstack/react-router";
+// import { dumpData } from "@app/data/dump-data";
 
 const TodoToday = () => {
   const [expandedTemplate, setExpandedTemplate] = useState<Template | null>(null);
@@ -17,6 +18,14 @@ const TodoToday = () => {
   const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
   const [instancePending, setInstancePending] = useState<boolean>(false);
   const [refreshInstance, setRefreshInstance] = useState<unknown>(null);
+
+  // useEffect(() => {
+  //   const dumpAll = async () => {
+  //     await dumpData();
+  //   }
+  //   dumpAll();
+  // }, [])
+
 
   useEffect(() => {
     const loadTemps = async () => {
