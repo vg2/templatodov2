@@ -3,7 +3,9 @@ import { openDb } from "../data/db";
 import { type TemplateInstance, mapTemplateInstanceFromDb } from "../model/TemplateInstance.type";
 import { loadTemplate } from "./load-templates";
 
-export async function getInstance(templateId: number, date: string): Promise<TemplateInstance> {
+export async function getInstance(templateId: number | null, date: string): Promise<TemplateInstance | null> {
+    if (!templateId) return Promise.resolve(null);
+    
     const db = await openDb();
     const dbTemplateInstances = await db.getAll('templateInstances');
     const template = await loadTemplate(templateId);

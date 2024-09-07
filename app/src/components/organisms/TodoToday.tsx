@@ -1,23 +1,24 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Grid, Typography } from "@mui/joy"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { format, formatISO } from "date-fns";
 import type { ExistingTemplate } from "@app/model/Template.type";
 import type { ActionedItem, TemplateInstance } from "@app/model/TemplateInstance.type";
-import { loadTemplates } from "@app/service/load-templates";
-import { getInstance } from "@app/service/get-instance";
 import type { ExistingTodoItem } from "@app/model/TodoItem.type";
 import type { TodoState } from "../../common/TodoState";
-import { updateInstance } from "@app/service/update-instance";
 import { TodoCard } from "../molecules/TodoCard";
 import { Link } from "@tanstack/react-router";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
+import { getTemplateInstanceQueryOptions } from "../../queries/get-template-instance-query";
+import { useUpdateInstanceMutation } from "../../queries/update-instance-mutation";
 // import { dumpData } from "@app/data/dump-data";
 
 const TodoToday = () => {
   const [expandedTemplate, setExpandedTemplate] = useState<ExistingTemplate| null>(null);
-  const [data, setData] = useState<ExistingTemplate[]>([]);
-  const [instanceData, setInstanceData] = useState<TemplateInstance | null>(null);
-  const [instancePending, setInstancePending] = useState<boolean>(false);
-  const [refreshInstance, setRefreshInstance] = useState<unknown>(null);
+  const { data, isLoading: instancePending } = useSuspenseQuery(getAllTemplatesQueryOptions())
+  const { data: instanceData } = useQuery(getTemplateInstanceQueryOptions(expandedTemplate?.id ?? null, format(new Date(), 'yyyy-MM-dd')))
+
+  const { mutateAsync: updateInstanceMutate } = useUpdateInstanceMutation();
 
   // useEffect(() => {
   //   const dumpAll = async () => {
@@ -25,32 +26,6 @@ const TodoToday = () => {
   //   }
   //   dumpAll();
   // }, [])
-
-
-  useEffect(() => {
-    const loadTemps = async () => {
-      const templates = await loadTemplates();
-      setData(templates);
-    }
-    loadTemps();
-  }, []);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (expandedTemplate === null) {
-      setInstanceData(() => null);
-      setInstancePending(() => false);
-      return;
-    }
-
-    setInstancePending(true);
-    const loadInstance = async () => {
-      const templateInstance = await getInstance(expandedTemplate.id ?? 0, format(new Date(), 'yyyy-MM-dd'));
-      setInstancePending(false);
-      setInstanceData(templateInstance);
-    }
-    loadInstance();
-  }, [expandedTemplate, setInstanceData, setInstancePending, refreshInstance])
 
   const currentTodoItemState = (instance: TemplateInstance, todo: ExistingTodoItem): TodoState => {
     const actionedItems = instance.actionedItems;
@@ -66,8 +41,7 @@ const TodoToday = () => {
       timestamp: formatISO(new Date())
     }
     instance.actionedItems.push(actioned);
-    await updateInstance(instance);
-    setRefreshInstance({});
+    await updateInstanceMutate(instance);
   }
 
   return (
