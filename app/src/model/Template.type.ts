@@ -12,7 +12,6 @@ export type ExistingTemplate = {
 }
 
 export type NewTemplate = Omit<Omit<ExistingTemplate, 'id'>, 'todos'>;
-
 export type Template = NewTemplate | ExistingTemplate;
 
 export function mapTemplateFromDb(dbTemplate: DbTemplate): ExistingTemplate {
@@ -23,4 +22,6 @@ export function mapTemplateFromDb(dbTemplate: DbTemplate): ExistingTemplate {
   }
 }
 
-export type TemplateFormType = Omit<NewTemplate, 'todos'> | Omit<ExistingTemplate, 'todos'>;
+export type NewTemplateForm = NewTemplate;
+export type ExistingTemplateForm = Omit<ExistingTemplate, 'todos'> & Partial<Pick<ExistingTemplate, 'todos'>>;
+export type TemplateFormType = NewTemplateForm | ExistingTemplateForm;

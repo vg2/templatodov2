@@ -8,7 +8,7 @@ import {
 	Stack,
 	Textarea,
 } from "@mui/joy";
-import type { ExistingTemplate, TemplateFormType } from "@app/model/Template.type";
+import type { ExistingTemplate, ExistingTemplateForm, TemplateFormType } from "@app/model/Template.type";
 import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { format, parse } from "date-fns";
@@ -28,7 +28,7 @@ export const EditTemplateForm: FC<EditTemplateFormProps> = ({
 }) => {
 	const { mutateAsync: updateTemplate } = useUpdateTemplateMutation();
 
-	const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>(
+	const form = useForm<ExistingTemplateForm, Validator<TemplateFormType | unknown>>(
 		{
 			validatorAdapter: zodValidator(),
 			validators: {
