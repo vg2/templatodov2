@@ -13,20 +13,20 @@ import {
 import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { newTodoSchema } from "./manage-existing-todos.schema";
-import { insertTodo } from "@app/service/insert-todo";
-import { invalidateAllTodosQuery } from "../../queries/all-todos-query";
+import { useInsertTodoMutation } from "../../queries/insert-todo-mutation";
 
 type AddTodoFormProps = {
 	onSubmit: () => void;
 };
 
 export const AddTodoForm = ({ onSubmit }: AddTodoFormProps) => {
+	const { mutateAsync: insertTodo } = useInsertTodoMutation();
+
 	const todoForm = useForm<NewTodoItem, Validator<TodoItem | unknown>>({
 		validatorAdapter: zodValidator(),
 		validators: { onChange: newTodoSchema, onSubmit: newTodoSchema },
 		onSubmit: async ({ value }) => {
 			await insertTodo(value);
-			await invalidateAllTodosQuery();
 			onSubmit();
 		},
 	});
