@@ -13,8 +13,8 @@ import {
 	Stack,
 } from "@mui/joy";
 import { AllDurations, type DurationUnit } from "@app/common/DurationUnit.type";
-import { saveTimeSlot } from "@app/service/save-timeslot";
 import { invalidateAllTimeslotsQuery } from "../../queries/all-timeslots-query";
+import { useSaveTimeslotMutation } from "../../queries/save-timeslot-mutation";
 
 type TimeSlotFormInputs = {
 	timeSlot: NewTimeSlotForm;
@@ -25,11 +25,13 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({
 	timeSlot,
 	onSuccessfulSubmit,
 }) => {
+	const { mutateAsync: saveTimeslot } = useSaveTimeslotMutation();
+
 	const form = useForm<NewTimeSlotForm, Validator<TimeSlot | unknown>>({
 		validatorAdapter: zodValidator(),
 		validators: { onChange: newTimeSlotSchema, onSubmit: newTimeSlotSchema },
 		onSubmit: async ({ value }) => {
-			await saveTimeSlot(value as TimeSlot);
+			await saveTimeslot(value as TimeSlot);
 			await invalidateAllTimeslotsQuery();
 			onSuccessfulSubmit();
 		},
