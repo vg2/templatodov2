@@ -2,13 +2,13 @@ import { queryOptions } from "@tanstack/react-query";
 import { queryClient } from "./query-client";
 import { loadTemplates } from "@app/service/load-templates";
 
-const getAllTemplatesQueryKey = 'get-templates';
+export const getTemplatesQueryKey = 'get-templates';
 
 export const getAllTemplatesQueryOptions = () => queryOptions({
-  queryKey: [getAllTemplatesQueryKey],
+  queryKey: [getTemplatesQueryKey],
   queryFn: () => loadTemplates()
 })
 
 export const invalidateAllTemplatesQuery = async () => {
-  await queryClient.invalidateQueries({ queryKey: [getAllTemplatesQueryKey] });
+  await queryClient.invalidateQueries({ queryKey: [getTemplatesQueryKey] });
 }

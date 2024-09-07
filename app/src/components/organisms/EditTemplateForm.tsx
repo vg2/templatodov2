@@ -11,11 +11,11 @@ import {
 import type { ExistingTemplate, TemplateFormType } from "@app/model/Template.type";
 import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { updateTemplate } from "@app/service/update-template";
 import { format, parse } from "date-fns";
 import { DateFormat } from "@app/common/DateFormat";
 import type { FC } from "react";
 import { editTemplateSchema } from "./edit-template.schema";
+import { useUpdateTemplateMutation } from "../../queries/update-template-mutation";
 
 type EditTemplateFormProps = {
 	template: ExistingTemplate;
@@ -26,6 +26,8 @@ export const EditTemplateForm: FC<EditTemplateFormProps> = ({
 	template,
 	onSuccessfulSubmit,
 }) => {
+	const { mutateAsync: updateTemplate } = useUpdateTemplateMutation();
+
 	const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>(
 		{
 			validatorAdapter: zodValidator(),
