@@ -1,4 +1,4 @@
-import { Add, Home } from '@mui/icons-material'
+import { Add } from '@mui/icons-material'
 import { Box, Button, Divider, Stack, Typography } from '@mui/joy'
 import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
 import logo from "../assets/logo.png";

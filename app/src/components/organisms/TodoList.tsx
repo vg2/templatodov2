@@ -1,6 +1,5 @@
-import { IconButton, List, ListItem, ListItemButton, ListItemContent, Stack, Typography } from "@mui/joy";
-import { Edit, RemoveCircleOutline } from '@mui/icons-material';
 import type { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
+import { List, ListItem, ListItemButton, ListItemContent, Stack, Typography } from "@mui/joy";
 import { Fragment } from "react/jsx-runtime";
 
 type TodoListInputType = {
@@ -21,8 +20,7 @@ export const TodoList = ({ todos }: TodoListInputType) => {
             </Stack>
             <List>
               {todos.filter(t => t.timeSlot.id === Number.parseInt(timeSlotId, 10)).map(todo => (
-                <ListItem key={todo.todoItem.id} startAction={<IconButton aria-label='Edit' size='sm' variant='plain'><Edit /></IconButton>}
-                  endAction={<IconButton aria-label='Remove' size='sm' variant='plain'><RemoveCircleOutline /></IconButton>}>
+                <ListItem key={todo.todoItem.id}>
                   <ListItemButton>
                     <ListItemContent>
                       <Typography level="title-sm">{todo.todoItem.name} | {todo.pointsInCycle.join(',')}</Typography>

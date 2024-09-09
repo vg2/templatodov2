@@ -14,7 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as EditTemplateTemplateIdImport } from './routes/edit-template.$templateId'
-import { Route as EditTemplateTemplateIdAddTodosImport } from './routes/edit-template_.$templateId/add-todos'
+import { Route as EditTemplateTemplateIdManageTodosImport } from './routes/edit-template_.$templateId/manage-todos'
 
 // Create Virtual Routes
 
@@ -38,9 +38,9 @@ const EditTemplateTemplateIdRoute = EditTemplateTemplateIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const EditTemplateTemplateIdAddTodosRoute =
-  EditTemplateTemplateIdAddTodosImport.update({
-    path: '/edit-template/$templateId/add-todos',
+const EditTemplateTemplateIdManageTodosRoute =
+  EditTemplateTemplateIdManageTodosImport.update({
+    path: '/edit-template/$templateId/manage-todos',
     getParentRoute: () => rootRoute,
   } as any)
 
@@ -69,11 +69,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditTemplateTemplateIdImport
       parentRoute: typeof rootRoute
     }
-    '/edit-template/$templateId/add-todos': {
-      id: '/edit-template/$templateId/add-todos'
-      path: '/edit-template/$templateId/add-todos'
-      fullPath: '/edit-template/$templateId/add-todos'
-      preLoaderRoute: typeof EditTemplateTemplateIdAddTodosImport
+    '/edit-template/$templateId/manage-todos': {
+      id: '/edit-template/$templateId/manage-todos'
+      path: '/edit-template/$templateId/manage-todos'
+      fullPath: '/edit-template/$templateId/manage-todos'
+      preLoaderRoute: typeof EditTemplateTemplateIdManageTodosImport
       parentRoute: typeof rootRoute
     }
   }
@@ -85,7 +85,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   NewTemplateLazyRoute,
   EditTemplateTemplateIdRoute,
-  EditTemplateTemplateIdAddTodosRoute,
+  EditTemplateTemplateIdManageTodosRoute,
 })
 
 /* prettier-ignore-end */
@@ -99,7 +99,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/new-template",
         "/edit-template/$templateId",
-        "/edit-template/$templateId/add-todos"
+        "/edit-template/$templateId/manage-todos"
       ]
     },
     "/": {
@@ -111,8 +111,8 @@ export const routeTree = rootRoute.addChildren({
     "/edit-template/$templateId": {
       "filePath": "edit-template.$templateId.tsx"
     },
-    "/edit-template/$templateId/add-todos": {
-      "filePath": "edit-template_.$templateId/add-todos.tsx"
+    "/edit-template/$templateId/manage-todos": {
+      "filePath": "edit-template_.$templateId/manage-todos.tsx"
     }
   }
 }
