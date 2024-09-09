@@ -11,12 +11,13 @@ import { useForm, type Validator } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { newTemplateSchema } from "./new-template.schema";
 import { format, parse } from "date-fns";
-import { insertTemplate } from "@app/service/insert-template";
 import { DateFormat } from "@app/common/DateFormat";
 import { useNavigate } from "@tanstack/react-router";
+import { useInsertTemplateMutation } from "../../../queries/insert-template-mutation";
 
 export const NewTemplatePage = () => {
     const navigate = useNavigate({ from: "/new-template" });
+    const { mutateAsync: insertTemplate } = useInsertTemplateMutation();
 
     const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>(
         {
