@@ -1,6 +1,7 @@
 import { Add, Home } from '@mui/icons-material'
 import { Box, Button, Divider, Stack, Typography } from '@mui/joy'
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
+import logo from "../assets/logo.png";
 
 export const Route = createRootRoute({
   component: () => (
@@ -12,7 +13,7 @@ export const Route = createRootRoute({
       <Box component='footer' sx={{ p: 2 }}>
         <Stack direction='row' gap={2} alignItems='center' justifyContent='space-between'>
           <Link to="/">
-            <Home />
+            <img src={logo} width="50" height="50" alt="Templatodo logo" />
           </Link>
           <Button component={Link} to="/new-template" startDecorator={<Add />}>New template</Button>
           <Typography level='title-lg'>Templatodo</Typography>
