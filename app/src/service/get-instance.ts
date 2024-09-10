@@ -60,7 +60,6 @@ export async function getInstance(
         (a, b) => (isAfter(b.date, a.date) ? 1 : -1),
     );
 
-    // todo: check if date param is valid for latest (first in ordered list) template instance
     const templateInstance = orderedTemplateInstances[0];
     if (templateInstance && dateValidInTemplate(parseISO(`${date}${utcMidnight}`), templateInstance.date, template.startDate, template.cycleLength, template.frequency)) {
         return templateInstance.instance;
