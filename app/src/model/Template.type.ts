@@ -1,10 +1,11 @@
+import type { Frequency } from "@app/common/Frequency.type";
 import type { DbTemplate } from "../data/DbTemplate.type";
 import type { TodoItemInTemplate } from "./TodoItemInTemplate.type";
 
 export type ExistingTemplate = {
   cycleLength: number;
   description: string;
-  frequency: 'Daily' | 'Weekly' | 'Monthly';
+  frequency: Frequency;
   id: number;
   name: string;
   startDate: Date;
