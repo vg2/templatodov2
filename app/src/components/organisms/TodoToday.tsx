@@ -10,6 +10,7 @@ import {
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
+  Button,
   Grid,
   Typography,
 } from "@mui/joy";
@@ -22,14 +23,15 @@ import {
   differenceInCalendarDays,
   format,
   formatISO,
+  isBefore,
 } from "date-fns";
 import { useState } from "react";
 import type { TodoState } from "../../common/TodoState";
 import { getTemplateInstanceQueryOptions } from "../../queries/get-template-instance-query";
 import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
+import { useLoadSampleTemplate } from "../../queries/load-sample-template-mutation";
 import { useUpdateInstanceMutation } from "../../queries/update-instance-mutation";
 import { TodoCard } from "../molecules/TodoCard";
-// import { dumpData } from "@app/data/dump-data";
 
 const calcPointInCycle = (
   today: Date,
@@ -40,7 +42,7 @@ const calcPointInCycle = (
   let templateDate = startDate;
   let min = templateDate;
 
-  while (templateDate < today) {
+  while (isBefore(templateDate, today)) {
     min = templateDate;
     switch (cycleFrequency) {
       case "Daily":
@@ -72,17 +74,17 @@ const TodoToday = () => {
     ),
   );
 
-
-  const pointInCycle = expandedTemplate ? calcPointInCycle(today, expandedTemplate.startDate, expandedTemplate.cycleLength, expandedTemplate.frequency) : undefined;
+  const pointInCycle = expandedTemplate
+    ? calcPointInCycle(
+        today,
+        expandedTemplate.startDate,
+        expandedTemplate.cycleLength,
+        expandedTemplate.frequency,
+      )
+    : undefined;
 
   const { mutateAsync: updateInstanceMutate } = useUpdateInstanceMutation();
-
-  // useEffect(() => {
-  //   const dumpAll = async () => {
-  //     await dumpData();
-  //   }
-  //   dumpAll();
-  // }, [])
+  const { mutateAsync: loadSampleTemplate, isPending } = useLoadSampleTemplate();
 
   const currentTodoItemState = (
     instance: TemplateInstance,
@@ -113,6 +115,9 @@ const TodoToday = () => {
         <Typography level="h2">To do today</Typography>
       </Grid>
       <Grid xs={12} sm={4}>
+        {(!data || data.length === 0) && (
+          <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
+        )}
         <AccordionGroup>
           {data.map((template) => (
             <Accordion
@@ -131,23 +136,30 @@ const TodoToday = () => {
                   Edit
                 </Link>
                 {!instancePending &&
-                  instanceData?.templateSnapshot.todos.filter(todo => todo.pointsInCycle.includes(pointInCycle || -1)).map((todo) => (
-                    <TodoCard
-                      key={`${todo.timeSlot.id}-${todo.todoItem.id}`}
-                      name={todo.todoItem.name}
-                      description={todo.todoItem.description}
-                      timeSlot={todo.timeSlot.name}
-                      time={todo.timeSlot.timeOfDay}
-                      duration={todo.timeSlot.duration}
-                      durationUnit={todo.timeSlot.durationUnit}
-                      todoId={todo.todoItem.id ?? 0}
-                      state={currentTodoItemState(instanceData, todo.todoItem)}
-                      markDone={() =>
-                        markDoneForInstance(instanceData, todo.todoItem)
-                      }
-                      openDetails={() => { }}
-                    />
-                  ))}
+                  instanceData?.templateSnapshot.todos
+                    .filter((todo) =>
+                      todo.pointsInCycle.includes(pointInCycle || -1),
+                    )
+                    .map((todo) => (
+                      <TodoCard
+                        key={`${todo.timeSlot.id}-${todo.todoItem.id}`}
+                        name={todo.todoItem.name}
+                        description={todo.todoItem.description}
+                        timeSlot={todo.timeSlot.name}
+                        time={todo.timeSlot.timeOfDay}
+                        duration={todo.timeSlot.duration}
+                        durationUnit={todo.timeSlot.durationUnit}
+                        todoId={todo.todoItem.id ?? 0}
+                        state={currentTodoItemState(
+                          instanceData,
+                          todo.todoItem,
+                        )}
+                        markDone={() =>
+                          markDoneForInstance(instanceData, todo.todoItem)
+                        }
+                        openDetails={() => {}}
+                      />
+                    ))}
                 {instancePending && <div>loading</div>}
               </AccordionDetails>
             </Accordion>

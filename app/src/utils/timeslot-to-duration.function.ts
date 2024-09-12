@@ -7,6 +7,7 @@ export function timeSlotToDuration(time: string, duration: number, durationUnit:
     const splitTime = time.split(':');
     const rawSeconds = splitTime[2];
     let seconds = Number.parseInt(rawSeconds, 10);
+    if (Number.isNaN(seconds)) { seconds = 0 };
     const rawMinutes = splitTime[1];
     let minutes = Number.parseInt(rawMinutes, 10);
     const rawHours = splitTime[0];
@@ -30,5 +31,5 @@ export function timeSlotToDuration(time: string, duration: number, durationUnit:
         hours = hours + duration;
     }
 
-    return `${time} - ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    return `${time} - ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
