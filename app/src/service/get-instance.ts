@@ -1,4 +1,4 @@
-import { addDays, addMonths, addWeeks, isAfter, isBefore, parseISO } from "date-fns";
+import { addDays, addMonths, addWeeks, isAfter, isBefore, isEqual, parseISO } from "date-fns";
 import type { DbTemplateInstance } from "../data/DbTemplateInstance.type";
 import { openDb } from "../data/db";
 import {
@@ -16,15 +16,16 @@ const dateValidInTemplate = (
     cycleCount: number,
     cycleFrequency: Frequency,
 ): boolean => {
+    if (cycleFrequency === 'Daily') {
+        return isEqual(checkDate, instanceDate);
+    }
+    
     let templateDate = templateStartDate;
     let min = templateDate;
 
     while (templateDate < instanceDate) {
         min = templateDate;
         switch (cycleFrequency) {
-            case "Daily":
-                templateDate = addDays(templateDate, cycleCount);
-                break;
             case "Weekly":
                 templateDate = addWeeks(templateDate, cycleCount);
                 break;
