@@ -57,7 +57,7 @@ const calcPointInCycle = (
     }
   }
   const difference = differenceInCalendarDays(today, min);
-  return difference;
+  return difference + 1;
 };
 
 const TodoToday = () => {
