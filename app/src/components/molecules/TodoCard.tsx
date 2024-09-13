@@ -20,16 +20,17 @@ export type TodoCardInput = {
 };
 export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, description, timeSlot, time, duration, durationUnit, state, markDone, openDetails }) => {
   return (
-    <Card>
-        <CardHeader>
-          <div className="flex flex-row gap-2">
-            <div><Checkbox 
-                className="h-8 w-8 rounded-full border-2 border-gray-400" 
+    <Card className="pt-1">
+        <CardHeader className="p-2">
+          <div className="flex flex-row items-center gap-2">
+            <div>
+              <Checkbox 
+                className="h-7 w-7 rounded-full border-2 border-gray-400" 
                 disabled={state !== 'New'}
                 checked={state !== 'New'}
                 onClick={() => void markDone(todoId)}/></div>
             <div>
-              <CardTitle>{name}</CardTitle>
+              <CardTitle className="text-lg">{name}</CardTitle>
               <CardDescription>{description}</CardDescription>
             </div>
           </div>

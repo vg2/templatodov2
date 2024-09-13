@@ -1,136 +1,131 @@
-import type { TemplateFormType } from "@app/model/Template.type";
-import {
-    FormControl,
-    FormLabel,
-    Input,
-    Select,
-    Option,
-    Button,
-} from "@mui/joy";
-import { useForm, type Validator } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
-import { newTemplateSchema } from "./new-template.schema";
-import { format, parse } from "date-fns";
-import { DateFormat } from "@app/common/DateFormat";
-import { useNavigate } from "@tanstack/react-router";
-import { useInsertNewTemplateMutation } from "../../../queries/insert-new-template-mutation";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "@tanstack/react-router"
+import { format, parse } from "date-fns"
+import { DateFormat } from "@app/common/DateFormat"
+import { newTemplateSchema } from "./new-template.schema"
+import { useInsertNewTemplateMutation } from "../../../queries/insert-new-template-mutation"
+import { H1 } from "@/components/atoms/Typography"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/atoms/Form"
+import { Input } from "@/components/atoms/Input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/atoms/Select"
+import { Button } from "@/components/atoms/Button"
+
+import type { TemplateFormType } from "@app/model/Template.type"
 
 export const NewTemplatePage = () => {
-    const navigate = useNavigate({ from: "/new-template" });
-    const { mutateAsync: insertNewTemplate } = useInsertNewTemplateMutation();
+    const navigate = useNavigate({ from: "/new-template" })
+    const { mutateAsync: insertNewTemplate } = useInsertNewTemplateMutation()
 
-    const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>(
-        {
-            validatorAdapter: zodValidator(),
-            validators: { onChange: newTemplateSchema, onSubmit: newTemplateSchema },
-            onSubmit: async ({ value }) => {
-                await insertNewTemplate(value);
-                navigate({ to: "/" });
-            },
-            defaultValues: {
-                cycleLength: 1,
-                description: "",
-                frequency: "Daily",
-                name: "",
-                startDate: new Date(),
-            },
+    const form = useForm<TemplateFormType>({
+        resolver: zodResolver(newTemplateSchema),
+        defaultValues: {
+            cycleLength: 1,
+            description: "",
+            frequency: "Daily",
+            name: "",
+            startDate: new Date(),
         },
-    );
+    })
+
+    const onSubmit = async (data: TemplateFormType) => {
+        await insertNewTemplate(data)
+        navigate({ to: "/" })
+    }
 
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
-        >
-            <form.Field name="name">
-                {(field) => (
-                    <FormControl error={field.state.meta.errors.length > 0}>
-                        <FormLabel>Template name</FormLabel>
-                        <Input
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            placeholder="Template name"
-                        />
-                        Errors: {field.state.meta.errors}
-                    </FormControl>
-                )}
-            </form.Field>
+        <>
+            <H1>New template</H1>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Template name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Template name" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
 
-            <form.Field name="description">
-                {(field) => (
-                    <FormControl>
-                        <FormLabel>Description</FormLabel>
-                        <Input
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            placeholder="Description"
-                        />
-                    </FormControl>
-                )}
-            </form.Field>
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Description" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
 
-            <form.Field name="cycleLength">
-                {(field) => (
-                    <FormControl>
-                        <FormLabel>Cycle Length</FormLabel>
-                        <Input
-                            type="number"
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(e) =>
-                                field.handleChange(Number.parseInt(e.target.value, 10))
-                            }
-                            placeholder="Cycle Length"
-                        />
-                    </FormControl>
-                )}
-            </form.Field>
+                    <FormField
+                        control={form.control}
+                        name="cycleLength"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Cycle Length</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        placeholder="Cycle Length"
+                                        {...field}
+                                        onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
 
-            <form.Field name="frequency">
-                {(field) => (
-                    <FormControl>
-                        <FormLabel>Frequency</FormLabel>
-                        <Select
-                            defaultValue="Daily"
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(_, val) =>
-                                val && field.handleChange(val as "Daily" | "Weekly" | "Monthly")
-                            }
-                            placeholder="Frequency"
-                        >
-                            <Option value="Daily">Daily</Option>
-                            <Option value="Weekly">Weekly</Option>
-                            <Option value="Monthly">Monthly</Option>
-                        </Select>
-                    </FormControl>
-                )}
-            </form.Field>
+                    <FormField
+                        control={form.control}
+                        name="frequency"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Frequency</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select frequency" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Daily">Daily</SelectItem>
+                                        <SelectItem value="Weekly">Weekly</SelectItem>
+                                        <SelectItem value="Monthly">Monthly</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </FormItem>
+                        )}
+                    />
 
-            <form.Field name="startDate">
-                {(field) => (
-                    <FormControl>
-                        <FormLabel>Start date</FormLabel>
-                        <Input
-                            type="date"
-                            value={format(field.state.value, DateFormat)}
-                            onBlur={field.handleBlur}
-                            onChange={(e) =>
-                                field.handleChange(
-                                    parse(e.target.value, DateFormat, new Date()),
-                                )
-                            }
-                            placeholder="Description"
-                        />
-                    </FormControl>
-                )}
-            </form.Field>
-            <Button type="submit">Submit</Button>
-        </form>
-    );
-};
+                    <FormField
+                        control={form.control}
+                        name="startDate"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Start date</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="date"
+                                        value={format(field.value, DateFormat)}
+                                        onChange={(e) =>
+                                            field.onChange(parse(e.target.value, DateFormat, new Date()))
+                                        }
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <Button type="submit">Submit</Button>
+                </form>
+            </Form>
+        </>
+    )
+}
