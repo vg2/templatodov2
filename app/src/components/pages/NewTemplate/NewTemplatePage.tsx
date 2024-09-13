@@ -64,45 +64,47 @@ export const NewTemplatePage = () => {
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name="cycleLength"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Cycle Length</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        placeholder="Cycle Length"
-                                        {...field}
-                                        onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="frequency"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Frequency</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <div className="flex gap-4">
+                        <FormField
+                            control={form.control}
+                            name="cycleLength"
+                            render={({ field }) => (
+                                <FormItem className="flex-1">
+                                    <FormLabel>Cycle Length</FormLabel>
                                     <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select frequency" />
-                                        </SelectTrigger>
+                                        <Input
+                                            type="number"
+                                            placeholder="Cycle Length"
+                                            {...field}
+                                            onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
+                                        />
                                     </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="Daily">Daily</SelectItem>
-                                        <SelectItem value="Weekly">Weekly</SelectItem>
-                                        <SelectItem value="Monthly">Monthly</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </FormItem>
-                        )}
-                    />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="frequency"
+                            render={({ field }) => (
+                                <FormItem className="flex-1">
+                                    <FormLabel>Frequency</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select frequency" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Daily">Daily</SelectItem>
+                                            <SelectItem value="Weekly">Weekly</SelectItem>
+                                            <SelectItem value="Monthly">Monthly</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
 
                     <FormField
                         control={form.control}
