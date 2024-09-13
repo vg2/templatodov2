@@ -24,6 +24,7 @@ import {
   format,
   formatISO,
   isBefore,
+  startOfDay,
 } from "date-fns";
 import { useState } from "react";
 import type { TodoState } from "../../common/TodoState";
@@ -41,8 +42,9 @@ const calcPointInCycle = (
 ): number => {
   let templateDate = startDate;
   let min = templateDate;
+  const compareDate = startOfDay(today);
 
-  while (isBefore(templateDate, today)) {
+  while (isBefore(templateDate, compareDate)) {
     min = templateDate;
     switch (cycleFrequency) {
       case "Daily":
@@ -57,7 +59,7 @@ const calcPointInCycle = (
     }
   }
   const difference = differenceInCalendarDays(today, min);
-  return difference + 1;
+  return difference;
 };
 
 const TodoToday = () => {
