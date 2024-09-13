@@ -16,6 +16,23 @@ export function H2({ children }: PropsWithChildren) {
   )
 }
 
+export function H3({ children }: PropsWithChildren) {
+  return (
+    <h3 className="scroll-m-20 font-semibold text-2xl tracking-tight">
+      {children}
+    </h3>
+  )
+}
+
+export function H4({ children }: PropsWithChildren) {
+  return (
+    <h4 className="scroll-m-20 font-semibold text-xl tracking-tight">
+      {children}
+    </h4>
+  )
+}
+
+
 export function Large({ children }: PropsWithChildren) {
   return <div className="font-semibold text-lg">{children}</div>
 }
