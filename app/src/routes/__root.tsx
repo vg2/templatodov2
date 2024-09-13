@@ -31,7 +31,7 @@ export const Route = createRootRoute({
       <div className="mx-2 my-2 flex-grow overflow-auto">
         <Outlet />
       </div>
-      <div className="sticky bottom-0 bg-white">
+      <div className="sticky bottom-0 z-10 bg-white">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
