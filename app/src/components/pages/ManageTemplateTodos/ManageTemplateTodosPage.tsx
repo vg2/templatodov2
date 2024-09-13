@@ -7,7 +7,7 @@ import { getAllTodosQueryOptions } from "../../../queries/all-todos-query";
 import { useSaveTodosInTemplateMutation } from "../../../queries/save-todos-in-template-mutation";
 import { getTemplateQueryOptions } from "../../../queries/template-query";
 import { ArrowBack } from "@mui/icons-material";
-import { SuspenseLoader } from "@app/components/atoms/SuspenseLoader";
+import { SuspenseLoader } from "@/components/molecules/SuspenseLoader";
 
 export const ManageTemplateTodosPage = () => {
     const { templateId } = useParams({ strict: false });

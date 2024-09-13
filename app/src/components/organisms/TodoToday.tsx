@@ -124,13 +124,13 @@ const TodoToday = () => {
             <AccordionTrigger>
               {template.name}
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="flex flex-col gap-2">
               <Button asChild variant='link'>
                 <Link
                   to="/edit-template/$templateId"
                   params={{ templateId: `${template.id}` }}
                 >
-                  Edit
+                  Edit template
                 </Link>
               </Button>
                 {!instancePending &&

@@ -27,7 +27,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useState } from "react";
 import { getAllTimeslotsQueryOptions } from "../../queries/all-timeslots-query";
-import { FloatingActionBar } from "../atoms/FloatingActionBar";
+import { FloatingActionBar } from "../molecules/FloatingActionBar";
 import RoundedButton from "../atoms/RoundedButton";
 import { AddTodoForm } from "./AddTodoForm";
 import { TimeSlotForm } from "./TimeSlotForm";
