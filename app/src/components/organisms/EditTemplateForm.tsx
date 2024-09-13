@@ -1,21 +1,17 @@
-import {
-	Button,
-	FormControl,
-	FormLabel,
-	Input,
-	Select,
-	Option,
-	Stack,
-	Textarea,
-} from "@mui/joy";
-import type { ExistingTemplate, ExistingTemplateForm, TemplateFormType } from "@app/model/Template.type";
-import { useForm, type Validator } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format, parse } from "date-fns";
 import { DateFormat } from "@app/common/DateFormat";
 import type { FC } from "react";
 import { editTemplateSchema } from "./edit-template.schema";
 import { useUpdateTemplateMutation } from "../../queries/update-template-mutation";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/atoms/Form";
+import { Input } from "@/components/atoms/Input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/atoms/Select";
+import { Button } from "@/components/atoms/Button";
+
+import type { ExistingTemplate, ExistingTemplateForm } from "@app/model/Template.type";
+import { Textarea } from "../atoms/Textarea";
 
 type EditTemplateFormProps = {
 	template: ExistingTemplate;
@@ -28,128 +24,112 @@ export const EditTemplateForm: FC<EditTemplateFormProps> = ({
 }) => {
 	const { mutateAsync: updateTemplate } = useUpdateTemplateMutation();
 
-	const form = useForm<ExistingTemplateForm, Validator<TemplateFormType | unknown>>(
-		{
-			validatorAdapter: zodValidator(),
-			validators: {
-				onChange: editTemplateSchema,
-				onSubmit: editTemplateSchema,
-			},
-			onSubmit: async ({ value }) => {
-				await updateTemplate(value);
-				onSuccessfulSubmit();
-			},
-			defaultValues: template,
-		},
-	);
+	const form = useForm<ExistingTemplateForm>({
+		resolver: zodResolver(editTemplateSchema),
+		defaultValues: template,
+	});
+
+	const onSubmit = async (data: ExistingTemplateForm) => {
+		await updateTemplate(data);
+		onSuccessfulSubmit();
+	};
 
 	return (
-		<form
-			onSubmit={(e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				form.handleSubmit();
-			}}
-		>
-			<Stack spacing={1}>
-				<form.Field name="name">
-					{(field) => (
-						<FormControl error={field.state.meta.errors.length > 0}>
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+				<FormField
+					control={form.control}
+					name="name"
+					render={({ field }) => (
+						<FormItem>
 							<FormLabel>Template name</FormLabel>
-							<Input
-								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								placeholder="Template name"
-							/>
-						</FormControl>
-					)}
-				</form.Field>
-
-				<form.Field name="description">
-					{(field) => (
-						<FormControl>
-							<FormLabel>Description</FormLabel>
-							<Textarea
-								minRows={2}
-								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								placeholder="Description"
-							/>
-						</FormControl>
-					)}
-				</form.Field>
-				<Stack
-					direction="row"
-					spacing={1}
-					justifyContent="space-evenly"
-					sx={{
-						width: "100%",
-						"& > *": {
-							width: "50%",
-							flex: 1,
-						},
-					}}
-				>
-					<form.Field name="cycleLength">
-						{(field) => (
 							<FormControl>
-								<FormLabel>Cycle Length</FormLabel>
-								<Input
-									type="number"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(Number.parseInt(e.target.value, 10))}
-									placeholder="Cycle Length"
+								<Input placeholder="Template name" {...field} />
+							</FormControl>
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="description"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Description</FormLabel>
+							<FormControl>
+								<Textarea
+									placeholder="Description"
+									className="min-h-[80px]"
+									{...field}
 								/>
 							</FormControl>
-						)}
-					</form.Field>
-
-					<form.Field name="frequency">
-						{(field) => (
-							<FormControl>
-								<FormLabel>Frequency</FormLabel>
-								<Select
-									defaultValue="Daily"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(_, val) =>
-										val &&
-										field.handleChange(val as "Daily" | "Weekly" | "Monthly")
-									}
-									placeholder="Frequency"
-								>
-									<Option value="Daily">Daily</Option>
-									<Option value="Weekly">Weekly</Option>
-									<Option value="Monthly">Monthly</Option>
-								</Select>
-							</FormControl>
-						)}
-					</form.Field>
-				</Stack>
-
-				<form.Field name="startDate">
-					{(field) => (
-						<FormControl>
-							<FormLabel>Start date</FormLabel>
-							<Input
-								type="date"
-								value={format(field.state.value, DateFormat)}
-								onBlur={field.handleBlur}
-								onChange={(e) =>
-									field.handleChange(
-										parse(e.target.value, DateFormat, new Date()),
-									)
-								}
-								placeholder="Description"
-							/>
-						</FormControl>
+						</FormItem>
 					)}
-				</form.Field>
-				<Button type="submit">Save template</Button>
-			</Stack>
-		</form>
+				/>
+
+				<div className="flex gap-4">
+					<FormField
+						control={form.control}
+						name="cycleLength"
+						render={({ field }) => (
+							<FormItem className="flex-1">
+								<FormLabel>Cycle Length</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="Cycle Length"
+										{...field}
+										onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="frequency"
+						render={({ field }) => (
+							<FormItem className="flex-1">
+								<FormLabel>Frequency</FormLabel>
+								<Select onValueChange={field.onChange} defaultValue={field.value}>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select frequency" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectItem value="Daily">Daily</SelectItem>
+										<SelectItem value="Weekly">Weekly</SelectItem>
+										<SelectItem value="Monthly">Monthly</SelectItem>
+									</SelectContent>
+								</Select>
+							</FormItem>
+						)}
+					/>
+				</div>
+
+				<FormField
+					control={form.control}
+					name="startDate"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Start date</FormLabel>
+							<FormControl>
+								<Input
+									type="date"
+									value={format(field.value, DateFormat)}
+									onChange={(e) =>
+										field.onChange(parse(e.target.value, DateFormat, new Date()))
+									}
+								/>
+							</FormControl>
+						</FormItem>
+					)}
+				/>
+
+				<Button type="submit" className="w-full">Save template</Button>
+			</form>
+		</Form>
 	);
 };
