@@ -13,18 +13,18 @@ import { newTemplateSchema } from "./new-template.schema";
 import { format, parse } from "date-fns";
 import { DateFormat } from "@app/common/DateFormat";
 import { useNavigate } from "@tanstack/react-router";
-import { useInsertTemplateMutation } from "../../../queries/insert-template-mutation";
+import { useInsertNewTemplateMutation } from "../../../queries/insert-new-template-mutation";
 
 export const NewTemplatePage = () => {
     const navigate = useNavigate({ from: "/new-template" });
-    const { mutateAsync: insertTemplate } = useInsertTemplateMutation();
+    const { mutateAsync: insertNewTemplate } = useInsertNewTemplateMutation();
 
     const form = useForm<TemplateFormType, Validator<TemplateFormType | unknown>>(
         {
             validatorAdapter: zodValidator(),
             validators: { onChange: newTemplateSchema, onSubmit: newTemplateSchema },
             onSubmit: async ({ value }) => {
-                await insertTemplate(value);
+                await insertNewTemplate(value);
                 navigate({ to: "/" });
             },
             defaultValues: {
