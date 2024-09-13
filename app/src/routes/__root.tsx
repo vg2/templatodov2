@@ -11,9 +11,9 @@ export const Route = createRootRoute({
         <Outlet />
       </div>
       <div className="sticky bottom-0 z-10 bg-white">
-      <Separator />
+        <Separator />
         <NavigationMenu>
-          <NavigationMenuList>
+          <NavigationMenuList className="flex flex-row justify-between">
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
                 <Link to="/">
@@ -25,11 +25,11 @@ export const Route = createRootRoute({
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link to="/new-template">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  <Plus/> New template
-                </NavigationMenuLink>
-              </Link>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                <Link to="/new-template">
+                  <Plus /> New template
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
