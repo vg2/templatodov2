@@ -1,7 +1,7 @@
 import type { DurationUnit } from "@app/common/DurationUnit.type";
 import type { TodoState } from "@app/common/TodoState";
 import { timeSlotToDuration } from "@app/utils/timeslot-to-duration.function";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../atoms/Card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../atoms/Card";
 import { Badge } from "../atoms/Badge";
 import { Button } from "../atoms/Button";
 import { Checkbox } from "../atoms/Checkbox";
