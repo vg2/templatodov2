@@ -1,7 +1,7 @@
 import { EditTemplateForm } from "@app/components/organisms/EditTemplateForm";
 import { TodoList } from "@app/components/organisms/TodoList";
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { useNavigate, useParams } from "@tanstack/react-router"
+import { Link, useNavigate, useParams } from "@tanstack/react-router"
 import { getTemplateQueryOptions } from "../../../queries/template-query"
 import { H3, H4 } from "@/components/atoms/Typography";
 import { Separator } from "@/components/atoms/Separator";
@@ -13,8 +13,6 @@ export const EditTemplatePage = () => {
   const { data: template } = useSuspenseQuery(getTemplateQueryOptions(Number.parseInt(templateId ?? '')));
   const navigate = useNavigate({ from: '/edit-template/$templateId' });
 
-  const manageTodos = () => navigate({ to: './manage-todos' });
-
   const postSubmit = () => navigate({ to: '/' });
 
   return (
@@ -23,8 +21,8 @@ export const EditTemplatePage = () => {
       <EditTemplateForm template={template} onSuccessfulSubmit={postSubmit} />
       <Separator />
       <div className="flex flex-row items-center gap-2">
-        <H4>Todos</H4>  
-        <Button variant='link' onClick={() => manageTodos()}><FileSliders /> Manage</Button>
+        <H4>Todos</H4>
+        <Button variant='link'><Link from="/edit-template/$templateId" to="./manage-todos" className="flex flex-row items-center gap-2"><FileSliders /> Manage</Link></Button>
       </div>
       <TodoList todos={template.todos} />
     </div>
