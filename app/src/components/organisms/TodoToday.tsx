@@ -5,15 +5,6 @@ import type {
   TemplateInstance,
 } from "@app/model/TemplateInstance.type";
 import type { ExistingTodoItem } from "@app/model/TodoItem.type";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionGroup,
-  AccordionSummary,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/joy";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
@@ -33,6 +24,10 @@ import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
 import { useLoadSampleTemplate } from "../../queries/load-sample-template-mutation";
 import { useUpdateInstanceMutation } from "../../queries/update-instance-mutation";
 import { TodoCard } from "../molecules/TodoCard";
+import { H1 } from "../atoms/Typography";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/Accordion";
+import { Button } from "../atoms/Button";
+import { Separator } from "../atoms/Separator";
 
 const calcPointInCycle = (
   today: Date,
@@ -78,11 +73,11 @@ const TodoToday = () => {
 
   const pointInCycle = expandedTemplate
     ? calcPointInCycle(
-        today,
-        expandedTemplate.startDate,
-        expandedTemplate.cycleLength,
-        expandedTemplate.frequency,
-      )
+      today,
+      expandedTemplate.startDate,
+      expandedTemplate.cycleLength,
+      expandedTemplate.frequency,
+    )
     : undefined;
 
   const { mutateAsync: updateInstanceMutate } = useUpdateInstanceMutation();
@@ -111,32 +106,33 @@ const TodoToday = () => {
     await updateInstanceMutate(instance);
   };
 
+  const onTemplateExpanded = (templateId: string) => {
+    setExpandedTemplate(data.find(t => t.id === Number.parseInt(templateId, 10)) || null);
+  }
+
   return (
-    <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-      <Grid xs={12}>
-        <Typography level="h2">To do today</Typography>
-      </Grid>
-      <Grid xs={12} sm={4}>
-        {(!data || data.length === 0) && (
-          <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
-        )}
-        <AccordionGroup>
-          {data.map((template) => (
-            <Accordion
-              key={template.id}
-              expanded={expandedTemplate?.id === template.id}
-              onChange={(_, expanded) =>
-                setExpandedTemplate(expanded ? template : null)
-              }
-            >
-              <AccordionSummary>{template.name}</AccordionSummary>
-              <AccordionDetails>
+    <>
+      <H1>Todo today</H1>
+      <Separator className="my-4" />
+      {(!data || data.length === 0) && (
+        <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
+      )}
+
+      <Accordion onValueChange={onTemplateExpanded} type="single" collapsible className="w-full">
+        {data.map(template => (
+          <AccordionItem key={template.id} value={template.id.toString()}>
+            <AccordionTrigger>
+              {template.name}
+            </AccordionTrigger>
+            <AccordionContent>
+              <Button asChild variant='link'>
                 <Link
                   to="/edit-template/$templateId"
                   params={{ templateId: `${template.id}` }}
                 >
                   Edit
                 </Link>
+              </Button>
                 {!instancePending &&
                   instanceData?.templateSnapshot.todos
                     .filter((todo) =>
@@ -159,16 +155,15 @@ const TodoToday = () => {
                         markDone={() =>
                           markDoneForInstance(instanceData, todo.todoItem)
                         }
-                        openDetails={() => {}}
+                        openDetails={() => { }}
                       />
                     ))}
                 {instancePending && <div>loading</div>}
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </AccordionGroup>
-      </Grid>
-    </Grid>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </>
   );
 };
 

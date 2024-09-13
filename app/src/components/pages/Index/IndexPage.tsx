@@ -1,5 +1,5 @@
+import TodoToday from '@/components/organisms/TodoToday';
 import './IndexPage.css'
-import TodoToday from '@app/components/organisms/TodoToday';
 import { openDb } from '@app/data/db';
 import { useEffect } from 'react';
 

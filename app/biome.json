@@ -2,7 +2,12 @@
   "organizeImports": { "enabled": true },
   "linter": {
     "enabled": true,
-    "rules": { "recommended": true }
+    "rules": {
+      "recommended": true,
+      "nursery": {
+        "useSortedClasses": { "level": "warn" }
+      }
+    }
   },
   "formatter": {
     "enabled": true,

@@ -19,8 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
+    "baseUrl": ".",
     "paths": {
+      "@/*": ["./src/*"],
       "@app/common/*": ["./src/common/*"],
       "@app/components/*": ["./src/components/*"],
       "@app/data/*": ["./src/data/*"],

@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
@@ -13,6 +13,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      "@": root,
       "@app/common": resolve(root, "common"),
       "@app/components": resolve(root, "components"),
       "@app/data": resolve(root, "data"),
