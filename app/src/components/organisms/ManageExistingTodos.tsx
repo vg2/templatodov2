@@ -1,259 +1,186 @@
-import type { ExistingTemplate } from "@app/model/Template.type";
-import type { ExistingTimeSlot } from "@app/model/TimeSlot.type";
-import type { ExistingTodoItem } from "@app/model/TodoItem.type";
-import type {
-	TodoItemInTemplate,
-	TodoItemInTemplateForm,
-	TodoItemsInTemplateForm,
-} from "@app/model/TodoItemInTemplate.type";
-import { Add, SaveAs } from "@mui/icons-material";
-import {
-	Checkbox,
-	DialogContent,
-	DialogTitle,
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemDecorator,
-	Modal,
-	ModalDialog,
-	Option,
-	Select,
-	Stack,
-	Typography,
-} from "@mui/joy";
-import { type Validator, useForm } from "@tanstack/react-form";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { PlusCircle, Save } from "lucide-react";
 import { getAllTimeslotsQueryOptions } from "../../queries/all-timeslots-query";
-import { FloatingActionBar } from "../molecules/FloatingActionBar";
-import RoundedButton from "../atoms/RoundedButton";
+import { managingExistingTodosSchema } from "./manage-existing-todos.schema";
 import { AddTodoForm } from "./AddTodoForm";
 import { TimeSlotForm } from "./TimeSlotForm";
-import { managingExistingTodosSchema } from "./manage-existing-todos.schema";
+import { Checkbox } from "@/components/atoms/Checkbox";
+import { Form, FormControl, FormField, FormItem } from "@/components/atoms/Form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/atoms/Select";
+import { Dialog, DialogContent, DialogTitle } from "@/components/atoms/Dialog";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/atoms/Card";
+import type { ExistingTemplate } from "@app/model/Template.type";
+import type { ExistingTodoItem } from "@app/model/TodoItem.type";
+import type { TodoItemInTemplate, TodoItemInTemplateForm, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
+import { MultiSelect } from "../atoms/MultiSelect";
+import { FloatingActionButton, FloatingActionButtonContainer } from "../molecules/FloatingActionButton";
 
 type ManagingExistingTodosInput = {
-	allTodos: ExistingTodoItem[];
-	template: ExistingTemplate;
-	save: (todosInTemplate: TodoItemInTemplate[]) => Promise<void>;
+  allTodos: ExistingTodoItem[];
+  template: ExistingTemplate;
+  save: (todosInTemplate: TodoItemInTemplate[]) => Promise<void>;
 };
 
 const getDefaultFormValues = (
-	allTodos: ExistingTodoItem[],
-	todosInTemplate: TodoItemInTemplate[],
+  allTodos: ExistingTodoItem[],
+  todosInTemplate: TodoItemInTemplate[],
 ): TodoItemsInTemplateForm => {
-	const formTodos: TodoItemInTemplateForm[] = allTodos.map((todo) => {
-		const alreadyInTemplate = todosInTemplate.find(
-			(x) => x.todoItem.id && x.todoItem.id === todo.id,
-		);
-		return alreadyInTemplate
-			? { ...alreadyInTemplate, selected: true }
-			: { todoItem: todo, selected: false };
-	});
+  const formTodos: TodoItemInTemplateForm[] = allTodos.map((todo) => {
+    const alreadyInTemplate = todosInTemplate.find(
+      (x) => x.todoItem.id && x.todoItem.id === todo.id,
+    );
+    return alreadyInTemplate
+      ? { ...alreadyInTemplate, selected: true }
+      : { todoItem: todo, selected: false };
+  });
 
-	return { todoItemsInTemplate: formTodos };
+  return { todoItemsInTemplate: formTodos };
 };
 
 export const ManageExistingTodos = ({
-	allTodos: todos,
-	template,
-	save,
+  allTodos: todos,
+  template,
+  save,
 }: ManagingExistingTodosInput) => {
-	const { data: timeSlots } = useSuspenseQuery(getAllTimeslotsQueryOptions());
+  const { data: timeSlots } = useSuspenseQuery(getAllTimeslotsQueryOptions());
 
-	const defaultValues = getDefaultFormValues(todos, template.todos);
-	const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState<boolean>(false);
-	const [addTimeslotModalIsOpen, setAddTimeslotModalIsOpen] =
-		useState<boolean>(false);
+  const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState<boolean>(false);
+  const [addTimeslotModalIsOpen, setAddTimeslotModalIsOpen] = useState<boolean>(false);
 
-	const form = useForm<
-		TodoItemsInTemplateForm,
-		Validator<TodoItemsInTemplateForm | unknown>
-	>({
-		validatorAdapter: zodValidator(),
-		validators: {
-			onChange: managingExistingTodosSchema,
-			onSubmit: managingExistingTodosSchema,
-		},
-		onSubmit: async ({ value }) => {
-			await save(value.todoItemsInTemplate.filter(t => t.selected) as TodoItemInTemplate[]);
-		},
-		defaultValues: defaultValues,
-	});
+  const form = useForm<TodoItemsInTemplateForm>({
+    resolver: zodResolver(managingExistingTodosSchema),
+    defaultValues: getDefaultFormValues(todos, template.todos),
+  });
 
-	const handleTimeslotChange = (
-		formChangeHandler: (updater: unknown) => void,
-		timeSlotId: number | null,
-	) => {
-		if (timeSlotId === -1) {
-			openAddTimeslotModal();
-			return;
-		}
-		const timeSlot = timeSlots.find((t) => t.id === timeSlotId);
-		formChangeHandler(timeSlot);
-	};
+  const { fields } = useFieldArray({
+    control: form.control,
+    name: "todoItemsInTemplate",
+  });
 
-	const handlePointsInCycleChange = (
-		formChangeHandler: (updater: unknown) => void,
-		selectedPoints: number[] | null,
-	) => {
-		formChangeHandler(selectedPoints);
-	};
+  const onSubmit = async (data: TodoItemsInTemplateForm) => {
+    await save(data.todoItemsInTemplate.filter((t) => t.selected) as TodoItemInTemplate[]);
+  };
 
-	const pointsInCycle = Array.from(
-		{ length: template.cycleLength },
-		(_, i) => i + 1,
-	);
+  const handleTimeslotChange = (onChange: (value: unknown) => void, value: string) => {
+    if (value === "-1") {
+      openAddTimeslotModal();
+      return;
+    }
+    const timeSlot = timeSlots.find((t) => t.id === Number.parseInt(value, 10));
+    onChange(timeSlot);
+  };
 
-	const isSelected = () => true;
+  const pointsInCycle = Array.from({ length: template.cycleLength }, (_, i) => i + 1);
 
-	const openAddTodoModal = () => setAddTodoModalIsOpen(true);
-	const closeAddTodoModal = () => setAddTodoModalIsOpen(false);
+  const openAddTodoModal = () => setAddTodoModalIsOpen(true);
+  const closeAddTodoModal = () => setAddTodoModalIsOpen(false);
 
-	const openAddTimeslotModal = () => setAddTimeslotModalIsOpen(true);
-	const closeAddTimeslotTodoModal = () => setAddTimeslotModalIsOpen(false);
+  const openAddTimeslotModal = () => setAddTimeslotModalIsOpen(true);
+  const closeAddTimeslotModal = () => setAddTimeslotModalIsOpen(false);
 
-	return (
-		<>
-			<Typography level="title-md">Todos</Typography>
-			<div role="group" aria-labelledby="template-todos-group">
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						e.stopPropagation();
-						form.handleSubmit();
-					}}
-				>
-					<List>
-						<form.Field name="todoItemsInTemplate" mode="array">
-							{(field) =>
-								field.state.value.map((_, i) => (
-									<ListItem key={field.state.value[i].todoItem.id}>
-										<ListItemButton>
-											<ListItemDecorator>
-												<form.Field name={`todoItemsInTemplate[${i}].selected`}>
-													{(subField) => {
-														return (
-															<Checkbox
-																checked={subField.state.value}
-																onChange={(e) =>
-																	subField.handleChange(e.target.checked)
-																}
-															/>
-														);
-													}}
-												</form.Field>
-											</ListItemDecorator>
-											<Stack direction="column" gap={1}>
-												<Typography level="title-sm">
-													{field.state.value[i].todoItem?.name ?? ""}
-												</Typography>
-												<Typography level="body-sm">
-													{field.state.value[i].todoItem?.description ?? ""}
-												</Typography>
-												{isSelected() && (
-													<Stack
-														direction="row"
-														gap={1}
-														sx={{
-															width: "100%",
-															"& > *": {
-																width: "50%",
-																flex: 1,
-															},
-														}}
-													>
-														<form.Field
-															name={`todoItemsInTemplate[${i}].timeSlot`}
-														>
-															{(subField) => (
-																<Select
-																	value={(subField.state.value as ExistingTimeSlot)?.id}
-																	onChange={(_, val) =>
-																		handleTimeslotChange(
-																			subField.handleChange,
-																			val,
-																		)
-																	}
-																>
-																	{timeSlots.map((ts) => (
-																		<Option
-																			key={ts.id}
-																			value={ts.id}
-																			label={ts.name}
-																		>
-																			{ts.name} | {ts.description}
-																		</Option>
-																	))}
-																	<Option
-																		key="add-new"
-																		value={-1}
-																		label="Add new timeslot..."
-																	>
-																		Add new timeslot...
-																	</Option>
-																</Select>
-															)}
-														</form.Field>
-														<form.Field
-															name={`todoItemsInTemplate[${i}].pointsInCycle`}
-														>
-															{(subField) => (
-																<Select
-																	value={subField.state.value as number[]}
-																	multiple
-																	onChange={(_, val) =>
-																		handlePointsInCycleChange(
-																			subField.handleChange,
-																			val as number[],
-																		)
-																	}
-																>
-																	{pointsInCycle.map((point) => (
-																		<Option key={point} value={point}>
-																			{point}
-																		</Option>
-																	))}
-																</Select>
-															)}
-														</form.Field>
-													</Stack>
-												)}
-											</Stack>
-										</ListItemButton>
-									</ListItem>
-								))
-							}
-						</form.Field>
-					</List>
-				</form>
-			</div>
-			<Modal open={addTodoModalIsOpen} onClose={closeAddTodoModal}>
-				<ModalDialog>
-					<DialogTitle>Add todo</DialogTitle>
-					<DialogContent>Add a new todo</DialogContent>
-					<AddTodoForm onSubmit={closeAddTodoModal} />
-				</ModalDialog>
-			</Modal>
-			<Modal open={addTimeslotModalIsOpen} onClose={closeAddTimeslotTodoModal}>
-				<ModalDialog>
-					<DialogTitle>Add timeslot</DialogTitle>
-					<DialogContent>Add a new timeslot</DialogContent>
-					<TimeSlotForm
-						timeSlot={{ templateId: template.id }}
-						onSuccessfulSubmit={closeAddTimeslotTodoModal}
-					/>
-				</ModalDialog>
-			</Modal>
-			<FloatingActionBar>
-				<RoundedButton onClick={openAddTodoModal}>
-					<Add />
-				</RoundedButton>
-				<RoundedButton onClick={form.handleSubmit}>
-					<SaveAs />
-				</RoundedButton>
-			</FloatingActionBar>
-		</>
-	);
+  return (
+    <>
+      <h2 className="mb-4 font-bold text-2xl">Todos</h2>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          {fields.map((field, index) => (
+            <Card key={field.id} className="mb-4">
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`todoItemsInTemplate.${index}.selected`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <div>
+                    <CardTitle>{field.todoItem.name}</CardTitle>
+                    <CardDescription>{field.todoItem.description}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {form.watch(`todoItemsInTemplate.${index}.selected`) && (
+                  <div className="flex flex-col gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`todoItemsInTemplate.${index}.timeSlot`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <Select
+                            onValueChange={(value) => handleTimeslotChange(field.onChange, value)}
+                            value={field.value?.id?.toString()}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select timeslot" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {timeSlots.map((ts) => (
+                                <SelectItem key={ts.id} value={ts.id.toString()}>
+                                  {ts.name} | {ts.description}
+                                </SelectItem>
+                              ))}
+                              <SelectItem value="-1">Add new timeslot...</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`todoItemsInTemplate.${index}.pointsInCycle`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <MultiSelect
+                            options={pointsInCycle.map((point) => ({ key: point.toString(), label: point.toString(), value: point.toString() }))}
+                            defaultValue={field.value?.map?.(v => v.toString()) || []}
+                            onValueChange={(value) => field.onChange(value.map(val => Number.parseInt(val, 10)))}
+                            maxCount={1}
+                            placeholder="Select points in cycle"
+                          />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </form>
+      </Form>
+
+      <Dialog open={addTodoModalIsOpen} onOpenChange={setAddTodoModalIsOpen}>
+        <DialogContent>
+          <DialogTitle>Add todo</DialogTitle>
+          <AddTodoForm onSubmit={closeAddTodoModal} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={addTimeslotModalIsOpen} onOpenChange={setAddTimeslotModalIsOpen}>
+        <DialogContent>
+          <DialogTitle>Add timeslot</DialogTitle>
+          <TimeSlotForm
+            timeSlot={{ templateId: template.id }}
+            onSuccessfulSubmit={closeAddTimeslotModal}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <FloatingActionButtonContainer>
+        <FloatingActionButton icon={<PlusCircle className="h-4 w-4" />} onClick={openAddTodoModal} />
+        <FloatingActionButton icon={<Save className="h-4 w-4" />} onClick={form.handleSubmit(onSubmit)} />
+      </FloatingActionButtonContainer>
+    </>
+  );
 };
