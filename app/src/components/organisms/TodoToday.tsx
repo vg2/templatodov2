@@ -12,6 +12,7 @@ import {
   addMonths,
   addWeeks,
   differenceInCalendarDays,
+  endOfDay,
   format,
   formatISO,
   isBefore,
@@ -37,9 +38,9 @@ const calcPointInCycle = (
 ): number => {
   if (cycleLength === 1) return 1;
 
-  let templateDate = startDate;
+  let templateDate = startOfDay(startDate);
   let min = templateDate;
-  const compareDate = startOfDay(today);
+  const compareDate = endOfDay(today);
 
   while (isBefore(templateDate, compareDate)) {
     min = templateDate;
