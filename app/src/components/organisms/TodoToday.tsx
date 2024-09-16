@@ -35,6 +35,8 @@ const calcPointInCycle = (
   cycleLength: number,
   cycleFrequency: Frequency,
 ): number => {
+  if (cycleLength === 1) return 1;
+
   let templateDate = startDate;
   let min = templateDate;
   const compareDate = startOfDay(today);
