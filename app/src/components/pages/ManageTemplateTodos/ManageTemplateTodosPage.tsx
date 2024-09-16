@@ -1,12 +1,13 @@
 import { ManageExistingTodos } from "@app/components/organisms/ManageExistingTodos";
 import type { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
-import { Button, Stack, Typography } from "@mui/joy";
+import { Button } from "@/components/atoms/Button";
+import { H4} from "@/components/atoms/Typography";
 import { useSuspenseQueries } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { getAllTodosQueryOptions } from "../../../queries/all-todos-query";
 import { useSaveTodosInTemplateMutation } from "../../../queries/save-todos-in-template-mutation";
 import { getTemplateQueryOptions } from "../../../queries/template-query";
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowLeft } from "lucide-react";
 import { SuspenseLoader } from "@/components/molecules/SuspenseLoader";
 
 export const ManageTemplateTodosPage = () => {
@@ -38,14 +39,15 @@ export const ManageTemplateTodosPage = () => {
         });
         navigateBack();
     };
+
     return (
-        <Stack spacing={1}>
-            <Stack direction="row" gap={1} alignItems="center">
-                <Button onClick={navigateBack} variant="plain">
-                    <ArrowBack />
+        <div className="space-y-4">
+            <div className="flex items-center gap-4">
+                <Button onClick={navigateBack} variant="link">
+                    <ArrowLeft />
                 </Button>
-                <Typography level="title-lg">Add todo to {template.name}</Typography>
-            </Stack>
+                <H4>Manage {template.name} todos</H4>
+            </div>
             <SuspenseLoader>
                 <ManageExistingTodos
                     template={template}
@@ -53,6 +55,6 @@ export const ManageTemplateTodosPage = () => {
                     save={save}
                 />
             </SuspenseLoader>
-        </Stack>
+        </div>
     );
 };

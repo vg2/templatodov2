@@ -28,7 +28,6 @@
       "@app/model/*": ["./src/model/*"],
       "@app/service/*": ["./src/service/*"],
       "@app/utils/*": ["./src/utils/*"],
-      "@mui/material": ["./node_modules/@mui/joy"]
     }
   },
   "include": ["src"],
