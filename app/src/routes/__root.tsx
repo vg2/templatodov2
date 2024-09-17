@@ -6,8 +6,8 @@ import { Separator } from '@/components/atoms/Separator';
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="flex min-h-screen flex-col">
-      <div className="mx-4 flex-grow overflow-auto p-2">
+    <div className="flex min-h-screen flex-col bg-cocoa-300 font-quicksand">
+      <div className="mx-4 flex-grow overflow-auto p-2" >
         <Outlet />
       </div>
       <div className="sticky bottom-0 z-10 bg-white">

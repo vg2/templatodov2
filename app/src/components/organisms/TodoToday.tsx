@@ -61,12 +61,13 @@ const calcPointInCycle = (
 };
 
 const TodoToday = () => {
-  const [expandedTemplate, setExpandedTemplate] =
-    useState<ExistingTemplate | null>(null);
   const { data, isLoading: instancePending } = useSuspenseQuery(
     getAllTemplatesQueryOptions(),
   );
   const today = new Date();
+
+  const [expandedTemplate, setExpandedTemplate] = useState<ExistingTemplate | null>(data.length === 1 ? data[0] : null);
+
   const { data: instanceData } = useQuery(
     getTemplateInstanceQueryOptions(
       expandedTemplate?.id ?? null,
@@ -121,7 +122,7 @@ const TodoToday = () => {
         <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
       )}
 
-      <Accordion onValueChange={onTemplateExpanded} type="single" collapsible className="w-full">
+      <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
         {data.map(template => (
           <AccordionItem key={template.id} value={template.id.toString()}>
             <AccordionTrigger>

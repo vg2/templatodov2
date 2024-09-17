@@ -36,7 +36,7 @@ export const EditTemplateForm: FC<EditTemplateFormProps> = ({
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 				<FormField
 					control={form.control}
 					name="name"
@@ -67,7 +67,7 @@ export const EditTemplateForm: FC<EditTemplateFormProps> = ({
 					)}
 				/>
 
-				<div className="flex gap-4">
+				<div className="flex gap-2">
 					<FormField
 						control={form.control}
 						name="cycleLength"

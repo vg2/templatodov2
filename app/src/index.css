@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Quicksand";
+  font-optical-sizing: auto;
+  font-weight: 300 700;
+  font-style: normal;
+}
+
 input[type="hidden"] {
     display: none;
 }
