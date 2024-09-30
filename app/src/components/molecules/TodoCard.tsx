@@ -20,7 +20,7 @@ export type TodoCardInput = {
 };
 export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, description, timeSlot, time, duration, durationUnit, state, markDone, openDetails }) => {
   return (
-    <Card className="pt-1 bg-cocoa-100 text-cocoa-900">
+    <Card className="bg-cocoa-200 pt-1 text-cocoa-900">
         <CardHeader className="p-2 ">
           <div className="flex flex-row items-center gap-2">
             <div>
