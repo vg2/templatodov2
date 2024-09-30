@@ -29,6 +29,10 @@ import { H1 } from "../atoms/Typography";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/Accordion";
 import { Button } from "../atoms/Button";
 import { Separator } from "../atoms/Separator";
+import { Label } from "../atoms/Label";
+import { Switch } from "../atoms/Switch";
+import { TimelineCardList } from "../molecules/TimelineCardList";
+import VerticalTimeline from "../molecules/VerticalTimeline";
 
 const calcPointInCycle = (
   today: Date,
@@ -87,6 +91,8 @@ const TodoToday = () => {
   const { mutateAsync: updateInstanceMutate } = useUpdateInstanceMutation();
   const { mutateAsync: loadSampleTemplate, isPending } = useLoadSampleTemplate();
 
+  const [timelineView, setTimelineView] = useState<boolean>(false);
+
   const currentTodoItemState = (
     instance: TemplateInstance,
     todo: ExistingTodoItem,
@@ -116,27 +122,41 @@ const TodoToday = () => {
 
   return (
     <>
-      <H1>Todo today</H1>
+      <div className="flex flex-row justify-between">
+        <H1>Todo today</H1>
+        <div className="flex items-center space-x-2 self-center">
+          <Switch id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)}/>
+          <Label htmlFor="timeline-view" className="self-center">Timeline view</Label>
+        </div>
+      </div>
       <Separator className="my-4" />
       {(!data || data.length === 0) && (
         <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
       )}
-
-      <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
-        {data.map(template => (
-          <AccordionItem key={template.id} value={template.id.toString()}>
-            <AccordionTrigger>
-              {template.name}
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-2">
-              <Button asChild variant='link'>
-                <Link
-                  to="/edit-template/$templateId"
-                  params={{ templateId: `${template.id}` }}
-                >
-                  Edit template
-                </Link>
-              </Button>
+      {timelineView ? (
+        <VerticalTimeline items={instanceData?.templateSnapshot.todos
+            .filter((todo) => todo.pointsInCycle.includes(pointInCycle || -1))
+            .map((todo) => ({
+              item: todo,
+              hour: todo.timeSlot.timeOfDay
+            })) || []}
+        />
+      ) : (
+        <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
+          {data.map(template => (
+            <AccordionItem key={template.id} value={template.id.toString()}>
+              <AccordionTrigger>
+                {template.name}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2">
+                <Button asChild variant='link'>
+                  <Link
+                    to="/edit-template/$templateId"
+                    params={{ templateId: `${template.id}` }}
+                  >
+                    Edit template
+                  </Link>
+                </Button>
                 {!instancePending &&
                   instanceData?.templateSnapshot.todos
                     .filter((todo) =>
@@ -163,10 +183,11 @@ const TodoToday = () => {
                       />
                     ))}
                 {instancePending && <div>loading</div>}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      )}
     </>
   );
 };
