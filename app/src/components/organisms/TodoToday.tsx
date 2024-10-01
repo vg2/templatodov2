@@ -160,10 +160,12 @@ const TodoToday = () => {
                         durationUnit={todo.timeSlot.durationUnit}
                         todoId={todo.todoItem.id ?? 0}
                         state={currentTodoItemState(
+                          // biome-ignore lint/style/noNonNullAssertion: <explanation>
                           instances.find(i => i.templateSnapshot.id === template.id)!,
                           todo.todoItem,
                         )}
                         markDone={() =>
+                          // biome-ignore lint/style/noNonNullAssertion: <explanation>
                           markDoneForInstance(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem)
                         }
                         openDetails={() => { }}
