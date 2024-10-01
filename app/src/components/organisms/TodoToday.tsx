@@ -137,7 +137,7 @@ const TodoToday = () => {
         <VerticalTimeline items={instanceData?.templateSnapshot.todos
             .filter((todo) => todo.pointsInCycle.includes(pointInCycle || -1))
             .map((todo) => ({
-              item: todo,
+              item: todo.todoItem,
               hour: todo.timeSlot.timeOfDay
             })) || []}
         />
