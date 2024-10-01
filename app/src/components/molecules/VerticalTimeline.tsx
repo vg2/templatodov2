@@ -22,7 +22,7 @@ export default function VerticalTimeline({ items }: VerticalTimelineProps) {
 
     return (
         <Card className="mx-auto w-full max-w-3xl bg-cocoa-200">
-            <CardContent className="p-6">
+            <CardContent className="p-0 pt-2">
                 <ScrollArea className="h-auto pr-4">
                     <div className="relative flex">
                         {/* Timeline */}
