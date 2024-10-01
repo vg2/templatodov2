@@ -5,7 +5,7 @@ import type {
   TemplateInstance,
 } from "@app/model/TemplateInstance.type";
 import type { ExistingTodoItem } from "@app/model/TodoItem.type";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQueries, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
   addDays,
@@ -31,7 +31,6 @@ import { Button } from "../atoms/Button";
 import { Separator } from "../atoms/Separator";
 import { Label } from "../atoms/Label";
 import { Switch } from "../atoms/Switch";
-import { TimelineCardList } from "../molecules/TimelineCardList";
 import VerticalTimeline from "../molecules/VerticalTimeline";
 
 const calcPointInCycle = (
@@ -65,28 +64,16 @@ const calcPointInCycle = (
 };
 
 const TodoToday = () => {
-  const { data, isLoading: instancePending } = useSuspenseQuery(
+  const { data } = useSuspenseQuery(
     getAllTemplatesQueryOptions(),
   );
   const today = new Date();
 
   const [expandedTemplate, setExpandedTemplate] = useState<ExistingTemplate | null>(data.length === 1 ? data[0] : null);
 
-  const { data: instanceData } = useQuery(
-    getTemplateInstanceQueryOptions(
-      expandedTemplate?.id ?? null,
-      format(today, "yyyy-MM-dd"),
-    ),
-  );
-
-  const pointInCycle = expandedTemplate
-    ? calcPointInCycle(
-      today,
-      expandedTemplate.startDate,
-      expandedTemplate.cycleLength,
-      expandedTemplate.frequency,
-    )
-    : undefined;
+  const instanceQueries = data.map(template => getTemplateInstanceQueryOptions(template.id, format(today, "yyyy-MM-dd")));
+  const instancesResult = useQueries({ queries: instanceQueries });
+  const instances = instancesResult.map(i => i.data).filter(i => !!i);
 
   const { mutateAsync: updateInstanceMutate } = useUpdateInstanceMutation();
   const { mutateAsync: loadSampleTemplate, isPending } = useLoadSampleTemplate();
@@ -134,9 +121,10 @@ const TodoToday = () => {
         <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
       )}
       {timelineView ? (
-        <VerticalTimeline items={instanceData?.templateSnapshot.todos
-            .filter((todo) => todo.pointsInCycle.includes(pointInCycle || -1))
-            .map((todo) => ({
+        // todo change this to accept instances and map internally?
+        <VerticalTimeline items={instances.flatMap(i => i.templateSnapshot.todos.map(t => ({todo: t, template: i.templateSnapshot })))
+            .filter(({ todo, template }) => todo.pointsInCycle.includes(calcPointInCycle(today, template.startDate, template.cycleLength, template.frequency) || -1))
+            .map(({todo}) => ({
               item: todo.todoItem,
               hour: todo.timeSlot.timeOfDay
             })) || []}
@@ -157,10 +145,9 @@ const TodoToday = () => {
                     Edit template
                   </Link>
                 </Button>
-                {!instancePending &&
-                  instanceData?.templateSnapshot.todos
+                {instances.find(i => i.templateSnapshot.id === template.id)?.templateSnapshot.todos
                     .filter((todo) =>
-                      todo.pointsInCycle.includes(pointInCycle || -1),
+                      todo.pointsInCycle.includes(calcPointInCycle(today, template.startDate, template.cycleLength, template.frequency) || -1),
                     )
                     .map((todo) => (
                       <TodoCard
@@ -173,16 +160,15 @@ const TodoToday = () => {
                         durationUnit={todo.timeSlot.durationUnit}
                         todoId={todo.todoItem.id ?? 0}
                         state={currentTodoItemState(
-                          instanceData,
+                          instances.find(i => i.templateSnapshot.id === template.id)!,
                           todo.todoItem,
                         )}
                         markDone={() =>
-                          markDoneForInstance(instanceData, todo.todoItem)
+                          markDoneForInstance(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem)
                         }
                         openDetails={() => { }}
                       />
                     ))}
-                {instancePending && <div>loading</div>}
               </AccordionContent>
             </AccordionItem>
           ))}
