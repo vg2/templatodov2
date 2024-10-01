@@ -5,7 +5,7 @@ import type {
   TemplateInstance,
 } from "@app/model/TemplateInstance.type";
 import type { ExistingTodoItem } from "@app/model/TodoItem.type";
-import { useQueries, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQueries, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
   addDays,
