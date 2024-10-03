@@ -25,7 +25,7 @@ import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
 import { useLoadSampleTemplate } from "../../queries/load-sample-template-mutation";
 import { useUpdateInstanceMutation } from "../../queries/update-instance-mutation";
 import { TodoCard } from "../molecules/TodoCard";
-import { H1, H2 } from "../atoms/Typography";
+import { H2 } from "../atoms/Typography";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/Accordion";
 import { Button } from "../atoms/Button";
 import { Separator } from "../atoms/Separator";
