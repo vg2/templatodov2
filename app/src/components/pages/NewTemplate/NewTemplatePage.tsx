@@ -5,13 +5,14 @@ import { format, parse } from "date-fns"
 import { DateFormat } from "@app/common/DateFormat"
 import { newTemplateSchema } from "./new-template.schema"
 import { useInsertNewTemplateMutation } from "../../../queries/insert-new-template-mutation"
-import { H1 } from "@/components/atoms/Typography"
+import { H1, H2 } from "@/components/atoms/Typography"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/atoms/Form"
 import { Input } from "@/components/atoms/Input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/atoms/Select"
 import { Button } from "@/components/atoms/Button"
 
 import type { TemplateFormType } from "@app/model/Template.type"
+import { Separator } from "@/components/atoms/Separator"
 
 export const NewTemplatePage = () => {
     const navigate = useNavigate({ from: "/new-template" })
@@ -35,9 +36,10 @@ export const NewTemplatePage = () => {
 
     return (
         <>
-            <H1>New template</H1>
+            <H2 className="border-transparent text-zorba-800">New template</H2>
+            <Separator className="my-4 bg-zorba-950" />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 text-zorba-800">
                     <FormField
                         control={form.control}
                         name="name"
@@ -125,7 +127,7 @@ export const NewTemplatePage = () => {
                         )}
                     />
 
-                    <Button type="submit">Submit</Button>
+                    <Button className="bg-zorba-950" type="submit">Submit</Button>
                 </form>
             </Form>
         </>

@@ -17,6 +17,8 @@ import type { ExistingTodoItem } from "@app/model/TodoItem.type";
 import type { TodoItemInTemplate, TodoItemInTemplateForm, TodoItemsInTemplateForm } from "@app/model/TodoItemInTemplate.type";
 import { MultiSelect } from "../atoms/MultiSelect";
 import { FloatingActionButton, FloatingActionButtonContainer } from "../molecules/FloatingActionButton";
+import { H2 } from "../atoms/Typography";
+import { Separator } from "../atoms/Separator";
 
 type ManagingExistingTodosInput = {
   allTodos: ExistingTodoItem[];
@@ -83,11 +85,12 @@ export const ManageExistingTodos = ({
 
   return (
     <>
-      <h2 className="mb-4 font-bold text-2xl">Todos</h2>
+      <H2 className="mb-4 border-transparent font-bold text-2xl text-zorba-800">Todos</H2>
+      <Separator className="my-4 bg-zorba-950" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {fields.map((field, index) => (
-            <Card key={field.id} className="mb-4">
+            <Card key={field.id} className="mb-4 bg-cloud-200">
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <FormField
@@ -122,7 +125,7 @@ export const ManageExistingTodos = ({
                             onValueChange={(value) => handleTimeslotChange(field.onChange, value)}
                             value={field.value?.id?.toString()}
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-cloud-100">
                               <SelectValue placeholder="Select timeslot" />
                             </SelectTrigger>
                             <SelectContent>
@@ -143,6 +146,7 @@ export const ManageExistingTodos = ({
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <MultiSelect
+                          className="bg-cloud-100"
                             options={pointsInCycle.map((point) => ({ key: point.toString(), label: point.toString(), value: point.toString() }))}
                             defaultValue={field.value?.map?.(v => v.toString()) || []}
                             onValueChange={(value) => field.onChange(value.map(val => Number.parseInt(val, 10)))}
@@ -161,14 +165,14 @@ export const ManageExistingTodos = ({
       </Form>
 
       <Dialog open={addTodoModalIsOpen} onOpenChange={setAddTodoModalIsOpen}>
-        <DialogContent>
+        <DialogContent className="bg-cararra-200">
           <DialogTitle>Add todo</DialogTitle>
           <AddTodoForm onSubmit={closeAddTodoModal} />
         </DialogContent>
       </Dialog>
 
       <Dialog open={addTimeslotModalIsOpen} onOpenChange={setAddTimeslotModalIsOpen}>
-        <DialogContent>
+        <DialogContent className="bg-cararra-200">
           <DialogTitle>Add timeslot</DialogTitle>
           <TimeSlotForm
             timeSlot={{ templateId: template.id }}
@@ -178,8 +182,8 @@ export const ManageExistingTodos = ({
       </Dialog>
 
       <FloatingActionButtonContainer>
-        <FloatingActionButton icon={<PlusCircle className="h-4 w-4" />} onClick={openAddTodoModal} />
-        <FloatingActionButton icon={<Save className="h-4 w-4" />} onClick={form.handleSubmit(onSubmit)} />
+        <FloatingActionButton className="bg-zorba-950" icon={<PlusCircle className="h-4 w-4" />} onClick={openAddTodoModal} />
+        <FloatingActionButton className="bg-zorba-950" icon={<Save className="h-4 w-4" />} onClick={form.handleSubmit(onSubmit)} />
       </FloatingActionButtonContainer>
     </>
   );

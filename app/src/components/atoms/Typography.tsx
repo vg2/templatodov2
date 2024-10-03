@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 
-export function H1({ children }: PropsWithChildren) {
+export function H1({ children, className }: PropsWithChildren & { className: string }) {
   return (
-    <h1 className="scroll-m-20 font-extrabold text-4xl tracking-tight lg:text-5xl">
+    <h1 className={cn(className, "scroll-m-20 font-extrabold text-4xl tracking-tight lg:text-5xl")}>
       {children}
     </h1>
   )
@@ -17,9 +17,9 @@ export function H2({ children, className }: PropsWithChildren & { className: str
   )
 }
 
-export function H3({ children }: PropsWithChildren) {
+export function H3({ children, className }: PropsWithChildren & { className: string }) {
   return (
-    <h3 className="scroll-m-20 font-semibold text-2xl tracking-tight">
+    <h3 className={cn(className, "scroll-m-20 font-semibold text-2xl tracking-tight")}>
       {children}
     </h3>
   )

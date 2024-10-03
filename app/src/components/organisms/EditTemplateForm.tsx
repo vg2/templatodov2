@@ -128,7 +128,7 @@ export const EditTemplateForm: FC<EditTemplateFormProps> = ({
 					)}
 				/>
 
-				<Button type="submit" className="w-full">Save template</Button>
+				<Button type="submit" className="w-full bg-zorba-950">Save template</Button>
 			</form>
 		</Form>
 	);

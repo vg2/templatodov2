@@ -124,7 +124,7 @@ export const TimeSlotForm: FC<TimeSlotFormInputs> = ({
 					)}
 				/>
 
-				<Button type="submit">Save {timeSlot.name}</Button>
+				<Button className="bg-zorba-950" type="submit">Save {timeSlot.name}</Button>
 			</form>
 		</Form>
 	);
