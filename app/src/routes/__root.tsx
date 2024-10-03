@@ -1,5 +1,5 @@
 import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
-import logo from "../assets/logo.png";
+import logo from "../assets/parenttime-logo-2.png";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/atoms/NavigationMenu';
 import { Plus } from 'lucide-react';
 import { Separator } from '@/components/atoms/Separator';
@@ -18,7 +18,8 @@ export const Route = createRootRoute({
               <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full justify-center bg-transparent text-cloud-50 hover:bg-transparent hover:text-cloud-50 focus:bg-transparent focus:text-cloud-50 active:bg-transparent`} asChild>
                 <Link to="/">
                   <div className="flex flex-row items-center gap-2">
-                    <img src={logo} width="32" height="32" alt="Templatodo logo" />
+                    <div className="rounded bg-cararra-200 p-1">
+                    <img src={logo} width="24" height="24" alt="Templatodo logo" /></div>
                     Templatodo
                   </div>
                 </Link>
