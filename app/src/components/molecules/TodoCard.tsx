@@ -20,7 +20,7 @@ export type TodoCardInput = {
 };
 export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, description, timeSlot, time, duration, durationUnit, state, markDone, openDetails }) => {
   return (
-    <Card className="bg-cocoa-200 pt-1 text-cocoa-900">
+    <Card className="bg-cloud-200 pt-1 text-zorba-800">
         <CardHeader className="p-2 ">
           <div className="flex flex-row items-center gap-2">
             <div>
@@ -30,14 +30,14 @@ export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, 
                 checked={state !== 'New'}
                 onClick={() => void markDone(todoId)}/></div>
             <div>
-              <CardTitle className="text-lg">{name}</CardTitle>
-              <CardDescription className="text-cocoa-800">{description}</CardDescription>
+              <CardTitle className="text-lg text-zorba-800">{name}</CardTitle>
+              <CardDescription className="text-zorba-800">{description}</CardDescription>
             </div>
           </div>
         </CardHeader>
       <CardContent>
         <div className="flex flex-row justify-between">
-          <Badge className="bg-cocoa-900">{timeSlot}: {timeSlotToDuration(time, duration, durationUnit)}</Badge>
+          <Badge className="bg-zorba-800">{timeSlot}: {timeSlotToDuration(time, duration, durationUnit)}</Badge>
           <Button variant="secondary" color="neutral" onClick={() => openDetails(todoId)}>
               Details
           </Button>

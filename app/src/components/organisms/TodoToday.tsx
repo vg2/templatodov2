@@ -25,7 +25,7 @@ import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
 import { useLoadSampleTemplate } from "../../queries/load-sample-template-mutation";
 import { useUpdateInstanceMutation } from "../../queries/update-instance-mutation";
 import { TodoCard } from "../molecules/TodoCard";
-import { H1 } from "../atoms/Typography";
+import { H1, H2 } from "../atoms/Typography";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/Accordion";
 import { Button } from "../atoms/Button";
 import { Separator } from "../atoms/Separator";
@@ -110,13 +110,13 @@ const TodoToday = () => {
   return (
     <>
       <div className="flex flex-row justify-between">
-        <H1>Todo today</H1>
+        <H2 className="border-transparent text-zorba-800">Todo today</H2>
         <div className="flex items-center space-x-2 self-center">
-          <Switch id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)}/>
-          <Label htmlFor="timeline-view" className="self-center">Timeline view</Label>
+          <Switch className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)}/>
+          <Label htmlFor="timeline-view" className="self-center text-zorba-800">Timeline view</Label>
         </div>
       </div>
-      <Separator className="my-4" />
+      <Separator className="my-4 bg-zorba-950" />
       {(!data || data.length === 0) && (
         <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
       )}
@@ -132,7 +132,7 @@ const TodoToday = () => {
       ) : (
         <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
           {data.map(template => (
-            <AccordionItem key={template.id} value={template.id.toString()}>
+            <AccordionItem className="border-zorba-300" key={template.id} value={template.id.toString()}>
               <AccordionTrigger>
                 {template.name}
               </AccordionTrigger>

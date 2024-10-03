@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 
 export function H1({ children }: PropsWithChildren) {
@@ -8,9 +9,9 @@ export function H1({ children }: PropsWithChildren) {
   )
 }
 
-export function H2({ children }: PropsWithChildren) {
+export function H2({ children, className }: PropsWithChildren & { className: string }) {
   return (
-    <h2 className="scroll-m-20 border-b pb-2 font-semibold text-3xl tracking-tight first:mt-0">
+    <h2 className={cn(className, "scroll-m-20 border-b pb-2 font-semibold text-3xl tracking-tight first:mt-0")}>
       {children}
     </h2>
   )
