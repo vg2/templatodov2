@@ -112,7 +112,7 @@ const TodoToday = () => {
       <div className="flex flex-row justify-between">
         <H2 className="border-transparent text-zorba-800">Todo today</H2>
         <div className="flex items-center space-x-2 self-center">
-          <Switch className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)}/>
+          <Switch className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)} />
           <Label htmlFor="timeline-view" className="self-center text-zorba-800">Timeline view</Label>
         </div>
       </div>
@@ -121,14 +121,9 @@ const TodoToday = () => {
         <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
       )}
       {timelineView ? (
-        // todo change this to accept instances and map internally?
-        <VerticalTimeline items={instances.flatMap(i => i.templateSnapshot.todos.map(t => ({todo: t, template: i.templateSnapshot })))
-            .filter(({ todo, template }) => todo.pointsInCycle.includes(calcPointInCycle(today, template.startDate, template.cycleLength, template.frequency) || -1))
-            .map(({todo}) => ({
-              item: todo.todoItem,
-              hour: todo.timeSlot.timeOfDay
-            })) || []}
-        />
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        <VerticalTimeline items={instances.flatMap(i => i.templateSnapshot.todos.map(t => ({ templateItem: { item: t, isDone: !!i.actionedItems.find(ai => ai.todoItemId === t.todoItem.id) }, template: i.templateSnapshot })))} markDone={(t, i) => markDoneForInstance(instances.find(i => i.templateSnapshot.id === t.id)!, i.todoItem)} />
+
       ) : (
         <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
           {data.map(template => (
@@ -146,31 +141,31 @@ const TodoToday = () => {
                   </Link>
                 </Button>
                 {instances.find(i => i.templateSnapshot.id === template.id)?.templateSnapshot.todos
-                    .filter((todo) =>
-                      todo.pointsInCycle.includes(calcPointInCycle(today, template.startDate, template.cycleLength, template.frequency) || -1),
-                    )
-                    .map((todo) => (
-                      <TodoCard
-                        key={`${todo.timeSlot.id}-${todo.todoItem.id}`}
-                        name={todo.todoItem.name}
-                        description={todo.todoItem.description}
-                        timeSlot={todo.timeSlot.name}
-                        time={todo.timeSlot.timeOfDay}
-                        duration={todo.timeSlot.duration}
-                        durationUnit={todo.timeSlot.durationUnit}
-                        todoId={todo.todoItem.id ?? 0}
-                        state={currentTodoItemState(
-                          // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                          instances.find(i => i.templateSnapshot.id === template.id)!,
-                          todo.todoItem,
-                        )}
-                        markDone={() =>
-                          // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                          markDoneForInstance(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem)
-                        }
-                        openDetails={() => { }}
-                      />
-                    ))}
+                  .filter((todo) =>
+                    todo.pointsInCycle.includes(calcPointInCycle(today, template.startDate, template.cycleLength, template.frequency) || -1),
+                  )
+                  .map((todo) => (
+                    <TodoCard
+                      key={`${todo.timeSlot.id}-${todo.todoItem.id}`}
+                      name={todo.todoItem.name}
+                      description={todo.todoItem.description}
+                      timeSlot={todo.timeSlot.name}
+                      time={todo.timeSlot.timeOfDay}
+                      duration={todo.timeSlot.duration}
+                      durationUnit={todo.timeSlot.durationUnit}
+                      todoId={todo.todoItem.id ?? 0}
+                      state={currentTodoItemState(
+                        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+                        instances.find(i => i.templateSnapshot.id === template.id)!,
+                        todo.todoItem,
+                      )}
+                      markDone={() =>
+                        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+                        markDoneForInstance(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem)
+                      }
+                      openDetails={() => { }}
+                    />
+                  ))}
               </AccordionContent>
             </AccordionItem>
           ))}
