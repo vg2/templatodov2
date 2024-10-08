@@ -36,10 +36,10 @@ export const NewTemplatePage = () => {
 
     return (
         <>
-            <H2 className="border-transparent text-zorba-800">New template</H2>
+            <H2 className="border-transparent text-zorba-950">New template</H2>
             <Separator className="my-4 bg-zorba-950" />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 text-zorba-800">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 text-zorba-950">
                     <FormField
                         control={form.control}
                         name="name"

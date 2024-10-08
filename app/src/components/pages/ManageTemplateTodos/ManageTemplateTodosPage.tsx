@@ -1,7 +1,7 @@
 import { ManageExistingTodos } from "@app/components/organisms/ManageExistingTodos";
 import type { TodoItemInTemplate } from "@app/model/TodoItemInTemplate.type";
 import { Button } from "@/components/atoms/Button";
-import { H4} from "@/components/atoms/Typography";
+import { H4 } from "@/components/atoms/Typography";
 import { useSuspenseQueries } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { getAllTodosQueryOptions } from "../../../queries/all-todos-query";
@@ -41,7 +41,7 @@ export const ManageTemplateTodosPage = () => {
     };
 
     return (
-        <div className="space-y-4 text-zorba-800">
+        <div className="space-y-4 text-zorba-950">
             <div className="flex items-center gap-4">
                 <Button onClick={navigateBack} variant="link">
                     <ArrowLeft />

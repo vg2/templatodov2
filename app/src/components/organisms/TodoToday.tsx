@@ -110,10 +110,10 @@ const TodoToday = () => {
   return (
     <>
       <div className="flex flex-row justify-between">
-        <H2 className="border-transparent text-zorba-800">Todo today</H2>
+        <H2 className="border-transparent text-zorba-950">Todo today</H2>
         <div className="flex items-center space-x-2 self-center">
           <Switch className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)} />
-          <Label htmlFor="timeline-view" className="self-center text-zorba-800">Timeline view</Label>
+          <Label htmlFor="timeline-view" className="self-center text-zorba-950">Timeline view</Label>
         </div>
       </div>
       <Separator className="my-4 bg-zorba-950" />

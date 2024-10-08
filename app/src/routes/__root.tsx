@@ -6,7 +6,7 @@ import { Separator } from '@/components/atoms/Separator';
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="max-w-4xl mx-auto flex min-h-screen flex-col bg-cararra-300 font-quicksand">
+    <div className="mx-auto flex min-h-screen max-w-4xl flex-col bg-cararra-300 font-quicksand">
       <div className="mx-4 flex-grow overflow-auto p-2" >
         <Outlet />
       </div>
@@ -19,7 +19,7 @@ export const Route = createRootRoute({
                 <Link to="/">
                   <div className="flex flex-row items-center gap-2">
                     <div className="rounded bg-cararra-200 p-1">
-                    <img src={logo} width="24" height="24" alt="Templatodo logo" /></div>
+                      <img src={logo} width="24" height="24" alt="Templatodo logo" /></div>
                     Templatodo
                   </div>
                 </Link>
