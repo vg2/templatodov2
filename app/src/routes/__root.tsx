@@ -6,7 +6,6 @@ import { Separator } from '@/components/atoms/Separator';
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="flex min-h-screen flex-col bg-cararra-300 font-quicksand">
       <div className="mx-4 flex-grow overflow-auto p-2" >
         <Outlet />
       </div>
