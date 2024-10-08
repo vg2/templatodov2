@@ -20,26 +20,26 @@ export type TodoCardInput = {
 };
 export const TodoCard: (input: TodoCardInput) => JSX.Element = ({ todoId, name, description, timeSlot, time, duration, durationUnit, state, markDone, openDetails }) => {
   return (
-    <Card className="bg-cloud-200 pt-1 text-zorba-800">
-        <CardHeader className="p-2 ">
-          <div className="flex flex-row items-center gap-2">
-            <div>
-              <Checkbox 
-                className="h-7 w-7 rounded-full border-2 border-gray-400" 
-                disabled={state !== 'New'}
-                checked={state !== 'New'}
-                onClick={() => void markDone(todoId)}/></div>
-            <div>
-              <CardTitle className="text-lg text-zorba-800">{name}</CardTitle>
-              <CardDescription className="text-zorba-800">{description}</CardDescription>
-            </div>
+    <Card className="bg-cloud-200 pt-1 text-zorba-950">
+      <CardHeader className="p-2 ">
+        <div className="flex flex-row items-center gap-2">
+          <div>
+            <Checkbox
+              className="h-7 w-7 rounded-full border-2 border-gray-400"
+              disabled={state !== 'New'}
+              checked={state !== 'New'}
+              onClick={() => void markDone(todoId)} /></div>
+          <div>
+            <CardTitle className="text-lg text-zorba-950">{name}</CardTitle>
+            <CardDescription className="text-zorba-950">{description}</CardDescription>
           </div>
-        </CardHeader>
+        </div>
+      </CardHeader>
       <CardContent>
         <div className="flex flex-row justify-between">
           <Badge className="bg-zorba-800">{timeSlot}: {timeSlotToDuration(time, duration, durationUnit)}</Badge>
           <Button variant="secondary" color="neutral" onClick={() => openDetails(todoId)}>
-              Details
+            Details
           </Button>
         </div>
       </CardContent>

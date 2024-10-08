@@ -1,35 +1,32 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { newTodoSchema } from "./manage-existing-todos.schema";
-import { useInsertTodoMutation } from "../../queries/insert-todo-mutation";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/atoms/Form";
 import { Input } from "@/components/atoms/Input";
 import { Textarea } from "@/components/atoms/Textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/atoms/Select";
 import { Button } from "@/components/atoms/Button";
-import { AllDurations, type DurationUnit } from "@app/common/DurationUnit.type";
-
-import type { NewTodoItem } from "@app/model/TodoItem.type";
 import type { FC } from "react";
+import type { ActionedItem } from "@/model/TemplateInstance.type";
+import { actionedTodoSchema } from "./actioned-todo-schema";
 
-type ActionTodoFormProps = {
+type AddTodoFormProps = {
+	actionedItem: Partial<ActionedItem>;
 	onSubmit: () => void;
 };
 
-export const ActionTodoForm: FC<ActionTodoFormProps> = ({ onSubmit }) => {
-	const { mutateAsync: insertTodo } = useInsertTodoMutation();
+export const AddTodoForm: FC<AddTodoFormProps> = ({ actionedItem, onSubmit }) => {
+	// const { mutateAsync: insertTodo } = useInsertTodoMutation();
 
-	const form = useForm<NewTodoItem>({
-		resolver: zodResolver(newTodoSchema),
+	const form = useForm<ActionedItem>({
+		resolver: zodResolver(actionedTodoSchema),
 		defaultValues: {
-			name: "",
-			description: "",
-			typicalDuration: 0,
-			typicalDurationUnit: "Minutes" as DurationUnit,
+			state: actionedItem?.state,
+			comment: actionedItem?.comment,
+			todoItemId: actionedItem?.todoItemId,
+			timestamp: actionedItem?.timestamp
 		},
 	});
 
-	const handleSubmit = async (data: NewTodoItem) => {
+	const handleSubmit = async (data: ActionedItem) => {
 		await insertTodo(data);
 		onSubmit();
 	};

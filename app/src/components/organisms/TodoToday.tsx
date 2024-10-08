@@ -32,6 +32,7 @@ import { Separator } from "../atoms/Separator";
 import { Label } from "../atoms/Label";
 import { Switch } from "../atoms/Switch";
 import VerticalTimeline from "../molecules/VerticalTimeline";
+import { updateInstance } from "@/service/update-instance";
 
 const calcPointInCycle = (
   today: Date,
@@ -89,18 +90,22 @@ const TodoToday = () => {
     return actionedItem?.state ?? "New";
   };
 
+  const actionItemForInstance = async (instance: TemplateInstance, todoItemId: number, state: TodoState, comment: string): Promise<void> => {
+    const actionedItem: ActionedItem = {
+      state,
+      todoItemId,
+      comment,
+      timestamp: formatISO(new Date())
+    }
+    instance.actionedItems.push(actionedItem);
+    await updateInstanceMutate(instance);
+  }
+
   const markDoneForInstance = async (
     instance: TemplateInstance,
     todo: ExistingTodoItem,
   ): Promise<void> => {
-    const actioned: ActionedItem = {
-      state: "Complete",
-      todoItemId: todo.id ?? 0,
-      comment: "",
-      timestamp: formatISO(new Date()),
-    };
-    instance.actionedItems.push(actioned);
-    await updateInstanceMutate(instance);
+    await actionItemForInstance(instance, todo.id, "Complete", "");
   };
 
   const onTemplateExpanded = (templateId: string) => {
