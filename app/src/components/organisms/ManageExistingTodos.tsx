@@ -19,6 +19,7 @@ import { MultiSelect } from "../atoms/MultiSelect";
 import { FloatingActionButton, FloatingActionButtonContainer } from "../molecules/FloatingActionButton";
 import { H2 } from "../atoms/Typography";
 import { Separator } from "../atoms/Separator";
+import { ResponsiveDialog } from "../molecules/ResponsiveDialog";
 
 type ManagingExistingTodosInput = {
   allTodos: ExistingTodoItem[];
@@ -146,7 +147,7 @@ export const ManageExistingTodos = ({
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <MultiSelect
-                          className="bg-cloud-100"
+                            className="bg-cloud-100"
                             options={pointsInCycle.map((point) => ({ key: point.toString(), label: point.toString(), value: point.toString() }))}
                             defaultValue={field.value?.map?.(v => v.toString()) || []}
                             onValueChange={(value) => field.onChange(value.map(val => Number.parseInt(val, 10)))}
@@ -164,22 +165,13 @@ export const ManageExistingTodos = ({
         </form>
       </Form>
 
-      <Dialog open={addTodoModalIsOpen} onOpenChange={setAddTodoModalIsOpen}>
-        <DialogContent className="bg-cararra-200">
-          <DialogTitle>Add todo</DialogTitle>
-          <AddTodoForm onSubmit={closeAddTodoModal} />
-        </DialogContent>
-      </Dialog>
+      <ResponsiveDialog title="Add todo" description="" open={addTodoModalIsOpen} onOpenChange={setAddTodoModalIsOpen}>
+        <AddTodoForm onSubmit={closeAddTodoModal} />
+      </ResponsiveDialog>
 
-      <Dialog open={addTimeslotModalIsOpen} onOpenChange={setAddTimeslotModalIsOpen}>
-        <DialogContent className="bg-cararra-200">
-          <DialogTitle>Add timeslot</DialogTitle>
-          <TimeSlotForm
-            timeSlot={{ templateId: template.id }}
-            onSuccessfulSubmit={closeAddTimeslotModal}
-          />
-        </DialogContent>
-      </Dialog>
+      <ResponsiveDialog open={addTimeslotModalIsOpen} onOpenChange={setAddTimeslotModalIsOpen} title="Add timeslot" description="">
+        <TimeSlotForm timeSlot={{ templateId: template.id }} onSuccessfulSubmit={closeAddTimeslotModal} />
+      </ResponsiveDialog>
 
       <FloatingActionButtonContainer>
         <FloatingActionButton className="bg-zorba-950" icon={<PlusCircle className="h-4 w-4" />} onClick={openAddTodoModal} />

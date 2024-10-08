@@ -107,7 +107,7 @@ export const AddTodoForm: FC<AddTodoFormProps> = ({ onSubmit }) => {
 					/>
 				</div>
 
-				<Button className="bg-zorba-950" type="submit">Save</Button>
+				<Button className="w-full bg-zorba-950" type="submit">Save</Button>
 			</form>
 		</Form>
 	);
