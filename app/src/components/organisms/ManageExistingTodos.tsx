@@ -10,7 +10,6 @@ import { TimeSlotForm } from "./TimeSlotForm";
 import { Checkbox } from "@/components/atoms/Checkbox";
 import { Form, FormControl, FormField, FormItem } from "@/components/atoms/Form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/atoms/Select";
-import { Dialog, DialogContent, DialogTitle } from "@/components/atoms/Dialog";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/atoms/Card";
 import type { ExistingTemplate } from "@app/model/Template.type";
 import type { ExistingTodoItem } from "@app/model/TodoItem.type";

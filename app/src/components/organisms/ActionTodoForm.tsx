@@ -1,34 +1,37 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/atoms/Form";
-import { Input } from "@/components/atoms/Input";
 import { Textarea } from "@/components/atoms/Textarea";
 import { Button } from "@/components/atoms/Button";
 import type { FC } from "react";
-import type { ActionedItem } from "@/model/TemplateInstance.type";
+import type { ActionedItemForm } from "@/model/TemplateInstance.type";
 import { actionedTodoSchema } from "./actioned-todo-schema";
+import { ToggleGroup, ToggleGroupItem } from "@radix-ui/react-toggle-group";
+import { AllTodoStates } from "@/common/TodoState";
+import { cn } from "@/lib/utils";
 
-type AddTodoFormProps = {
-	actionedItem: Partial<ActionedItem>;
-	onSubmit: () => void;
+type ActionTodoFormProps = {
+	actionedItem: Partial<ActionedItemForm>;
+	onSubmit: (actionedItem: ActionedItemForm) => Promise<void>;
 };
 
-export const AddTodoForm: FC<AddTodoFormProps> = ({ actionedItem, onSubmit }) => {
-	// const { mutateAsync: insertTodo } = useInsertTodoMutation();
-
-	const form = useForm<ActionedItem>({
+export const ActionTodoForm: FC<ActionTodoFormProps> = ({ actionedItem, onSubmit }) => {
+	const form = useForm<ActionedItemForm>({
 		resolver: zodResolver(actionedTodoSchema),
 		defaultValues: {
-			state: actionedItem?.state,
+			state: actionedItem?.state ?? "New",
 			comment: actionedItem?.comment,
 			todoItemId: actionedItem?.todoItemId,
-			timestamp: actionedItem?.timestamp
 		},
 	});
 
-	const handleSubmit = async (data: ActionedItem) => {
-		await insertTodo(data);
-		onSubmit();
+	const handleSubmit = async ({ state, comment, todoItemId }: ActionedItemForm) => {
+		const actionedItem: ActionedItemForm = {
+			state,
+			comment,
+			todoItemId,
+		};
+		await onSubmit(actionedItem);
 	};
 
 	return (
@@ -36,12 +39,22 @@ export const AddTodoForm: FC<AddTodoFormProps> = ({ actionedItem, onSubmit }) =>
 			<form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
 				<FormField
 					control={form.control}
-					name="name"
+					name="state"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Todo name</FormLabel>
+							<FormLabel>State</FormLabel>
 							<FormControl>
-								<Input placeholder="Todo name" {...field} />
+								<ToggleGroup type="single" value={field.value} onValueChange={e => field.onChange(e)} className="flex w-full gap-2">
+									<ToggleGroupItem value={AllTodoStates[0]} aria-label={AllTodoStates[0]} className={cn({ "bg-zorba-500": field.value === AllTodoStates[0] }, "rounded p-2")}>
+										New
+									</ToggleGroupItem>
+									<ToggleGroupItem value={AllTodoStates[1]} aria-label={AllTodoStates[1]} className={cn({ "bg-zorba-500": field.value === AllTodoStates[1] }, "rounded p-2")}>
+										Complete
+									</ToggleGroupItem>
+									<ToggleGroupItem value={AllTodoStates[2]} aria-label={AllTodoStates[2]} className={cn({ "bg-zorba-500": field.value === AllTodoStates[2] }, "rounded p-2")}>
+										Did not complete
+									</ToggleGroupItem>
+								</ToggleGroup>
 							</FormControl>
 						</FormItem>
 					)}
@@ -49,60 +62,16 @@ export const AddTodoForm: FC<AddTodoFormProps> = ({ actionedItem, onSubmit }) =>
 
 				<FormField
 					control={form.control}
-					name="description"
+					name="comment"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Description</FormLabel>
+							<FormLabel>Comment</FormLabel>
 							<FormControl>
-								<Textarea placeholder="Description" {...field} />
+								<Textarea placeholder="Comment" {...field} />
 							</FormControl>
 						</FormItem>
 					)}
 				/>
-
-				<div className="flex gap-4">
-					<FormField
-						control={form.control}
-						name="typicalDuration"
-						render={({ field }) => (
-							<FormItem className="flex-1">
-								<FormLabel>Typical duration</FormLabel>
-								<FormControl>
-									<Input
-										type="number"
-										placeholder="Typical Duration"
-										{...field}
-										onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="typicalDurationUnit"
-						render={({ field }) => (
-							<FormItem className="flex-1">
-								<FormLabel>Unit</FormLabel>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Unit" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{AllDurations.map((duration) => (
-											<SelectItem key={duration} value={duration}>
-												{duration}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</FormItem>
-						)}
-					/>
-				</div>
 
 				<Button className="w-full bg-zorba-950" type="submit">Save</Button>
 			</form>

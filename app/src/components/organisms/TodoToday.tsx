@@ -2,6 +2,7 @@ import type { Frequency } from "@app/common/Frequency.type";
 import type { ExistingTemplate } from "@app/model/Template.type";
 import type {
   ActionedItem,
+  ActionedItemForm,
   TemplateInstance,
 } from "@app/model/TemplateInstance.type";
 import type { ExistingTodoItem } from "@app/model/TodoItem.type";
@@ -24,15 +25,16 @@ import { getTemplateInstanceQueryOptions } from "../../queries/get-template-inst
 import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
 import { useLoadSampleTemplate } from "../../queries/load-sample-template-mutation";
 import { useUpdateInstanceMutation } from "../../queries/update-instance-mutation";
-import { TodoCard } from "../molecules/TodoCard";
-import { H2 } from "../atoms/Typography";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/Accordion";
 import { Button } from "../atoms/Button";
-import { Separator } from "../atoms/Separator";
 import { Label } from "../atoms/Label";
+import { Separator } from "../atoms/Separator";
 import { Switch } from "../atoms/Switch";
+import { H2 } from "../atoms/Typography";
+import { TodoCard } from "../molecules/TodoCard";
 import VerticalTimeline from "../molecules/VerticalTimeline";
-import { updateInstance } from "@/service/update-instance";
+import { ResponsiveDialog } from "../molecules/ResponsiveDialog";
+import { ActionTodoForm } from "./ActionTodoForm";
 
 const calcPointInCycle = (
   today: Date,
@@ -60,7 +62,7 @@ const calcPointInCycle = (
         break;
     }
   }
-  const difference = differenceInCalendarDays(today, min);
+  const difference = (differenceInCalendarDays(today, min) + 1) % cycleLength;
   return difference;
 };
 
@@ -80,6 +82,18 @@ const TodoToday = () => {
   const { mutateAsync: loadSampleTemplate, isPending } = useLoadSampleTemplate();
 
   const [timelineView, setTimelineView] = useState<boolean>(false);
+
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<[TemplateInstance, ExistingTodoItem] | null>(null);
+
+  const itemDetailsClick = (instance: TemplateInstance, todoItem: ExistingTodoItem): void => {
+    setShowDetails(true);
+    setSelectedItem([instance, todoItem]);
+  }
+
+  const updateActionedItem = async (instance: TemplateInstance, { todoItemId, state, comment }: ActionedItemForm): Promise<void> => {
+    await actionItemForInstance(instance, todoItemId, state, comment);
+  }
 
   const currentTodoItemState = (
     instance: TemplateInstance,
@@ -126,8 +140,12 @@ const TodoToday = () => {
         <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
       )}
       {timelineView ? (
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        <VerticalTimeline items={instances.flatMap(i => i.templateSnapshot.todos.map(t => ({ templateItem: { item: t, isDone: !!i.actionedItems.find(ai => ai.todoItemId === t.todoItem.id) }, template: i.templateSnapshot })))} markDone={(t, i) => markDoneForInstance(instances.find(i => i.templateSnapshot.id === t.id)!, i.todoItem)} />
+        <VerticalTimeline items={instances.flatMap(i => i.templateSnapshot.todos
+          .filter(todo =>
+            todo.pointsInCycle.includes(calcPointInCycle(today, i.templateSnapshot.startDate, i.templateSnapshot.cycleLength, i.templateSnapshot.frequency) || -1),
+          )
+          // biome-ignore lint/style/noNonNullAssertion: <explanation>
+          .map(t => ({ templateItem: { item: t, isDone: !!i.actionedItems.find(ai => ai.todoItemId === t.todoItem.id) }, template: i.templateSnapshot })))} markDone={(t, i) => markDoneForInstance(instances.find(i => i.templateSnapshot.id === t.id)!, i.todoItem)} />
 
       ) : (
         <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
@@ -168,7 +186,8 @@ const TodoToday = () => {
                         // biome-ignore lint/style/noNonNullAssertion: <explanation>
                         markDoneForInstance(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem)
                       }
-                      openDetails={() => { }}
+                      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+                      openDetails={() => { itemDetailsClick(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem) }}
                     />
                   ))}
               </AccordionContent>
@@ -176,6 +195,15 @@ const TodoToday = () => {
           ))}
         </Accordion>
       )}
+      <ResponsiveDialog title={selectedItem?.[1]?.name ?? ""} description={selectedItem?.[1]?.description ?? ""} open={showDetails} onOpenChange={setShowDetails}>
+        {selectedItem && (
+          <ActionTodoForm actionedItem={{
+            state: selectedItem[0].actionedItems.find(ai => ai.todoItemId === selectedItem[1].id)?.state,
+            todoItemId: selectedItem[1].id,
+            comment: selectedItem[0].actionedItems.find(ai => ai.todoItemId === selectedItem[1].id)?.comment,
+          }} onSubmit={(actionedItem) => updateActionedItem(selectedItem[0], actionedItem)} />
+        )}
+      </ResponsiveDialog>
     </>
   );
 };

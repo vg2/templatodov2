@@ -16,6 +16,8 @@ export type ActionedItem = {
   timestamp: string;
 }
 
+export type ActionedItemForm = Omit<ActionedItem, 'timestamp'>;
+
 export function mapTemplateInstanceFromDb(dbInstance: DbTemplateInstance, mappedTemplate: ExistingTemplate): TemplateInstance {
   return {
     id: dbInstance.id ?? 0,

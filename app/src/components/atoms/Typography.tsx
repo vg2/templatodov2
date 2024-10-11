@@ -17,7 +17,7 @@ export function H2({ children, className }: PropsWithChildren & { className: str
   )
 }
 
-export function H3({ children, className }: PropsWithChildren & { className: string }) {
+export function H3({ children, className }: PropsWithChildren & { className?: string }) {
   return (
     <h3 className={cn(className, "scroll-m-20 font-semibold text-2xl tracking-tight")}>
       {children}

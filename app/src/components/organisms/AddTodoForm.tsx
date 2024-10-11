@@ -12,11 +12,11 @@ import { AllDurations, type DurationUnit } from "@app/common/DurationUnit.type";
 import type { NewTodoItem } from "@app/model/TodoItem.type";
 import type { FC } from "react";
 
-type ActionTodoFormProps = {
+type AddTodoFormProps = {
 	onSubmit: () => void;
 };
 
-export const ActionTodoForm: FC<ActionTodoFormProps> = ({ onSubmit }) => {
+export const AddTodoForm: FC<AddTodoFormProps> = ({ onSubmit }) => {
 	const { mutateAsync: insertTodo } = useInsertTodoMutation();
 
 	const form = useForm<NewTodoItem>({
