@@ -35,6 +35,7 @@ import { TodoCard } from "../molecules/TodoCard";
 import VerticalTimeline from "../molecules/VerticalTimeline";
 import { ResponsiveDialog } from "../molecules/ResponsiveDialog";
 import { ActionTodoForm } from "./ActionTodoForm";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../atoms/Card";
 
 const calcPointInCycle = (
   today: Date,
@@ -126,18 +127,43 @@ const TodoToday = () => {
     setExpandedTemplate(data.find(t => t.id === Number.parseInt(templateId, 10)) || null);
   }
 
+  const noData = !data || data.length === 0;
+
   return (
     <>
       <div className="flex flex-row justify-between">
         <H2 className="border-transparent text-zorba-950">Todo today</H2>
         <div className="flex items-center space-x-2 self-center">
-          <Switch className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)} />
+          <Switch disabled={noData} className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)} />
           <Label htmlFor="timeline-view" className="self-center text-zorba-950">Timeline view</Label>
         </div>
       </div>
       <Separator className="my-4 bg-zorba-950" />
-      {(!data || data.length === 0) && (
-        <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Load Sample Template</Button>
+      {noData && (
+        <Card className="bg-zorba-50">
+          <CardHeader>
+            <CardTitle>Welcome to templatodo</CardTitle>
+            <CardDescription>Get started here</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>It's recommended to start with the provided templates, meant for:</p>
+            <p className="p-1 mx-6">
+              <ul className="list-disc">
+                <li>Baby care</li>
+                <li>Baby activities</li>
+              </ul>
+            </p>
+            <p>Alternatively, you can start from scratch with a new template.</p>
+          </CardContent>
+          <CardFooter className="flex flex-row gap-2">
+            <Button variant="link" asChild>
+              <Link to="/new-template">
+                New template
+              </Link>
+            </Button>
+            <Button disabled={isPending} onClick={async () => await loadSampleTemplate()}>Use templates</Button>
+          </CardFooter>
+        </Card>
       )}
       {timelineView ? (
         <VerticalTimeline items={instances.flatMap(i => i.templateSnapshot.todos
