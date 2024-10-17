@@ -54,7 +54,7 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                                         {/* Hour indicator */}
                                         <div className="flex w-20 flex-shrink-0 items-center justify-center">
                                             <div className="relative z-10 h-4 w-4 rounded-full bg-zorba-800" />
-                                            <span className="ml-2 font-medium text-sm">{`${hour}`}</span>
+                                            <span className="ml-2 font-medium text-sm">{hour === '00:00' ? 'When possible' : hour}</span>
                                         </div>
 
                                         {/* Tasks */}
