@@ -147,7 +147,7 @@ const TodoToday = () => {
           </CardHeader>
           <CardContent>
             <p>It's recommended to start with the provided templates, meant for:</p>
-            <p className="p-1 mx-6">
+            <p className="mx-6 p-1">
               <ul className="list-disc">
                 <li>Baby care</li>
                 <li>Baby activities</li>
