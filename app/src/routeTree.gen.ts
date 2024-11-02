@@ -13,6 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LogoutImport } from './routes/logout'
+import { Route as LoginImport } from './routes/login'
+import { Route as AuthImport } from './routes/auth'
 import { Route as EditTemplateTemplateIdImport } from './routes/edit-template.$templateId'
 import { Route as EditTemplateTemplateIdManageTodosImport } from './routes/edit-template_.$templateId/manage-todos'
 
@@ -27,6 +30,21 @@ const NewTemplateLazyRoute = NewTemplateLazyImport.update({
   path: '/new-template',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/new-template.lazy').then((d) => d.Route))
+
+const LogoutRoute = LogoutImport.update({
+  path: '/logout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -53,6 +71,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutImport
       parentRoute: typeof rootRoute
     }
     '/new-template': {
@@ -83,6 +122,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  AuthRoute,
+  LoginRoute,
+  LogoutRoute,
   NewTemplateLazyRoute,
   EditTemplateTemplateIdRoute,
   EditTemplateTemplateIdManageTodosRoute,
@@ -97,6 +139,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auth",
+        "/login",
+        "/logout",
         "/new-template",
         "/edit-template/$templateId",
         "/edit-template/$templateId/manage-todos"
@@ -104,6 +149,15 @@ export const routeTree = rootRoute.addChildren({
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/auth": {
+      "filePath": "auth.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/logout": {
+      "filePath": "logout.tsx"
     },
     "/new-template": {
       "filePath": "new-template.lazy.tsx"

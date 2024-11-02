@@ -3,6 +3,8 @@ import logo from "../assets/parenttime-logo-2.png";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/atoms/NavigationMenu';
 import { Plus } from 'lucide-react';
 import { Separator } from '@/components/atoms/Separator';
+import LoginButton from '@/components/atoms/LoginButton';
+import LogoutButton from '@/components/atoms/LogoutButton';
 
 export const Route = createRootRoute({
   component: () => (
@@ -31,6 +33,10 @@ export const Route = createRootRoute({
                   <Plus /> New template
                 </Link>
               </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem className="flex-1">
+              <LoginButton />
+              <LogoutButton />
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
