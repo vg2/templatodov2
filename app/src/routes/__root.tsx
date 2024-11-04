@@ -13,7 +13,7 @@ export const Route = createRootRoute({
         <Outlet />
       </div>
       <Separator />
-      <div className="sticky bottom-0 z-10 w-full bg-concrete-950 p-1">
+      <div className="sticky bottom-0 z-10 w-full bg-concrete-950 pt-1 pb-1">
         <NavigationMenu className="w-full max-w-none">
           <NavigationMenuList className="flex w-full justify-center">
             <NavigationMenuItem className="flex-1">
@@ -30,7 +30,7 @@ export const Route = createRootRoute({
             <NavigationMenuItem className="flex-1">
               <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full justify-center bg-transparent text-cloud-50 hover:bg-transparent hover:text-cloud-50 focus:bg-transparent focus:text-cloud-50 active:bg-transparent`} asChild>
                 <Link to="/new-template">
-                  <Plus /> New template
+                  <Plus /> Template
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>

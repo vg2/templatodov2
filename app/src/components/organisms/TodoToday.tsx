@@ -19,7 +19,7 @@ import {
   isBefore,
   startOfDay,
 } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { TodoState } from "../../common/TodoState";
 import { getTemplateInstanceQueryOptions } from "../../queries/get-template-instance-query";
 import { getAllTemplatesQueryOptions } from "../../queries/get-templates-query";
@@ -82,7 +82,11 @@ const TodoToday = () => {
   const { mutateAsync: updateInstanceMutate } = useUpdateInstanceMutation();
   const { mutateAsync: loadSampleTemplate, isPending } = useLoadSampleTemplate();
 
-  const [timelineView, setTimelineView] = useState<boolean>(false);
+  const [timelineView, setTimelineView] = useState<boolean>(localStorage.getItem('tmpltd_isTimelineView') === true.toString());
+
+  useEffect(() => {
+    localStorage.setItem('tmpltd_isTimelineView', timelineView.toString());
+  }, [timelineView])
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<[TemplateInstance, ExistingTodoItem] | null>(null);

@@ -6,7 +6,7 @@ const LoginButton = () => {
 
   if (isAuthenticated) return <></>;
 
-  return <Button onClick={() => loginWithRedirect()}>Log In</Button>;
+  return <Button className="bg-cararra-950" onClick={() => loginWithRedirect()}>Log In</Button>;
 };
 
 export default LoginButton;
