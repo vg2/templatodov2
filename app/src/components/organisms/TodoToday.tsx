@@ -68,7 +68,7 @@ const calcPointInCycle = (
   return difference;
 };
 
-const toSortedActionedItems = (actionedItems: ActionedItem[]): ActionedItem[] => actionedItems.toSorted((a,b) => isBefore(parseISO(a.timestamp), parseISO(b.timestamp)) ? 1 : -1);
+const toSortedActionedItems = (actionedItems: ActionedItem[]): ActionedItem[] => actionedItems.toSorted((a, b) => isBefore(parseISO(a.timestamp), parseISO(b.timestamp)) ? 1 : -1);
 
 const TodoToday = () => {
   const { data } = useSuspenseQuery(
@@ -97,6 +97,12 @@ const TodoToday = () => {
   const itemDetailsClick = (instance: TemplateInstance, todoItem: ExistingTodoItem): void => {
     setShowDetails(true);
     setSelectedItem([instance, todoItem]);
+  }
+
+  const submitDetails = async (instance: TemplateInstance, actionedItem: ActionedItemForm): Promise<void> => {
+    await updateActionedItem(instance, actionedItem);
+    setShowDetails(false);
+    setSelectedItem(null);
   }
 
   const updateActionedItem = async (instance: TemplateInstance, { todoItemId, state, comment }: ActionedItemForm): Promise<void> => {
@@ -234,7 +240,7 @@ const TodoToday = () => {
             state: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemId === selectedItem[1].id)?.state,
             todoItemId: selectedItem[1].id,
             comment: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemId === selectedItem[1].id)?.comment,
-          }} onSubmit={(actionedItem) => updateActionedItem(selectedItem[0], actionedItem)} />
+          }} onSubmit={(actionedItem) => submitDetails(selectedItem[0], actionedItem)} />
         )}
       </ResponsiveDialog>
     </>
