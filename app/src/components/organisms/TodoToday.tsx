@@ -17,6 +17,7 @@ import {
   format,
   formatISO,
   isBefore,
+  parseISO,
   startOfDay,
 } from "date-fns";
 import { useEffect, useState } from "react";
@@ -67,6 +68,8 @@ const calcPointInCycle = (
   return difference;
 };
 
+const toSortedActionedItems = (actionedItems: ActionedItem[]): ActionedItem[] => actionedItems.toSorted((a,b) => isBefore(parseISO(a.timestamp), parseISO(b.timestamp)) ? 1 : -1);
+
 const TodoToday = () => {
   const { data } = useSuspenseQuery(
     getAllTemplatesQueryOptions(),
@@ -105,7 +108,7 @@ const TodoToday = () => {
     todo: ExistingTodoItem,
   ): TodoState => {
     const actionedItems = instance.actionedItems;
-    const actionedItem = actionedItems.find((ai) => ai.todoItemId === todo.id);
+    const actionedItem = toSortedActionedItems(actionedItems).find((ai) => ai.todoItemId === todo.id);
     return actionedItem?.state ?? "New";
   };
 
@@ -228,9 +231,9 @@ const TodoToday = () => {
       <ResponsiveDialog title={selectedItem?.[1]?.name ?? ""} description={selectedItem?.[1]?.description ?? ""} open={showDetails} onOpenChange={setShowDetails}>
         {selectedItem && (
           <ActionTodoForm actionedItem={{
-            state: selectedItem[0].actionedItems.find(ai => ai.todoItemId === selectedItem[1].id)?.state,
+            state: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemId === selectedItem[1].id)?.state,
             todoItemId: selectedItem[1].id,
-            comment: selectedItem[0].actionedItems.find(ai => ai.todoItemId === selectedItem[1].id)?.comment,
+            comment: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemId === selectedItem[1].id)?.comment,
           }} onSubmit={(actionedItem) => updateActionedItem(selectedItem[0], actionedItem)} />
         )}
       </ResponsiveDialog>
