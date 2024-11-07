@@ -1,5 +1,6 @@
 package com.templatodo.api.TemplateDefinitions;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ public class TemplateDefinitionController {
 	private TemplateDefinitionService service;
 
 	@GetMapping("")
-	public List<TemplateDefinitionDto> templates() {
+	public List<TemplateDefinitionDto> templates(Principal principal) {
+		String name = principal.getName();
+		System.out.println(name);
 		return this.service.getAll();
 	}
 
@@ -34,7 +37,7 @@ public class TemplateDefinitionController {
 	}
 
 	@PostMapping("")
-	public void save(@RequestBody TemplateDefinitionDto templateDefinition) {
-		this.service.save(templateDefinition);
+	public void save(@RequestBody TemplateDefinitionDto templateDefinition, Principal principal) throws Exception {
+		this.service.save(templateDefinition, principal.getName());
 	}
 }

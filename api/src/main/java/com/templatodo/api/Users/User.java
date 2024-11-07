@@ -1,5 +1,7 @@
 package com.templatodo.api.Users;
 
+import java.util.ArrayList;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,6 +11,15 @@ public class User {
 	private String id;
 	private int age;
 	private String name;
+	private ArrayList<String> templateIds;
+
+	public ArrayList<String> getTemplateIds() {
+		return templateIds;
+	}
+
+	public void setTemplateIds(ArrayList<String> templateIds) {
+		this.templateIds = templateIds;
+	}
 
 	public String getId() {
 		return id;

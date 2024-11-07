@@ -2,10 +2,14 @@ package com.templatodo.api.TemplateDefinitions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.templatodo.api.Users.User;
+import com.templatodo.api.Users.UserRepository;
 
 @Service
 public class TemplateDefinitionService {
@@ -15,8 +19,22 @@ public class TemplateDefinitionService {
     private TimeSlotRepository timeSlotRepository;
     @Autowired
     private TodoItemRepository todoRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public void save(TemplateDefinitionDto templateDefinition) {
+    public void save(TemplateDefinitionDto templateDefinition, String requestUserId) throws Exception {
+        String id = templateDefinition.getId();
+        if (id != null) {
+            Optional<User> user = userRepository.findById(requestUserId);
+            if (user.isPresent()) {
+                Boolean hasAccess = user.get().getTemplateIds().stream().anyMatch(x -> x == id);
+                if (!hasAccess) {
+                    throw new Exception("Not authorised");
+                }
+            } else {
+                throw new Exception("Not authorised");
+            }
+        }
         TemplateDefinition def = templateDefinition.toDomain();
         def.setTimeSlotIds(new ArrayList<String>());
         List<TimeSlotDto> timeSlots = templateDefinition.getTimeSlots();
