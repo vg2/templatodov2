@@ -24,6 +24,8 @@ if (rootNode) {
 				clientId="R3mmZeyBZWbmG5fydDL0ka5EmaQvLUXJ"
 				authorizationParams={{
 					redirect_uri: `${window.location.origin}/auth`,
+					audience: 'https://templatodo-api.pages.dev',
+					scope: 'read:templates'
 				}}
 			>
 				<QueryClientProvider client={queryClient}>
