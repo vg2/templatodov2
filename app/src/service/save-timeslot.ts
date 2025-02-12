@@ -6,8 +6,8 @@ export async function saveTimeSlot(timeSlot: TimeSlot): Promise<number> {
     const db = await openDb();
     let timeSlotToSave: DbTimeSlot;
     if ('id' in timeSlot) {
-        const dbTimeSlot = await db.get('timeSlots', timeSlot.id);
-        if(!dbTimeSlot) throw new Error("could not find timeslot");
+        const dbTimeSlot = await db.get('timeSlots', timeSlot.key);
+        if (!dbTimeSlot) throw new Error("could not find timeslot");
         timeSlotToSave = { ...dbTimeSlot, ...timeSlot };
     } else {
         timeSlotToSave = { ...timeSlot };

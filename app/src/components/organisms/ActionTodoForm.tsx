@@ -21,15 +21,15 @@ export const ActionTodoForm: FC<ActionTodoFormProps> = ({ actionedItem, onSubmit
 		defaultValues: {
 			state: actionedItem?.state ?? "New",
 			comment: actionedItem?.comment,
-			todoItemId: actionedItem?.todoItemId,
+			todoItemKey: actionedItem?.todoItemKey,
 		},
 	});
 
-	const handleSubmit = async ({ state, comment, todoItemId }: ActionedItemForm) => {
+	const handleSubmit = async ({ state, comment, todoItemKey: todoItemId }: ActionedItemForm) => {
 		const actionedItem: ActionedItemForm = {
 			state,
 			comment,
-			todoItemId,
+			todoItemKey: todoItemId,
 		};
 		await onSubmit(actionedItem);
 	};

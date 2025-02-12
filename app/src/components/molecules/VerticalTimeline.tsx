@@ -64,7 +64,7 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                                             >
                                                 {hourItems.map((item) => (
                                                     <div
-                                                        key={item.item.item.todoItem.id}
+                                                        key={item.item.item.todoItem.key}
                                                         className="flex flex-row items-center gap-1 text-sm"
                                                     >
                                                         <Checkbox

@@ -1,11 +1,11 @@
 import type { DurationUnit } from "../common/DurationUnit.type";
 
 export type DbTimeSlot = {
-  id?: number;
+  key?: number;
   name: string;
   description: string;
   duration: number;
   durationUnit: DurationUnit;
   timeOfDay: string;
-  templateId: number;
+  templateKey: number;
 }

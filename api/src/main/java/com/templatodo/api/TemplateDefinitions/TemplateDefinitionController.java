@@ -21,23 +21,27 @@ public class TemplateDefinitionController {
 
 	@GetMapping("")
 	public List<TemplateDefinitionDto> templates(Principal principal) {
-		String name = principal.getName();
-		System.out.println(name);
-		return this.service.getAll();
+		return this.service.getAll(principal.getName());
 	}
 
 	@GetMapping("/{templateDefId}/time-slots")
-	public List<TimeSlotDto> getMethodName(@PathVariable String templateDefId) {
-		return this.service.getTimeSlots(templateDefId);
+	public List<TimeSlotDto> getTimeSlots(@PathVariable String templateDefId, Principal principal) {
+		return this.service.getTimeSlots(templateDefId, principal.getName());
 	}
 
-	@GetMapping("/{templateDefId}/time-slots/{timeSlotId}/todo-items")
-	public List<TodoItemDto> getMethodName(@PathVariable String templateDefId, @PathVariable String timeSlotId) {
-		return this.service.getTodoItems(timeSlotId);
+	@GetMapping("/todo-items")
+	public List<TodoItemDto> getTodoItems(Principal principal) {
+		return this.service.getTodoItems(principal.getName());
 	}
 
 	@PostMapping("")
 	public void save(@RequestBody TemplateDefinitionDto templateDefinition, Principal principal) throws Exception {
 		this.service.save(templateDefinition, principal.getName());
 	}
+
+	@PostMapping("/{templateDefId}/time-slots")
+	public String saveTimeSlots(@PathVariable String templateDefId, @RequestBody List<TimeSlotDto> timeSlots) {
+		this.service.save(null, templateDefId);
+	}
+	
 }

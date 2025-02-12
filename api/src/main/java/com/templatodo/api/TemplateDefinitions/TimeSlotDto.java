@@ -14,14 +14,14 @@ public class TimeSlotDto {
     private int duration;
     private DurationUnit durationUnit;
     private LocalTime timeOfDay;
-    private List<TodoItemDto> todoItems;
+    private String templateId;
 
-    public List<TodoItemDto> getTodoItems() {
-        return todoItems;
+    public String getTemplateId() {
+        return templateId;
     }
 
-    public void setTodoItems(List<TodoItemDto> todoItems) {
-        this.todoItems = todoItems;
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 
     public String getId() {
@@ -80,7 +80,7 @@ public class TimeSlotDto {
         slot.setDuration(this.getDuration());
         slot.setDurationUnit(this.getDurationUnit());
         slot.setTimeOfDay(this.getTimeOfDay());
-
+        slot.setTemplateId(this.getTemplateId());
         return slot;
     }
 
@@ -92,6 +92,7 @@ public class TimeSlotDto {
         dto.setDuration(slot.getDuration());
         dto.setDurationUnit(slot.getDurationUnit());
         dto.setTimeOfDay(slot.getTimeOfDay());
+        dto.setTemplateId(slot.getTemplateId());
         return dto;
     }
 }

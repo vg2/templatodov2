@@ -36,63 +36,59 @@ public class TemplateDefinitionService {
             }
         }
         TemplateDefinition def = templateDefinition.toDomain();
-        def.setTimeSlotIds(new ArrayList<String>());
-        List<TimeSlotDto> timeSlots = templateDefinition.getTimeSlots();
-        for (int i = 0; i < timeSlots.size(); i++) {
-            TimeSlotDto timeSlot = timeSlots.get(i);
-            List<TodoItem> todoItems = timeSlot.getTodoItems().stream().map(x -> x.toDomain())
-                    .collect(Collectors.toList());
-
-            todoRepository.saveAll(todoItems);
-            List<String> todoIds = todoItems.stream().map(x -> x.getId()).collect(Collectors.toList());
-            TimeSlot ts = timeSlot.toDomain();
-            ts.setTodoItemIds(todoIds);
-            timeSlotRepository.save(ts);
-
-            def.getTimeSlotIds().add(ts.getId());
-        }
-
         this.templateDefRepository.save(def);
     }
 
-    public List<TemplateDefinitionDto> getAll() {
-        List<TemplateDefinition> defs = this.templateDefRepository.findAll();
+    public void saveTimeSlots(String templateDefId, List<TimeSlotDto> timeSlots, string userId) {
+        Optional<User> user = this.userRepository.findById(userId);
+        if (!user.isPresent() || !user.get().getTemplateIds().contains(templateDefId)) {
+            throw new Exception("unauthorised");
+        }
+    }
+
+    public List<TemplateDefinitionDto> getAll(String userId) {
+        Optional<User> user = this.userRepository.findById(userId);
+        if (!user.isPresent()) {
+            return List.of();
+        }
+        List<TemplateDefinition> defs = this.templateDefRepository.findAllById(user.get().getTemplateIds());
 
         return defs.stream().map(x -> TemplateDefinitionDto.fromDomain(x)).collect(Collectors.toList());
     }
 
-    public TemplateDefinitionDto getById(String templateDefinitionId) {
+    public Optional<TemplateDefinitionDto> getById(String templateDefinitionId, String userId) {
+        Optional<User> user = this.userRepository.findById(userId);
+        if (!user.isPresent() || !user.get().getTemplateIds().contains(templateDefinitionId)) {
+            return Optional.empty();
+        }
         TemplateDefinition def = this.templateDefRepository.findById(templateDefinitionId).get();
         TemplateDefinitionDto dto = TemplateDefinitionDto.fromDomain(def);
 
-        List<TimeSlotDto> timeSlots = this.getTimeSlots(templateDefinitionId);
+        return Optional.of(dto);
+    }
 
-        for (int i = 0; i < timeSlots.size(); i++) {
-            TimeSlotDto tsDto = timeSlots.get(i);
-            List<TodoItemDto> todoItems = this.getTodoItems(tsDto.getId());
-            tsDto.setTodoItems(todoItems);
+    public List<TimeSlotDto> getTimeSlots(String templateDefinitionId, String userId) {
+        Optional<User> user = this.userRepository.findById(userId);
+        if (!user.isPresent() || !user.get().getTemplateIds().contains(templateDefinitionId)) {
+            return List.of();
         }
-
-        dto.setTimeSlots(timeSlots);
-
-        return dto;
+        return this.timeSlotRepository
+            .findAll()
+            .stream()
+            .filter(x -> x.getTemplateId().equals(templateDefinitionId))
+            .map(x -> TimeSlotDto.fromDomain(x))
+            .collect(Collectors.toList());
     }
 
-    public List<TimeSlotDto> getTimeSlots(String templateDefinitionId) {
-        List<String> timeSlotIds = this.templateDefRepository.findById(templateDefinitionId).get().getTimeSlotIds();
-
-        return this.timeSlotRepository.findAllById(timeSlotIds)
-                .stream()
-                .map(x -> TimeSlotDto.fromDomain(x))
-                .collect(Collectors.toList());
-    }
-
-    public List<TodoItemDto> getTodoItems(String timeSlotId) {
-        List<String> todoItemIds = this.timeSlotRepository.findById(timeSlotId).get().getTodoItemIds();
-
-        return this.todoRepository.findAllById(todoItemIds)
+    public List<TodoItemDto> getTodoItems(String userId) {
+        Optional<User> user = this.userRepository.findById(userId);
+        if (!user.isPresent()) {
+            return List.of();
+        }
+        return this.todoRepository.findAllById(user.get().getTodoItemIds())
                 .stream()
                 .map(x -> TodoItemDto.fromDomain(x))
                 .collect(Collectors.toList());
     }
+
 }

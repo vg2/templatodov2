@@ -9,5 +9,5 @@ const updateTemplateMutationKey = 'update-template';
 export const useUpdateTemplateMutation = () => useMutation({
     mutationKey: [updateTemplateMutationKey],
     mutationFn: (templateForm: Omit<ExistingTemplate, 'todos'>) => updateTemplate(templateForm),
-    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: [getTemplatesQueryKey, variables.id] })
+    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: [getTemplatesQueryKey, variables.key] })
 })

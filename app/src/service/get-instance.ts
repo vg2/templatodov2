@@ -19,7 +19,7 @@ const dateValidInTemplate = (
     if (cycleFrequency === 'Daily') {
         return isEqual(checkDate, instanceDate);
     }
-    
+
     let templateDate = templateStartDate;
     let min = templateDate;
 
@@ -47,7 +47,7 @@ export async function getInstance(
     const db = await openDb();
     const allDbTemplateInstances = await db.getAll("templateInstances");
     const dbTemplateInstances = allDbTemplateInstances.filter(
-        (adbi) => adbi.templateSnapshot.id === templateId,
+        (adbi) => adbi.templateSnapshot.key === templateId,
     );
     const template = await loadTemplate(templateId);
     const templateInstances = dbTemplateInstances.map((dbti) =>
@@ -75,6 +75,6 @@ export async function getInstance(
         actionedItems: [],
     };
     const key = await db.put("templateInstances", newTemplateInstance);
-    newTemplateInstance.id = key;
+    newTemplateInstance.key = key;
     return mapTemplateInstanceFromDb(newTemplateInstance, template);
 }

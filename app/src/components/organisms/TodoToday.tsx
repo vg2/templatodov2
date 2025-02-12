@@ -78,7 +78,7 @@ const TodoToday = () => {
 
   const [expandedTemplate, setExpandedTemplate] = useState<ExistingTemplate | null>(data.length === 1 ? data[0] : null);
 
-  const instanceQueries = data.map(template => getTemplateInstanceQueryOptions(template.id, format(today, "yyyy-MM-dd")));
+  const instanceQueries = data.map(template => getTemplateInstanceQueryOptions(template.key, format(today, "yyyy-MM-dd")));
   const instancesResult = useQueries({ queries: instanceQueries });
   const instances = instancesResult.map(i => i.data).filter(i => !!i);
 
@@ -105,7 +105,7 @@ const TodoToday = () => {
     setSelectedItem(null);
   }
 
-  const updateActionedItem = async (instance: TemplateInstance, { todoItemId, state, comment }: ActionedItemForm): Promise<void> => {
+  const updateActionedItem = async (instance: TemplateInstance, { todoItemKey: todoItemId, state, comment }: ActionedItemForm): Promise<void> => {
     await actionItemForInstance(instance, todoItemId, state, comment);
   }
 
@@ -114,14 +114,14 @@ const TodoToday = () => {
     todo: ExistingTodoItem,
   ): TodoState => {
     const actionedItems = instance.actionedItems;
-    const actionedItem = toSortedActionedItems(actionedItems).find((ai) => ai.todoItemId === todo.id);
+    const actionedItem = toSortedActionedItems(actionedItems).find((ai) => ai.todoItemKey === todo.key);
     return actionedItem?.state ?? "New";
   };
 
   const actionItemForInstance = async (instance: TemplateInstance, todoItemId: number, state: TodoState, comment: string): Promise<void> => {
     const actionedItem: ActionedItem = {
       state,
-      todoItemId,
+      todoItemKey: todoItemId,
       comment,
       timestamp: formatISO(new Date())
     }
@@ -133,11 +133,11 @@ const TodoToday = () => {
     instance: TemplateInstance,
     todo: ExistingTodoItem,
   ): Promise<void> => {
-    await actionItemForInstance(instance, todo.id, "Complete", "");
+    await actionItemForInstance(instance, todo.key, "Complete", "");
   };
 
   const onTemplateExpanded = (templateId: string) => {
-    setExpandedTemplate(data.find(t => t.id === Number.parseInt(templateId, 10)) || null);
+    setExpandedTemplate(data.find(t => t.key === Number.parseInt(templateId, 10)) || null);
   }
 
   const noData = !data || data.length === 0;
@@ -184,12 +184,12 @@ const TodoToday = () => {
             todo.pointsInCycle.includes(calcPointInCycle(today, i.templateSnapshot.startDate, i.templateSnapshot.cycleLength, i.templateSnapshot.frequency) || -1),
           )
           // biome-ignore lint/style/noNonNullAssertion: <explanation>
-          .map(t => ({ templateItem: { item: t, isDone: !!i.actionedItems.find(ai => ai.todoItemId === t.todoItem.id) }, template: i.templateSnapshot })))} markDone={(t, i) => markDoneForInstance(instances.find(i => i.templateSnapshot.id === t.id)!, i.todoItem)} />
+          .map(t => ({ templateItem: { item: t, isDone: !!i.actionedItems.find(ai => ai.todoItemKey === t.todoItem.key) }, template: i.templateSnapshot })))} markDone={(t, i) => markDoneForInstance(instances.find(i => i.templateSnapshot.key === t.key)!, i.todoItem)} />
 
       ) : (
-        <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.id.toString()} type="single" collapsible className="w-full">
+        <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.key.toString()} type="single" collapsible className="w-full">
           {data.map(template => (
-            <AccordionItem className="border-zorba-300" key={template.id} value={template.id.toString()}>
+            <AccordionItem className="border-zorba-300" key={template.key} value={template.key.toString()}>
               <AccordionTrigger>
                 {template.name}
               </AccordionTrigger>
@@ -197,36 +197,36 @@ const TodoToday = () => {
                 <Button asChild variant='link'>
                   <Link
                     to="/edit-template/$templateId"
-                    params={{ templateId: `${template.id}` }}
+                    params={{ templateId: `${template.key}` }}
                   >
                     Edit template
                   </Link>
                 </Button>
-                {instances.find(i => i.templateSnapshot.id === template.id)?.templateSnapshot.todos
+                {instances.find(i => i.templateSnapshot.key === template.key)?.templateSnapshot.todos
                   .filter((todo) =>
                     todo.pointsInCycle.includes(calcPointInCycle(today, template.startDate, template.cycleLength, template.frequency) || -1),
                   )
                   .map((todo) => (
                     <TodoCard
-                      key={`${todo.timeSlot.id}-${todo.todoItem.id}`}
+                      key={`${todo.timeSlot.key}-${todo.todoItem.key}`}
                       name={todo.todoItem.name}
                       description={todo.todoItem.description}
                       timeSlot={todo.timeSlot.name}
                       time={todo.timeSlot.timeOfDay}
                       duration={todo.timeSlot.duration}
                       durationUnit={todo.timeSlot.durationUnit}
-                      todoId={todo.todoItem.id ?? 0}
+                      todoId={todo.todoItem.key ?? 0}
                       state={currentTodoItemState(
                         // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                        instances.find(i => i.templateSnapshot.id === template.id)!,
+                        instances.find(i => i.templateSnapshot.key === template.key)!,
                         todo.todoItem,
                       )}
                       markDone={() =>
                         // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                        markDoneForInstance(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem)
+                        markDoneForInstance(instances.find(i => i.templateSnapshot.key === template.key)!, todo.todoItem)
                       }
                       // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                      openDetails={() => { itemDetailsClick(instances.find(i => i.templateSnapshot.id === template.id)!, todo.todoItem) }}
+                      openDetails={() => { itemDetailsClick(instances.find(i => i.templateSnapshot.key === template.key)!, todo.todoItem) }}
                     />
                   ))}
               </AccordionContent>
@@ -237,9 +237,9 @@ const TodoToday = () => {
       <ResponsiveDialog title={selectedItem?.[1]?.name ?? ""} description={selectedItem?.[1]?.description ?? ""} open={showDetails} onOpenChange={setShowDetails}>
         {selectedItem && (
           <ActionTodoForm actionedItem={{
-            state: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemId === selectedItem[1].id)?.state,
-            todoItemId: selectedItem[1].id,
-            comment: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemId === selectedItem[1].id)?.comment,
+            state: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemKey === selectedItem[1].key)?.state,
+            todoItemKey: selectedItem[1].key,
+            comment: toSortedActionedItems(selectedItem[0].actionedItems).find(ai => ai.todoItemKey === selectedItem[1].key)?.comment,
           }} onSubmit={(actionedItem) => submitDetails(selectedItem[0], actionedItem)} />
         )}
       </ResponsiveDialog>

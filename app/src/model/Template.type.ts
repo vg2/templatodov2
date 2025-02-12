@@ -6,7 +6,7 @@ export type ExistingTemplate = {
   cycleLength: number;
   description: string;
   frequency: Frequency;
-  id: number;
+  key: number;
   name: string;
   startDate: Date;
   todos: TodoItemInTemplate[];
@@ -17,7 +17,7 @@ export type Template = NewTemplate | ExistingTemplate;
 
 export function mapTemplateFromDb(dbTemplate: DbTemplate): ExistingTemplate {
   return {
-    id: 0,
+    key: 0,
     ...dbTemplate,
     todos: []
   }

@@ -32,7 +32,7 @@ const getDefaultFormValues = (
 ): TodoItemsInTemplateForm => {
   const formTodos: TodoItemInTemplateForm[] = allTodos.map((todo) => {
     const alreadyInTemplate = todosInTemplate.find(
-      (x) => x.todoItem.id && x.todoItem.id === todo.id,
+      (x) => x.todoItem.key && x.todoItem.key === todo.key,
     );
     return alreadyInTemplate
       ? { ...alreadyInTemplate, selected: true }
@@ -71,7 +71,7 @@ export const ManageExistingTodos = ({
       openAddTimeslotModal();
       return;
     }
-    const timeSlot = timeSlots.find((t) => t.id === Number.parseInt(value, 10));
+    const timeSlot = timeSlots.find((t) => t.key === Number.parseInt(value, 10));
     onChange(timeSlot);
   };
 
@@ -123,14 +123,14 @@ export const ManageExistingTodos = ({
                         <FormItem className="flex-1">
                           <Select
                             onValueChange={(value) => handleTimeslotChange(field.onChange, value)}
-                            value={field.value?.id?.toString()}
+                            value={field.value?.key?.toString()}
                           >
                             <SelectTrigger className="bg-cloud-100">
                               <SelectValue placeholder="Select timeslot" />
                             </SelectTrigger>
                             <SelectContent>
                               {timeSlots.map((ts) => (
-                                <SelectItem key={ts.id} value={ts.id.toString()}>
+                                <SelectItem key={ts.key} value={ts.key.toString()}>
                                   {ts.name} | {ts.description}
                                 </SelectItem>
                               ))}
@@ -169,7 +169,7 @@ export const ManageExistingTodos = ({
       </ResponsiveDialog>
 
       <ResponsiveDialog open={addTimeslotModalIsOpen} onOpenChange={setAddTimeslotModalIsOpen} title="Add timeslot" description="">
-        <TimeSlotForm timeSlot={{ templateId: template.id }} onSuccessfulSubmit={closeAddTimeslotModal} />
+        <TimeSlotForm timeSlot={{ templateKey: template.key }} onSuccessfulSubmit={closeAddTimeslotModal} />
       </ResponsiveDialog>
 
       <FloatingActionButtonContainer>

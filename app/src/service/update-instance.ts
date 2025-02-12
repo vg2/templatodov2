@@ -4,10 +4,10 @@ import type { TemplateInstance } from "../model/TemplateInstance.type";
 
 export async function updateInstance(instance: TemplateInstance): Promise<void> {
     const db = await openDb();
-    const dbTemplate = await db.get('templates', instance.templateSnapshot.id ?? 0);
+    const dbTemplate = await db.get('templates', instance.templateSnapshot.key ?? 0);
     if (!dbTemplate) throw new Error("Could not find template");
     const dbInstance: DbTemplateInstanceType.DbTemplateInstance = {
-        id: instance.id,
+        key: instance.key,
         actionedItems: instance.actionedItems,
         templateSnapshot: dbTemplate,
         date: instance.date,

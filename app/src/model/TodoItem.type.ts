@@ -2,7 +2,7 @@ import type { DurationUnit } from "../common/DurationUnit.type";
 import type { DbTodoItem } from "../data/DbTodoItem.type";
 
 export type ExistingTodoItem = {
-  id: number;
+  key: number;
   name: string;
   description: string;
   typicalDuration: number;
@@ -15,7 +15,7 @@ export type TodoItem = ExistingTodoItem | NewTodoItem;
 
 export function mapTodoItemFromDb(dbTodo: DbTodoItem): ExistingTodoItem {
   return {
-    id: 0,
+    key: 0,
     ...dbTodo
   }
 }

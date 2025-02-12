@@ -1,5 +1,5 @@
 export type DbTodoItemInTemplate = {
-  todoItemId: number;
-  timeSlotId: number;
+  todoItemKey: number;
+  timeSlotKey: number;
   pointsInCycle: number[];
 }

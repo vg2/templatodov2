@@ -5,7 +5,7 @@ export type DbTemplate = {
   cycleLength: number;
   description: string;
   frequency: Frequency;
-  id?: number;
+  key?: number;
   name: string;
   startDate: Date;
   todos: DbTodoItemInTemplate[];

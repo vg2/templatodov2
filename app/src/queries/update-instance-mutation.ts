@@ -9,5 +9,5 @@ const updateInstanceMutationKey = 'update-instance';
 export const useUpdateInstanceMutation = () => useMutation({
     mutationKey: [updateInstanceMutationKey],
     mutationFn: (instance: TemplateInstance) => updateInstance(instance),
-    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: [getTemplateInstanceQueryKey, variables.templateSnapshot.id, variables.date] })
+    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: [getTemplateInstanceQueryKey, variables.templateSnapshot.key, variables.date] })
 })

@@ -16,14 +16,14 @@ public class TimeSlot {
     private int duration;
     private DurationUnit durationUnit;
     private LocalTime timeOfDay;
-    private List<String> todoItemIds;
+    private String templateId;
 
-    public List<String> getTodoItemIds() {
-        return todoItemIds;
+    public String getTemplateId() {
+        return templateId;
     }
 
-    public void setTodoItemIds(List<String> todoItemIds) {
-        this.todoItemIds = todoItemIds;
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 
     public String getId() {

@@ -16,14 +16,14 @@ public class TemplateDefinition {
     private Frequency frequency;
     private int cycleLength;
     private LocalDate startDate;
-    private List<String> timeSlotIds;
+    private List<TodoItemInTemplate> todos;
 
-    public List<String> getTimeSlotIds() {
-        return timeSlotIds;
+    public List<TodoItemInTemplate> getTodos() {
+        return todos;
     }
 
-    public void setTimeSlotIds(List<String> timeSlotIds) {
-        this.timeSlotIds = timeSlotIds;
+    public void setTodos(List<TodoItemInTemplate> todos) {
+        this.todos = todos;
     }
 
     public String getId() {

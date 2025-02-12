@@ -13,12 +13,12 @@ export async function loadTemplates(): Promise<ExistingTemplate[]> {
     const todoItems = dbTodoItems.map(mapTodoItemFromDb);
 
     for (const t of templates) {
-        const dbTemplate = dbTemplates.find(dbt => dbt.id === t.id);
+        const dbTemplate = dbTemplates.find(dbt => dbt.key === t.key);
         if (!dbTemplate) continue;
 
-        for (const { pointsInCycle, timeSlotId, todoItemId } of dbTemplate.todos) {
-            const todoItem = todoItems.find(dbtodo => dbtodo.id === todoItemId);
-            const timeSlot = timeSlots.find(dbts => dbts.id === timeSlotId);
+        for (const { pointsInCycle, timeSlotKey: timeSlotId, todoItemKey: todoItemId } of dbTemplate.todos) {
+            const todoItem = todoItems.find(dbtodo => dbtodo.key === todoItemId);
+            const timeSlot = timeSlots.find(dbts => dbts.key === timeSlotId);
             if (!todoItem || !timeSlot) continue;
 
             t.todos.push({ todoItem, timeSlot, pointsInCycle })
@@ -40,9 +40,9 @@ export async function loadTemplate(templateId: number): Promise<ExistingTemplate
     const todoItems = dbTodoItems.map(mapTodoItemFromDb);
 
 
-    for (const { timeSlotId, todoItemId, pointsInCycle } of dbTemplate.todos) {
-        const todoItem = todoItems.find(dbtodo => dbtodo.id === todoItemId);
-        const timeSlot = timeSlots.find(dbts => dbts.id === timeSlotId);
+    for (const { timeSlotKey: timeSlotId, todoItemKey: todoItemId, pointsInCycle } of dbTemplate.todos) {
+        const todoItem = todoItems.find(dbtodo => dbtodo.key === todoItemId);
+        const timeSlot = timeSlots.find(dbts => dbts.key === timeSlotId);
         if (!todoItem || !timeSlot) continue;
 
         template.todos.push({ todoItem, timeSlot, pointsInCycle })

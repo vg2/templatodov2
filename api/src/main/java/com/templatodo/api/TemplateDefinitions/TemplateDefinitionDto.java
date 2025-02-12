@@ -11,7 +11,7 @@ public class TemplateDefinitionDto {
     private Frequency frequency;
     private int cycleLength;
     private LocalDate startDate;
-    private List<TimeSlotDto> timeSlots;
+    private List<TodoItemInTemplate> todos;
 
     public String getId() {
         return id;
@@ -61,12 +61,12 @@ public class TemplateDefinitionDto {
         this.startDate = startDate;
     }
 
-    public List<TimeSlotDto> getTimeSlots() {
-        return timeSlots;
+    public List<TodoItemInTemplate> getTodos() {
+        return todos;
     }
 
-    public void setTimeSlots(List<TimeSlotDto> timeSlots) {
-        this.timeSlots = timeSlots;
+    public void setTodos(List<TodoItemInTemplate> todos) {
+        this.todos = todos;
     }
 
     public TemplateDefinition toDomain() {
@@ -77,6 +77,7 @@ public class TemplateDefinitionDto {
         def.setFrequency(this.getFrequency());
         def.setCycleLength(this.getCycleLength());
         def.setStartDate(this.getStartDate());
+        def.setTodos(this.getTodos());
         return def;
     }
 
@@ -88,7 +89,7 @@ public class TemplateDefinitionDto {
         dto.setFrequency(def.getFrequency());
         dto.setCycleLength(def.getCycleLength());
         dto.setStartDate(def.getStartDate());
-        dto.setTimeSlots(new ArrayList<TimeSlotDto>());
+        dto.setTodos(def.getTodos());
         return dto;
     }
 }
