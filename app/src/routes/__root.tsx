@@ -22,7 +22,7 @@ export const Route = createRootRoute({
                   <div className="flex flex-row items-center gap-2">
                     <div className="rounded p-1">
                       <img src={logo} width="36" height="36" alt="Templatodo logo" /></div>
-                    Templatodo
+                    ParenTime
                   </div>
                 </Link>
               </NavigationMenuLink>
