@@ -44,7 +44,7 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                 <ScrollArea className="h-auto pr-4">
                     <div className="relative flex">
                         {/* Timeline */}
-                        <div className="absolute top-0 bottom-0 left-20 w-[1px]" />
+                        <div className="absolute top-0 bottom-0 left-24 w-[1px] bg-muted" />
 
                         {/* Content */}
                         <div className="w-full">
@@ -53,8 +53,8 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                                     <div key={hour} className="flex">
                                         {/* Hour indicator */}
                                         <div className="flex w-20 flex-shrink-0 items-center justify-center">
-                                            <div className="relative z-10 h-4 w-4 rounded-full" />
-                                            <span className="ml-2 font-medium text-sm">{hour === '00:00' ? 'When possible' : hour}</span>
+                                            <div className="relative z-10 h-2 w-2 rounded-full bg-primary" />
+                                            <span className="ml-2 font-medium text-sm">{hour === '00:00' ? 'Anytime' : hour}</span>
                                         </div>
 
                                         {/* Tasks */}
@@ -80,7 +80,7 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="mt-4 mb-4 h-[1px] w-full" />
+                                    <div className="mt-4 mb-4 h-[1px] w-full bg-muted" />
                                 </Fragment>
                             ))}
                         </div>
