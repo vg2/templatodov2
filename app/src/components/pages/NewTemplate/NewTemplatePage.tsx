@@ -36,10 +36,10 @@ export const NewTemplatePage = () => {
 
     return (
         <>
-            <H2 className="border-transparent text-zorba-950">New template</H2>
-            <Separator className="my-4 bg-zorba-950" />
+            <H2 className="border-transparent">New template</H2>
+            <Separator className="my-4" />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 text-zorba-950">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
                     <FormField
                         control={form.control}
                         name="name"
@@ -127,7 +127,7 @@ export const NewTemplatePage = () => {
                         )}
                     />
 
-                    <Button className="bg-zorba-950" type="submit">Submit</Button>
+                    <Button type="submit">Submit</Button>
                 </form>
             </Form>
         </>

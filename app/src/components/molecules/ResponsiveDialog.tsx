@@ -31,7 +31,7 @@ export function ResponsiveDialog({ title, description, open, onOpenChange, child
     if (isDesktop) {
         return (
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent className="sm:max-w-[425px] bg-cararra-200">
+                <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         <DialogDescription>
@@ -46,7 +46,7 @@ export function ResponsiveDialog({ title, description, open, onOpenChange, child
 
     return (
         <Drawer open={open} onOpenChange={onOpenChange}>
-            <DrawerContent className="bg-cararra-200">
+            <DrawerContent>
                 <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                     <DrawerDescription>

@@ -39,12 +39,12 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
     mappedItems.sort((a, b) => a.ordinal.getTime() - b.ordinal.getTime());
 
     return (
-        <Card className="mx-auto w-full max-w-3xl bg-cloud-200">
+        <Card className="mx-auto w-full max-w-3xl">
             <CardContent className="p-0 pt-2">
                 <ScrollArea className="h-auto pr-4">
                     <div className="relative flex">
                         {/* Timeline */}
-                        <div className="absolute top-0 bottom-0 left-20 w-[1px] bg-zorba-200" />
+                        <div className="absolute top-0 bottom-0 left-20 w-[1px]" />
 
                         {/* Content */}
                         <div className="w-full">
@@ -53,14 +53,14 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                                     <div key={hour} className="flex">
                                         {/* Hour indicator */}
                                         <div className="flex w-20 flex-shrink-0 items-center justify-center">
-                                            <div className="relative z-10 h-4 w-4 rounded-full bg-zorba-800" />
+                                            <div className="relative z-10 h-4 w-4 rounded-full" />
                                             <span className="ml-2 font-medium text-sm">{hour === '00:00' ? 'When possible' : hour}</span>
                                         </div>
 
                                         {/* Tasks */}
                                         <div className="ml-4 flex-grow">
                                             <div
-                                                className={`rounded-lg bg-cararra-300 p-4 ${hourItems.length > 1 ? "space-y-2" : ""}`}
+                                                className={`rounded-lg p-4 ${hourItems.length > 1 ? "space-y-2" : ""}`}
                                             >
                                                 {hourItems.map((item) => (
                                                     <div
@@ -80,7 +80,7 @@ export default function VerticalTimeline({ items, markDone }: VerticalTimelinePr
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="mt-4 mb-4 h-[1px] w-full bg-zorba-200" />
+                                    <div className="mt-4 mb-4 h-[1px] w-full" />
                                 </Fragment>
                             ))}
                         </div>

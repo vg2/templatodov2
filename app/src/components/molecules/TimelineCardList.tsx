@@ -31,7 +31,7 @@ export const TimelineCardList: FC<TimelineCardListProps> = ({ items }) => {
           return (
             <div key={hour} className="border-gray-200 border-b min-h-[3rem]">
               {hourItems.map((item) => (
-                <Card key={item.id} className="m-1 bg-cocoa-200">
+                <Card key={item.id} className="m-1">
                   <CardHeader className="p-1">
                     <CardTitle className="text-xs font-medium">{item.title}</CardTitle>
                   </CardHeader>

@@ -6,7 +6,7 @@ const LogoutButton = () => {
 
   if (!isAuthenticated) return <></>;
 
-  return <Button className="bg-cararra-950" onClick={() => logout()}>Log Out</Button>;
+  return <Button onClick={() => logout()}>Log Out</Button>;
 };
 
 export default LogoutButton;

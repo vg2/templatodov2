@@ -41,7 +41,7 @@ export const ManageTemplateTodosPage = () => {
     };
 
     return (
-        <div className="space-y-4 text-zorba-950">
+        <div className="space-y-4">
             <div className="flex items-center gap-4">
                 <Button onClick={navigateBack} variant="link">
                     <ArrowLeft />

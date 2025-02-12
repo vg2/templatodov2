@@ -145,15 +145,15 @@ const TodoToday = () => {
   return (
     <>
       <div className="flex flex-row justify-between">
-        <H2 className="border-transparent text-zorba-950">Todo today</H2>
+        <H2 className="border-transparent">Todo today</H2>
         <div className="flex items-center space-x-2 self-center">
-          <Switch disabled={noData} className="data-[state=checked]:bg-zorba-800" id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)} />
-          <Label htmlFor="timeline-view" className="self-center text-zorba-950">Timeline view</Label>
+          <Switch disabled={noData} id="timeline-view" checked={timelineView} onCheckedChange={(e) => setTimelineView(e)} />
+          <Label htmlFor="timeline-view" className="self-center">Timeline view</Label>
         </div>
       </div>
-      <Separator className="my-4 bg-zorba-950" />
+      <Separator className="my-4" />
       {noData && (
-        <Card className="bg-zorba-50">
+        <Card>
           <CardHeader>
             <CardTitle>Welcome to templatodo</CardTitle>
             <CardDescription>Get started here</CardDescription>
@@ -189,7 +189,7 @@ const TodoToday = () => {
       ) : (
         <Accordion onValueChange={onTemplateExpanded} value={expandedTemplate?.key.toString()} type="single" collapsible className="w-full">
           {data.map(template => (
-            <AccordionItem className="border-zorba-300" key={template.key} value={template.key.toString()}>
+            <AccordionItem key={template.key} value={template.key.toString()}>
               <AccordionTrigger>
                 {template.name}
               </AccordionTrigger>

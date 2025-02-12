@@ -15,13 +15,13 @@ export const EditTemplatePage = () => {
   const postSubmit = () => navigate({ to: '/' });
 
   return (
-    <div className="flex flex-col gap-2 text-zorba-950">
-      <H3 className="text-zorba-950">Edit {template.name}</H3>
-      <Separator className="my-4 bg-zorba-950" />
+    <div className="flex flex-col gap-2">
+      <H3>Edit {template.name}</H3>
+      <Separator className="my-4" />
       <EditTemplateForm template={template} onSuccessfulSubmit={postSubmit} />
       <Separator />
-      <div className="flex flex-row items-center gap-2 text-zorba-950">
-        <Button variant='link'><Link from="/edit-template/$templateId" to="./manage-todos" className="flex flex-row items-center gap-2 text-zorba-950"><FileSliders /> Manage todos</Link></Button>
+      <div className="flex flex-row items-center gap-2">
+        <Button variant='link'><Link from="/edit-template/$templateId" to="./manage-todos" className="flex flex-row items-center gap-2"><FileSliders /> Manage todos</Link></Button>
       </div>
     </div>
   )

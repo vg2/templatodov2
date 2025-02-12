@@ -85,12 +85,12 @@ export const ManageExistingTodos = ({
 
   return (
     <>
-      <H2 className="mb-4 border-transparent font-bold text-2xl text-zorba-800">Todos</H2>
-      <Separator className="my-4 bg-zorba-950" />
+      <H2 className="mb-4 border-transparent font-bold text-2xl">Todos</H2>
+      <Separator className="my-4" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {fields.map((field, index) => (
-            <Card key={field.id} className="mb-4 bg-cloud-200">
+            <Card key={field.id} className="mb-4">
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <FormField
@@ -125,7 +125,7 @@ export const ManageExistingTodos = ({
                             onValueChange={(value) => handleTimeslotChange(field.onChange, value)}
                             value={field.value?.key?.toString()}
                           >
-                            <SelectTrigger className="bg-cloud-100">
+                            <SelectTrigger>
                               <SelectValue placeholder="Select timeslot" />
                             </SelectTrigger>
                             <SelectContent>
@@ -146,7 +146,6 @@ export const ManageExistingTodos = ({
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <MultiSelect
-                            className="bg-cloud-100"
                             options={pointsInCycle.map((point) => ({ key: point.toString(), label: point.toString(), value: point.toString() }))}
                             defaultValue={field.value?.map?.(v => v.toString()) || []}
                             onValueChange={(value) => field.onChange(value.map(val => Number.parseInt(val, 10)))}
@@ -173,8 +172,8 @@ export const ManageExistingTodos = ({
       </ResponsiveDialog>
 
       <FloatingActionButtonContainer>
-        <FloatingActionButton className="bg-zorba-950" icon={<PlusCircle className="h-4 w-4" />} onClick={openAddTodoModal} />
-        <FloatingActionButton className="bg-zorba-950" icon={<Save className="h-4 w-4" />} onClick={form.handleSubmit(onSubmit)} />
+        <FloatingActionButton icon={<PlusCircle className="h-4 w-4" />} onClick={openAddTodoModal} />
+        <FloatingActionButton icon={<Save className="h-4 w-4" />} onClick={form.handleSubmit(onSubmit)} />
       </FloatingActionButtonContainer>
     </>
   );
