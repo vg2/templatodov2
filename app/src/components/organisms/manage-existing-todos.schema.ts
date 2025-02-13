@@ -12,7 +12,7 @@ export const newTodoSchema = z.object({
 }) satisfies ZodType<NewTodoItem>;
 
 export const existingTodoSchema = newTodoSchema.and(z.object({
-    id: z.number()
+    key: z.number()
 })) satisfies ZodType<ExistingTodoItem>
 
 

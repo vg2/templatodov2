@@ -11,9 +11,9 @@ export const newTimeSlotSchema = z.object({
     duration: z.number(),
     durationUnit: z.enum(AllDurations),
     timeOfDay: z.string(),
-    templateId: z.number(),
+    templateKey: z.number(),
 }) satisfies ZodType<NewTimeSlot>;
 
 export const existingTimeSlotSchema = newTimeSlotSchema.and(
-    z.object({ id: z.number() }),
+    z.object({ key: z.number() }),
 ) satisfies ZodType<ExistingTimeSlot>;

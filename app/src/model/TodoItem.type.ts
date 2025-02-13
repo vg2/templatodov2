@@ -9,7 +9,7 @@ export type ExistingTodoItem = {
   typicalDurationUnit: DurationUnit;
 }
 
-export type NewTodoItem = Omit<ExistingTodoItem, 'id'>;
+export type NewTodoItem = Omit<ExistingTodoItem, 'key'>;
 
 export type TodoItem = ExistingTodoItem | NewTodoItem;
 

@@ -6,7 +6,7 @@ export async function saveTodosInTemplate(templateId: number, todosInTemplate: T
     const db = await openDb();
     const dbTemplate = await db.get('templates', templateId);
     if (!dbTemplate) throw new Error("Could not get template");
-    const dbTodosInTemplate: DbTodoItemInTemplate[] = todosInTemplate.map(t => ({ pointsInCycle: t.pointsInCycle, timeSlotId: t.timeSlot.key ?? 0, todoItemId: t.todoItem.key ?? 0 }));
+    const dbTodosInTemplate: DbTodoItemInTemplate[] = todosInTemplate.map(t => ({ pointsInCycle: t.pointsInCycle, timeSlotKey: t.timeSlot.key ?? 0, todoItemKey: t.todoItem.key ?? 0 }));
     dbTemplate.todos = dbTodosInTemplate;
     return await db.put('templates', dbTemplate);
 }

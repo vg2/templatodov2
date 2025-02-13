@@ -11,7 +11,7 @@ export type ExistingTimeSlot = {
   templateKey: number;
 }
 
-export type NewTimeSlot = Omit<ExistingTimeSlot, 'id'>;
+export type NewTimeSlot = Omit<ExistingTimeSlot, 'key'>;
 
 export type TimeSlot = ExistingTimeSlot | NewTimeSlot;
 
