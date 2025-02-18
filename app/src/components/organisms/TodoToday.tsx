@@ -155,7 +155,7 @@ const TodoToday = () => {
       {noData && (
         <Card>
           <CardHeader>
-            <CardTitle>Welcome to templatodo</CardTitle>
+            <CardTitle>Welcome to ParenTime</CardTitle>
             <CardDescription>Get started here</CardDescription>
           </CardHeader>
           <CardContent>
